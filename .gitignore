@@ -17,3 +17,9 @@ project/plugins/project/
 .worksheet
 .idea
 *.iml
+
+# Eclipse
+.project
+.settings
+.classpath
+.cache
