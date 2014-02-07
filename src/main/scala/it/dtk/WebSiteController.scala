@@ -10,6 +10,10 @@ object WebSiteController {
   case class Save(record: AnyRef)
 }
 
+/**
+ * @author Andrea & Fabiana
+ *
+ */
 trait WebSiteController extends Actor {
 }
 

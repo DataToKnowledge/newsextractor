@@ -7,6 +7,11 @@ object MainContentExtractor {
 }
 
 
+/**
+ * @author fabiofumarola
+ *
+ */
 class MainContentExtractor extends Actor {
 
+  def receive = ???
 }

@@ -9,8 +9,9 @@ object DbManager {
 }
 
 /**
- * @author 
+ * @author Daniele & Fabio
  * persist data in the db MongoDB indexed based on url
+ * we should use Casbah http://mongodb.github.io/casbah/
  */
 class DbManager extends Actor{
 

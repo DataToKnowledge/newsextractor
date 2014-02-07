@@ -7,10 +7,10 @@ object ListExtractor {
 }
 
 /**
- * @author
+ * @author Andrea & Fabiana
  * 
  */
 class ListExtractor extends Actor{
 
-  
+  def receive = ???
 }
