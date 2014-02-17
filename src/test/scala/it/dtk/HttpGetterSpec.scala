@@ -26,9 +26,9 @@ with WordSpecLike with Matchers with BeforeAndAfterAll {
       httpGetter ! "get"
 
       val res = expectMsgClass(10500 millis, classOf[Result])
-      assert(res.html.getClass.equals(classOf[Some[String]]))
-      assert(res.headerDate.getClass.equals(classOf[Some[Date]]))
-      println(res.headerDate)
+
+      res.html.getClass should be (classOf[Some[String]])
+      res.headerDate.getClass should be (classOf[Some[Date]])
     }
   }
 
