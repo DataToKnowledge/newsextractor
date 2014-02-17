@@ -26,7 +26,7 @@ with WordSpecLike with Matchers with BeforeAndAfterAll {
       val httpGetter = system.actorOf(Props(classOf[HttpGetter], "http://www.google.it/"))
       httpGetter ! "get"
 
-      val res = expectMsgClass(10500 millis, classOf[Result])
+      val res = expectMsgClass(10500.millis, classOf[Result])
 
       res.html.getClass should be(classOf[Some[String]])
       res.headerDate.getClass should be(classOf[Some[Date]])
@@ -36,7 +36,7 @@ with WordSpecLike with Matchers with BeforeAndAfterAll {
       val httpGetter = system.actorOf(Props(classOf[HttpGetter], "http://www.google.it/asd"))
       httpGetter ! "get"
 
-      val res = expectMsgClass(10500 millis, classOf[Result])
+      val res = expectMsgClass(10500.millis, classOf[Result])
 
       res.html.getClass should be(None.getClass)
       res.headerDate.getClass should be(None.getClass)
@@ -46,7 +46,7 @@ with WordSpecLike with Matchers with BeforeAndAfterAll {
       val httpGetter = system.actorOf(Props(classOf[HttpGetter], "http://www.goo.it/"))
       httpGetter ! "get"
 
-      val res = expectMsgClass(10500 millis, classOf[Result])
+      val res = expectMsgClass(10500.millis, classOf[Result])
 
       res.html.getClass should be(None.getClass)
       res.headerDate.getClass should be(None.getClass)

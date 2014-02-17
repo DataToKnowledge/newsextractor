@@ -6,7 +6,7 @@ import com.ning.http.client.AsyncHttpClient
 import it.dtk.HttpGetter.Result
 import java.io.IOException
 import java.text.SimpleDateFormat
-import java.util.concurrent.{TimeUnit}
+import java.util.concurrent.TimeUnit
 import scala.concurrent.ExecutionException
 
 object HttpGetter {
