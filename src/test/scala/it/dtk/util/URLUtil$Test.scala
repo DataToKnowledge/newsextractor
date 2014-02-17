@@ -9,11 +9,11 @@ import java.net.MalformedURLException
  * Date: 17/02/14
  * Time: 11:33
  */
-class URLUtils$Test extends FlatSpec with Matchers {
+class URLUtil$Test extends FlatSpec with Matchers {
   "A URLUtils" should "return the domain name" in {
     urls foreach {
       url =>
-        val domain = URLUtils.getDomainName(url)
+        val domain = URLUtil.getDomainName(url)
         println(s"- URL: $url => Domain: $domain")
 
         domain should be ("baritoday.it")
@@ -22,14 +22,14 @@ class URLUtils$Test extends FlatSpec with Matchers {
 
   it should "throw MalformedURLException if malformed URL is passed to getDomainName" in {
     a [MalformedURLException] should be thrownBy {
-      URLUtils.getDomainName("baritoday")
+      URLUtil.getDomainName("baritoday")
     }
   }
 
   it should "normalize a URL" in {
     normUrls1 foreach {
       url =>
-        val normalizedUrl = URLUtils.normalize(url)
+        val normalizedUrl = URLUtil.normalize(url)
         println(s"- URL: $url => Normalized: $normalizedUrl")
 
         normalizedUrl should be ("http://www.baritoday.it/")
@@ -37,7 +37,7 @@ class URLUtils$Test extends FlatSpec with Matchers {
 
     normUrls2 foreach {
       url =>
-        val normalizedUrl = URLUtils.normalize(url)
+        val normalizedUrl = URLUtil.normalize(url)
         println(s"- URL: $url => Normalized: $normalizedUrl")
 
         normalizedUrl should be ("http://www.baritoday.it/pages/4/")
@@ -46,14 +46,14 @@ class URLUtils$Test extends FlatSpec with Matchers {
 
   it should "throw MalformedURLException if malformed URL is passed to normalize" in {
     a [MalformedURLException] should be thrownBy {
-      URLUtils.normalize("baritoday")
+      URLUtil.normalize("baritoday")
     }
   }
 
   it should "check if a URL is absolute" in {
     absUrls foreach {
       url =>
-        val isAbsolute = URLUtils.isAbsolute(url)
+        val isAbsolute = URLUtil.isAbsolute(url)
         println(s"- URL: $url => Is absolute: $isAbsolute")
 
         isAbsolute should be (true)
@@ -61,7 +61,7 @@ class URLUtils$Test extends FlatSpec with Matchers {
 
     relUrls foreach {
       url =>
-        val isAbsolute = URLUtils.isAbsolute(url)
+        val isAbsolute = URLUtil.isAbsolute(url)
         println(s"- URL: $url => Is absolute: $isAbsolute")
 
         isAbsolute should be (false)
@@ -71,7 +71,7 @@ class URLUtils$Test extends FlatSpec with Matchers {
   it should "check if a URL is relative" in {
     relUrls foreach {
       url =>
-        val isRelative = URLUtils.isRelative(url)
+        val isRelative = URLUtil.isRelative(url)
         println(s"- URL: $url => Is relative: $isRelative")
 
         isRelative should be (true)
@@ -79,7 +79,7 @@ class URLUtils$Test extends FlatSpec with Matchers {
 
     absUrls foreach {
       url =>
-        val isRelative = URLUtils.isRelative(url)
+        val isRelative = URLUtil.isRelative(url)
         println(s"- URL: $url => Is relative: $isRelative")
 
         isRelative should be (false)
@@ -89,16 +89,16 @@ class URLUtils$Test extends FlatSpec with Matchers {
   it should "check if a URL is already normalized" in {
     normUrls1 ++ normUrls2 foreach {
       url =>
-        val isNormalized = URLUtils.isNormalized(url)
+        val isNormalized = URLUtil.isNormalized(url)
         println(s"- URL: $url => Is normalized: $isNormalized")
 
         isNormalized should be (false)
     }
 
-    URLUtils.isNormalized("http://www.baritoday.it/") should be (true)
-    URLUtils.isNormalized("https://www.baritoday.it/") should be (true)
-    URLUtils.isNormalized("http://www.baritoday.it/notizia-a-caso/") should be (true)
-    URLUtils.isNormalized("https://www.baritoday.it/notizia-a-caso/") should be (true)
+    URLUtil.isNormalized("http://www.baritoday.it/") should be (true)
+    URLUtil.isNormalized("https://www.baritoday.it/") should be (true)
+    URLUtil.isNormalized("http://www.baritoday.it/notizia-a-caso/") should be (true)
+    URLUtil.isNormalized("https://www.baritoday.it/notizia-a-caso/") should be (true)
   }
 
   val urls = List(

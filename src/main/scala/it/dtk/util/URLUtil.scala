@@ -1,7 +1,6 @@
 package it.dtk.util
 
 import java.net.MalformedURLException
-import java.lang.ArrayIndexOutOfBoundsException
 
 /**
  * Author: Michele Damiano Torelli
@@ -9,7 +8,7 @@ import java.lang.ArrayIndexOutOfBoundsException
  * Date: 17/02/14
  * Time: 10:59
  */
-object URLUtils {
+object URLUtil {
   def normalize(url: String): String = {
     val URL_REGEX = "^(http(?:s)?\\:\\/\\/[a-zA-Z0-9\\-]+(?:\\.[a-zA-Z0-9\\-]+)*\\.[a-zA-Z]{2,6}(?:\\/?|(?:\\/[\\w\\-]+)*)(?:\\/?|\\/\\w+\\.[a-zA-Z]{2,4}(?:\\?[\\w]+\\=[\\w\\-]+)?)?(?:\\&[\\w]+\\=[\\w\\-]+)*)$"
     var parsedUrl = url.trim.toLowerCase
@@ -26,7 +25,7 @@ object URLUtils {
       parsedUrl += "/"
     }
 
-    if (parsedUrl matches URL_REGEX) {
+    if (parsedUrl.matches(URL_REGEX)) {
       parsedUrl
     } else {
       throw new MalformedURLException(s"URL is malformed: $url")
