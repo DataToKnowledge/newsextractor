@@ -1,4 +1,4 @@
-package it.dtk
+package it.dtk.http
 
 import org.scalatest.{BeforeAndAfterAll, Matchers, WordSpecLike}
 import akka.actor.{Props, ActorSystem}

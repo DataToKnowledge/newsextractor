@@ -1,25 +1,30 @@
-package it.dtk
+package it.dtk.http
 
 import akka.actor.Actor
 import java.util.Date
 import com.ning.http.client.AsyncHttpClient
-import it.dtk.HttpGetter.Result
 import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.concurrent.TimeUnit
 import scala.concurrent.ExecutionException
+import it.dtk.http.HttpGetter.Result
 
 object HttpGetter {
 
+  /**
+   * Wraps the HTML and the Web page last modified time.
+   *
+   * @param html fetched HTML
+   * @param headerDate time extracted from response headers
+   */
   case class Result(html: Option[String], headerDate: Option[Date])
 
 }
 
 /**
  * @author Andrea Scarpino <andrea@datatoknowledge.it>
- *         uses AsyncWebClient to fetch the web page
- *         should implement a strategy to recover errors
- *         and have a timeout for html retrieval
+ *
+ * Fetches the HTML of a given Web page.
  */
 class HttpGetter(url: String) extends Actor {
 
@@ -27,7 +32,7 @@ class HttpGetter(url: String) extends Actor {
   private val sdf = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss z")
 
   def receive = {
-    case x =>
+    case _ =>
       val f = client.prepareGet(url).execute
 
       try {
