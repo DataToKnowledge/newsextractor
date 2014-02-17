@@ -3,12 +3,17 @@ package it.dtk.util
 import java.net.MalformedURLException
 
 /**
- * Author: Michele Damiano Torelli
- * Project: NewsExtractor
- * Date: 17/02/14
- * Time: 10:59
+ * URL utilities class.
+ *
+ * @author Michele Damiano Torelli <me@mdtorelli.it>
  */
 object URLUtil {
+
+  /**
+   * Normalize a given URL to http(s)://domain.tld/(whatever/) format.
+   * @param url URL to normalize
+   * @return Normalized URL
+   */
   def normalize(url: String): String = {
     val URL_REGEX = "^(http(?:s)?\\:\\/\\/[a-zA-Z0-9\\-]+(?:\\.[a-zA-Z0-9\\-]+)*\\.[a-zA-Z]{2,6}(?:\\/?|(?:\\/[\\w\\-]+)*)(?:\\/?|\\/\\w+\\.[a-zA-Z]{2,4}(?:\\?[\\w]+\\=[\\w\\-]+)?)?(?:\\&[\\w]+\\=[\\w\\-]+)*)$"
     var parsedUrl = url.trim.toLowerCase
@@ -33,6 +38,11 @@ object URLUtil {
     }
   }
 
+  /**
+   * Get domain of a given URL.
+   * @param url URL to parse
+   * @return Domain of URL (format: domain.tld)
+   */
   def getDomainName(url: String): String = {
     var parsedUrl = url.trim.toLowerCase
 
@@ -54,6 +64,11 @@ object URLUtil {
     }
   }
 
+  /**
+   * Check if given URL is normalized.
+   * @param url URL to check
+   * @return true if is normalized; false otherwise
+   */
   def isNormalized(url: String): Boolean = {
     val lowerCaseUrl = url.trim.toLowerCase
 
@@ -62,6 +77,11 @@ object URLUtil {
     || lowerCaseUrl.startsWith("https")))
   }
 
+  /**
+   * Check if given URL is absolute (http(s)://domain.tld/(whatever) or /path-to-whatever).
+   * @param url URL to check
+   * @return true if is absolute; false otherwise
+   */
   def isAbsolute(url: String): Boolean = {
     val lowerCaseUrl = url.trim.toLowerCase
 
@@ -72,6 +92,11 @@ object URLUtil {
     || lowerCaseUrl.startsWith("https"))
   }
 
+  /**
+   * Check if given URL is relative (whatever/ or ./whatever/ or ../whatever/).
+   * @param url URL to check
+   * @return true if is relative; false otherwise
+   */
   def isRelative(url: String): Boolean = {
     val lowerCaseUrl = url.trim.toLowerCase
 
@@ -80,4 +105,5 @@ object URLUtil {
     && !lowerCaseUrl.startsWith("http")
     && !lowerCaseUrl.startsWith("https"))
   }
+
 }

@@ -4,10 +4,9 @@ import org.scalatest.{Matchers, FlatSpec}
 import java.net.MalformedURLException
 
 /**
- * Author: Michele Damiano Torelli
- * Project: NewsExtractor
- * Date: 17/02/14
- * Time: 11:33
+ * URL utilities ScalaTest class.
+ *
+ * @author Michele Damiano Torelli <me@mdtorelli.it>
  */
 class URLUtil$Test extends FlatSpec with Matchers {
   "A URLUtils" should "return the domain name" in {
