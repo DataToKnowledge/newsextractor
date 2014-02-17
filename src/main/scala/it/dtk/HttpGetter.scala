@@ -4,10 +4,10 @@ import akka.actor.Actor
 import java.util.Date
 import com.ning.http.client.AsyncHttpClient
 import it.dtk.HttpGetter.Result
-import scala.concurrent.TimeoutException
 import java.io.IOException
 import java.text.SimpleDateFormat
-import java.util.concurrent.TimeUnit
+import java.util.concurrent.{TimeUnit}
+import scala.concurrent.ExecutionException
 
 object HttpGetter {
 
@@ -38,7 +38,7 @@ class HttpGetter(url: String) extends Actor {
         else
           throw new IOException(String.valueOf(response.getStatusCode))
       } catch {
-        case _: TimeoutException | _: IOException => sender ! new Result(None, None)
+        case _: ExecutionException | _: IOException => sender ! new Result(None, None)
       }
   }
 
