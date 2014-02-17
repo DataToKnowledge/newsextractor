@@ -13,18 +13,19 @@ object URLUtil {
     val URL_REGEX = "^(http(?:s)?\\:\\/\\/[a-zA-Z0-9\\-]+(?:\\.[a-zA-Z0-9\\-]+)*\\.[a-zA-Z]{2,6}(?:\\/?|(?:\\/[\\w\\-]+)*)(?:\\/?|\\/\\w+\\.[a-zA-Z]{2,4}(?:\\?[\\w]+\\=[\\w\\-]+)?)?(?:\\&[\\w]+\\=[\\w\\-]+)*)$"
     var parsedUrl = url.trim.toLowerCase
 
-    if (parsedUrl.contains("#")) {
+    // Remove indexes
+    if (parsedUrl.contains("#"))
       parsedUrl = parsedUrl.substring(0, parsedUrl.indexOf("#"))
-    }
 
-    if (!parsedUrl.startsWith("http://") && !parsedUrl.startsWith("https://")) {
+    // Add http if missing
+    if (!parsedUrl.startsWith("http://") && !parsedUrl.startsWith("https://"))
       parsedUrl = "http://" + parsedUrl
-    }
 
-    if (!parsedUrl.endsWith("/")) {
+    // Add trailing slash if missing
+    if (!parsedUrl.endsWith("/"))
       parsedUrl += "/"
-    }
 
+    // Check if composed URL is still valid
     if (parsedUrl.matches(URL_REGEX)) {
       parsedUrl
     } else {
@@ -64,9 +65,8 @@ object URLUtil {
   def isAbsolute(url: String): Boolean = {
     val lowerCaseUrl = url.trim.toLowerCase
 
-    if (lowerCaseUrl.startsWith("/")) {
+    if (lowerCaseUrl.startsWith("/"))
       return true
-    }
 
     (lowerCaseUrl.startsWith("http")
     || lowerCaseUrl.startsWith("https"))
