@@ -8,10 +8,13 @@ import akka.actor.ActorRef
 import akka.actor.Props
 import akka.actor.ActorLogging
 import it.dtk.http.HttpGetter
+import akka.actor.Terminated
+import akka.actor.ReceiveTimeout
 
 object WebSiteController {
   case object Start
-  private case class Job(url: String, index: Int, terminated: Boolean = false)
+  case class Job(url: String, index: Int, terminated: Boolean = false)
+  case class Done(url: String)
 }
 
 /**
@@ -33,6 +36,10 @@ trait WebSiteController extends Actor with ActorLogging {
 
   def httpGetterProps(url: String): Props
 
+  def mainContentExtractorProps(url: String, record: String): Props
+
+  def computeJobs(url: String, start: Int, end: Int) = start to end map (v => Job(url + v, v))
+
   def numParallelExtractions = 3
 
   private val baseUrl = "http://bari.repubblica.it/cronaca/"
@@ -50,12 +57,12 @@ trait WebSiteController extends Actor with ActorLogging {
 
     case Start =>
       //generate the jobs with the urls
-      val jobs = 1 to 3 map (v => Job(baseUrl + v, v))
-      context.become(runBatch(jobs))
+      val end = numParallelExtractions
+      val jobs = computeJobs(baseUrl, 1, end)
+      context.become(runBatch(jobs, end))
   }
 
-  def runBatch(job: Seq[Job]): Receive = {
-
+  def runBatch(job: Seq[Job], end: Int): Receive = {
     if (job.isEmpty) waiting
     else {
       job.foreach(j => {
@@ -63,14 +70,41 @@ trait WebSiteController extends Actor with ActorLogging {
         //start a http getter for each url and start getting the HTML
         context.watch(context.actorOf(httpGetterProps(j.url)))
       })
-      running(job)
+      running(job, end)
     }
-
   }
 
-  def running(job: Seq[Job]): Receive = {
-    case HttpGetter.Result(html,date) => 
-      //call the actor to retrieve t
+  def running(job: Seq[Job], end: Int): Receive = {
+    //it misses the url and 
+    case HttpGetter.Result(html, date) =>
+      val url = "" //FIXME 
+      log.debug("Getting the data records from the page {}", url)
+      //FIXME check what happen if the http getter has an error
+      context.watch(context.actorOf(dataRecordExtractorProps))
+
+    case DataRecordExtractor.ExtractedRecords(url, records) =>
+      records.foreach(r => {
+        log.debug("Getting the article main content from the page {}", r)
+        context.watch(context.actorOf(mainContentExtractorProps(url, r)))
+      })
+
+    case res: MainContentExtractor.Result =>
+    //save to the db
+
+    case Terminated(_) => {
+      if (context.children.isEmpty)
+        if (end < maxIncrement) {
+          val start = end + 1
+          val last = if (start + numParallelExtractions < maxIncrement) start + numParallelExtractions else maxIncrement
+          runBatch(computeJobs(baseUrl, start, last), last)
+        } else {
+          context.parent ! Done(baseUrl)
+        }
+    }
+
+    case ReceiveTimeout =>
+      context.children foreach context.stop
+
   }
 
 }
