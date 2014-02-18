@@ -2,7 +2,6 @@ package it.dtk.util
 
 import org.scalatest.{Matchers, FlatSpec}
 import java.net.MalformedURLException
-import scala.util.Success
 
 /**
  * URL utilities ScalaTest class.
