@@ -5,7 +5,7 @@ import akka.actor.ActorSystem
 import org.scalatest.WordSpecLike
 import org.scalatest.BeforeAndAfterAll
 import akka.testkit.ImplicitSender
-import it.dtk.model.DataRecord
+import it.dtk.db.DataRecord
 
 object DataRecordExtractorSpec {
   
