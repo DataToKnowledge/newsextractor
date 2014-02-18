@@ -3,7 +3,8 @@ package it.dtk
 import akka.actor.Actor
 
 object MainContentExtractor {
-  case class Extract(record: AnyRef)
+  case class Result(title: String, canonicalUrl: String, extractedTags: Seq[String], metaKeywords: Seq[String], metaDescription: String,
+      articleText: String, imageUrl: String)
 }
 
 
@@ -11,7 +12,7 @@ object MainContentExtractor {
  * @author fabiofumarola
  *
  */
-class MainContentExtractor extends Actor {
+class MainContentExtractor(html: String) extends Actor {
 
   def receive = ???
 }
