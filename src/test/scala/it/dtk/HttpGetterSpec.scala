@@ -1,7 +1,7 @@
-package it.dtk.http
+package it.dtk
 
 import org.scalatest.{BeforeAndAfterAll, Matchers, WordSpecLike}
-import akka.actor.{Props, ActorSystem}
+import akka.actor.{ActorRef, Actor, Props, ActorSystem}
 import akka.testkit.{ImplicitSender, TestKit}
 import scala.concurrent.duration._
 import java.util.Date
@@ -23,8 +23,8 @@ with WordSpecLike with Matchers with BeforeAndAfterAll {
   "An HttpGetter actor" must {
 
     "return the body page" in {
-      val httpGetter = system.actorOf(Props(classOf[HttpGetter], "http://www.google.it/"))
-      httpGetter ! "get"
+
+      system.actorOf(Props(new StepParent(Props(classOf[HttpGetter], "http://www.google.it/"), testActor)))
 
       val res = expectMsgClass(10500.millis, classOf[Result])
 
@@ -33,8 +33,8 @@ with WordSpecLike with Matchers with BeforeAndAfterAll {
     }
 
     "return an empty result when it fetches a 404" in {
-      val httpGetter = system.actorOf(Props(classOf[HttpGetter], "http://www.google.it/asd"))
-      httpGetter ! "get"
+
+      system.actorOf(Props(new StepParent(Props(classOf[HttpGetter], "http://www.google.it/asd"), testActor)))
 
       val res = expectMsgClass(10500.millis, classOf[Result])
 
@@ -43,8 +43,8 @@ with WordSpecLike with Matchers with BeforeAndAfterAll {
     }
 
     "return an empty result when it goes in timeout" in {
-      val httpGetter = system.actorOf(Props(classOf[HttpGetter], "http://www.goo.it/"))
-      httpGetter ! "get"
+
+      system.actorOf(Props(new StepParent(Props(classOf[HttpGetter], "http://www.go.it/"), testActor)))
 
       val res = expectMsgClass(10500.millis, classOf[Result])
 
@@ -54,4 +54,19 @@ with WordSpecLike with Matchers with BeforeAndAfterAll {
 
   }
 
+}
+
+/**
+ * Fake parent Actor as TestKit does not set itselfs as parent
+ * see http://hs.ljungblad.nu/post/69922869833/testing-parent-child-relationships-in-akka
+ *
+ * @param child
+ * @param fwd
+ */
+class StepParent(child: Props, fwd: ActorRef) extends Actor {
+  context.actorOf(child, "child")
+
+  def receive = {
+    case msg => fwd.tell(msg, sender())
+  }
 }
