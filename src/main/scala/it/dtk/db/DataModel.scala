@@ -1,4 +1,4 @@
-package it.dtk.model
+package it.dtk.db
 
 import DataModel._
 import java.util.Date
