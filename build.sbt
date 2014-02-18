@@ -23,6 +23,7 @@ libraryDependencies ++= Seq(
   "com.github.nscala-time" %% "nscala-time" % "0.8.0",
   "org.scalatest" % "scalatest_2.10" % "2.0" % "test",
   "org.scalacheck" %% "scalacheck" % "1.11.3" % "test",
-  "org.mongodb" %% "casbah" % "2.7.0-RC0"
+  "org.mongodb" %% "casbah" % "2.7.0-RC0", 
+  "com.gravity" % "goose" % "2.1.23"
 )
 
