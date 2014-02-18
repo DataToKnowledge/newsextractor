@@ -4,10 +4,10 @@ import akka.actor.Actor
 import java.util.Date
 import com.ning.http.client.AsyncHttpClient
 import java.io.IOException
-import java.text.SimpleDateFormat
 import java.util.concurrent.TimeUnit
 import scala.concurrent.ExecutionException
 import it.dtk.http.HttpGetter.Result
+import org.joda.time.format.DateTimeFormat
 
 object HttpGetter {
 
@@ -22,15 +22,18 @@ object HttpGetter {
 }
 
 /**
- * @author Andrea Scarpino <andrea@datatoknowledge.it>
- *
  * Fetches the HTML of a given Web page.
+ *
+ * @author Andrea Scarpino <andrea@datatoknowledge.it>
  */
 class HttpGetter(url: String) extends Actor {
 
   private val client = new AsyncHttpClient
-  private val sdf = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss z")
+  private val sdf = DateTimeFormat.forPattern("EEE, dd MMM yyyy HH:mm:ss z")
 
+  /**
+   * When receives any message it replies with the HTML of the given Web page
+   */
   def receive = {
     case _ =>
       val f = client.prepareGet(url).execute
@@ -39,7 +42,7 @@ class HttpGetter(url: String) extends Actor {
         val response = f.get(10, TimeUnit.SECONDS)
 
         if (response.getStatusCode < 400)
-          sender ! new Result(Some(response.getResponseBody), Some(sdf.parse(response.getHeader("Date"))))
+          sender ! new Result(Some(response.getResponseBody), Some(sdf.parseDateTime(response.getHeader("Date")).toDate))
         else
           throw new IOException(String.valueOf(response.getStatusCode))
       } catch {
