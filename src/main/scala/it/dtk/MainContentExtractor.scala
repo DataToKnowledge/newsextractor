@@ -1,11 +1,11 @@
 package it.dtk
 
 import akka.actor.Actor
+import it.dtk.db.DataRecord
+
 
 object MainContentExtractor {
-  case class Result(title: String, canonicalUrl: String, extractedTags: Seq[String], metaKeywords: Seq[String], metaDescription: String,
-      articleText: String, imageUrl: String)
-  
+  case class Result(record: DataRecord)
 }
 
 

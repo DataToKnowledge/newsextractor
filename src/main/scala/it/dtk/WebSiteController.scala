@@ -7,14 +7,15 @@ import scala.concurrent.duration._
 import akka.actor.ActorRef
 import akka.actor.Props
 import akka.actor.ActorLogging
-import it.dtk.http.HttpGetter
 import akka.actor.Terminated
 import akka.actor.ReceiveTimeout
+import it.dtk.db.DataRecord
 
 object WebSiteController {
   case object Start
   case class Job(url: String, index: Int, terminated: Boolean = false)
   case class Done(url: String)
+  case class Failure(url: String)
 }
 
 /**
@@ -28,6 +29,12 @@ trait WebSiteController extends Actor with ActorLogging {
   override val supervisorStrategy = OneForOneStrategy(maxNrOfRetries = 5) {
     case _: Exception => SupervisorStrategy.Restart
   }
+    
+  protected val baseUrl = "http://bari.repubblica.it/cronaca/"
+    
+  val parallelFactor = 3
+
+  protected val maxIncrement = 23
 
   /**
    * this should be implemented in each class and point to the actual data record extractor
@@ -36,15 +43,11 @@ trait WebSiteController extends Actor with ActorLogging {
 
   def httpGetterProps(url: String): Props
 
-  def mainContentExtractorProps(url: String, record: String): Props
+  def mainContentExtractorProps(record: DataRecord): Props
 
-  def computeJobs(url: String, start: Int, end: Int) = start to end map (v => Job(url + v, v))
+  def logicalListUrlGenerator(start: Int, stop: Int) = start to stop map (v => Job(baseUrl + v, v))
 
-  def numParallelExtractions = 3
 
-  private val baseUrl = "http://bari.repubblica.it/cronaca/"
-
-  private val maxIncrement = 23
 
   //the maximum duration of the call
   //  context.setReceiveTimeout(10.seconds)
@@ -56,13 +59,12 @@ trait WebSiteController extends Actor with ActorLogging {
   val waiting: Receive = {
 
     case Start =>
-      //generate the jobs with the urls
-      val end = numParallelExtractions
-      val jobs = computeJobs(baseUrl, 1, end)
-      context.become(runBatch(jobs, end))
+      //start querying the first 
+      val jobs = logicalListUrlGenerator(1, parallelFactor)
+      context.become(runBatch(jobs, parallelFactor))
   }
 
-  def runBatch(job: Seq[Job], end: Int): Receive = {
+  def runBatch(job: Seq[Job], currentEnd: Int): Receive = {
     if (job.isEmpty) waiting
     else {
       job.foreach(j => {
@@ -70,33 +72,34 @@ trait WebSiteController extends Actor with ActorLogging {
         //start a http getter for each url and start getting the HTML
         context.watch(context.actorOf(httpGetterProps(j.url)))
       })
-      running(job, end)
+      running(job, currentEnd)
     }
   }
 
-  def running(job: Seq[Job], end: Int): Receive = {
+  def running(job: Seq[Job], currentEnd: Int): Receive = {
     //it misses the url and 
-    case HttpGetter.Result(html, date) =>
-      val url = "" //FIXME 
+    case HttpGetter.Result(url, html, date) =>
       log.debug("Getting the data records from the page {}", url)
       //FIXME check what happen if the http getter has an error
       context.watch(context.actorOf(dataRecordExtractorProps))
 
     case DataRecordExtractor.ExtractedRecords(url, records) =>
-      records.foreach(r => {
-        log.debug("Getting the article main content from the page {}", r)
-        context.watch(context.actorOf(mainContentExtractorProps(url, r)))
+      records.foreach(record => {
+        log.debug("Getting the article main content from the page {}", record)
+        context.watch(context.actorOf(mainContentExtractorProps(record)))
       })
 
     case res: MainContentExtractor.Result =>
-    //save to the db
+      //save to the db
+      println(res.record)
+
 
     case Terminated(_) => {
       if (context.children.isEmpty)
-        if (end < maxIncrement) {
-          val start = end + 1
-          val last = if (start + numParallelExtractions < maxIncrement) start + numParallelExtractions else maxIncrement
-          runBatch(computeJobs(baseUrl, start, last), last)
+        if (currentEnd < maxIncrement) {
+          val start = currentEnd + 1
+          val stop = if (start + parallelFactor < maxIncrement) start + parallelFactor else maxIncrement
+          runBatch(logicalListUrlGenerator(start, stop), stop)
         } else {
           context.parent ! Done(baseUrl)
         }
@@ -104,7 +107,8 @@ trait WebSiteController extends Actor with ActorLogging {
 
     case ReceiveTimeout =>
       context.children foreach context.stop
-
+      log.debug("Failure in the extraction of the website {}",baseUrl)
+      context.parent ! Failure(baseUrl)
   }
 
 }
