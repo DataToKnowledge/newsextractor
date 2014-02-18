@@ -2,6 +2,7 @@ package it.dtk.util
 
 import org.scalatest.{Matchers, FlatSpec}
 import java.net.MalformedURLException
+import scala.util.Success
 
 /**
  * URL utilities ScalaTest class.
@@ -13,93 +14,56 @@ class URLUtil$Test extends FlatSpec with Matchers {
   "A URLUtils" should "return the domain name" in {
     urls foreach {
       url =>
-        val domain = URLUtil.getDomainName(url)
-        println(s"- URL: $url => Domain: $domain")
-        domain should be ("baritoday.it")
+        val result = URLUtil getDomainName url
+        result should be a 'success
+        result.get should be ("baritoday.it")
     }
   }
 
   it should "throw MalformedURLException if malformed URL is passed to getDomainName" in {
-    a [MalformedURLException] should be thrownBy {
-      URLUtil.getDomainName("baritoday")
-    }
+    val result = URLUtil getDomainName "baritoday"
+    result should be a 'failure
+    a [MalformedURLException] should be thrownBy result.get
   }
 
   it should "normalize a URL" in {
     normUrls1 foreach {
       url =>
-        val normalizedUrl = URLUtil.normalize(url)
-        println(s"- URL: $url => Normalized: $normalizedUrl")
-        
-//        normalizedUrl.getOrElse("") should be  ("http://www.baritoday.it/")
-//        normalizedUrl.get should be  ("http://www.baritoday.it/")
-        normalizedUrl.map(_ should be ("http://www.baritoday.it/"))
+        val result = URLUtil normalize url
+        result should be a 'success
+        result.get should be ("http://www.baritoday.it/")
     }
 
     normUrls2 foreach {
       url =>
-        val normalizedUrl = URLUtil.normalize(url)
-        println(s"- URL: $url => Normalized: $normalizedUrl")
-
-        normalizedUrl should be ("http://www.baritoday.it/pages/4/")
+        val result = URLUtil normalize url
+        result should be a 'success
+        result.get should be ("http://www.baritoday.it/pages/4/")
     }
   }
 
   it should "throw MalformedURLException if malformed URL is passed to normalize" in {
-    a [MalformedURLException] should be thrownBy {
-      URLUtil.normalize("baritoday")
-    }
+    val result = URLUtil normalize "baritoday"
+    result should be a 'failure
+    a [MalformedURLException] should be thrownBy result.get
   }
 
   it should "check if a URL is absolute" in {
-    absUrls foreach {
-      url =>
-        val isAbsolute = URLUtil.isAbsolute(url)
-        println(s"- URL: $url => Is absolute: $isAbsolute")
-
-        isAbsolute should be (true)
-    }
-
-    relUrls foreach {
-      url =>
-        val isAbsolute = URLUtil.isAbsolute(url)
-        println(s"- URL: $url => Is absolute: $isAbsolute")
-
-        isAbsolute should be (false)
-    }
+    absUrls foreach (URLUtil isAbsolute _ should be (true))
+    relUrls foreach (URLUtil isAbsolute _ should be (false))
   }
 
   it should "check if a URL is relative" in {
-    relUrls foreach {
-      url =>
-        val isRelative = URLUtil.isRelative(url)
-        println(s"- URL: $url => Is relative: $isRelative")
-
-        isRelative should be (true)
-    }
-
-    absUrls foreach {
-      url =>
-        val isRelative = URLUtil.isRelative(url)
-        println(s"- URL: $url => Is relative: $isRelative")
-
-        isRelative should be (false)
-    }
+    relUrls foreach (URLUtil isRelative _ should be (true))
+    absUrls foreach (URLUtil isRelative _ should be (false))
   }
 
   it should "check if a URL is already normalized" in {
-    normUrls1 ++ normUrls2 foreach {
-      url =>
-        val isNormalized = URLUtil.isNormalized(url)
-        println(s"- URL: $url => Is normalized: $isNormalized")
-
-        isNormalized should be (false)
-    }
-
-    URLUtil.isNormalized("http://www.baritoday.it/") should be (true)
-    URLUtil.isNormalized("https://www.baritoday.it/") should be (true)
-    URLUtil.isNormalized("http://www.baritoday.it/notizia-a-caso/") should be (true)
-    URLUtil.isNormalized("https://www.baritoday.it/notizia-a-caso/") should be (true)
+    normUrls1 ++ normUrls2 foreach (URLUtil isNormalized _ should be (false))
+    URLUtil isNormalized "http://www.baritoday.it/" should be (true)
+    URLUtil isNormalized "https://www.baritoday.it/" should be (true)
+    URLUtil isNormalized "http://www.baritoday.it/notizia-a-caso/" should be (true)
+    URLUtil isNormalized "https://www.baritoday.it/notizia-a-caso/" should be (true)
   }
 
   val urls = List(

@@ -1,6 +1,7 @@
 package it.dtk.util
 
 import java.net.MalformedURLException
+import scala.util.{Try, Success, Failure}
 
 /**
  * URL utilities class.
@@ -8,50 +9,53 @@ import java.net.MalformedURLException
  * @author Michele Damiano Torelli <me@mdtorelli.it>
  */
 object URLUtil {
-  
-  val URL_REGEX = "^(http(?:s)?\\:\\/\\/[a-zA-Z0-9\\-]+(?:\\.[a-zA-Z0-9\\-]+)*\\.[a-zA-Z]{2,6}(?:\\/?|(?:\\/[\\w\\-]+)*)(?:\\/?|\\/\\w+\\.[a-zA-Z]{2,4}(?:\\?[\\w]+\\=[\\w\\-]+)?)?(?:\\&[\\w]+\\=[\\w\\-]+)*)$"
+
+  val URL_REGEX = "^(http(?:s)?\\:\\/\\/[a-zA-Z0-9\\-]+(?:\\.[a-zA-Z0-9\\-]+)*\\.[a-zA-Z]{2,6}(?:\\/?|(?:\\/[\\w\\-]+)*)(?:\\/?|\\/\\w+\\.[a-zA-Z]{2,4}(?:\\?[\\w]+\\=[\\w\\-]+)?)?(?:\\&[\\w]+\\=[\\w\\-]+)*)/$"
 
   /**
    * Normalize a given URL to http(s)://domain.tld/(whatever/) format.
    * @param url URL to normalize
-   * @return Normalized URL
+   * @return Normalized URL or MalformedURLException
    */
-  def normalize(url: String): Option[String] = {
-    val urlToLower = url.trim.toLowerCase
-    val urlNormalize = urlToLower match {
-      case u if u.contains("#") => u.substring(0, u.indexOf("#"))
-      case u if !u.startsWith("http://") && !u.startsWith("https://") => "http://" + u
-      case u if !u.endsWith("/") => u + "/"
-    } 
+  def normalize(url: String): Try[String] = {
+    var parsedUrl = url.trim.toLowerCase
+
+    // Remove indexes
+    if (parsedUrl.contains("#"))
+      parsedUrl = parsedUrl.substring(0, parsedUrl.indexOf("#"))
+
+    // Add http if missing
+    if (!parsedUrl.startsWith("http://") && !parsedUrl.startsWith("https://"))
+      parsedUrl = "http://" + parsedUrl
+
+    // Add trailing slash if missing
+    if (!parsedUrl.endsWith("/"))
+      parsedUrl = parsedUrl + "/"
 
     // Check if composed URL is still valid
-    if (urlNormalize.matches(URL_REGEX)) Some(urlNormalize) else None
+    if (parsedUrl.matches(URL_REGEX)) Success(parsedUrl)
+    else Failure(new MalformedURLException(s"URL is malformed: $url"))
   }
 
   /**
    * Get domain of a given URL.
    * @param url URL to parse
-   * @return Domain of URL (format: domain.tld)
+   * @return Domain of URL (format: domain.tld) or MalformedURLException
    */
-  def getDomainName(url: String): String = {
+  def getDomainName(url: String): Try[String] = {
     var parsedUrl = url.trim.toLowerCase
 
     // Prune leading http or https
-    if (!parsedUrl.startsWith("http") && !parsedUrl.startsWith("https")) {
+    if (!parsedUrl.startsWith("http") && !parsedUrl.startsWith("https"))
       parsedUrl = parsedUrl.split("/").apply(0)
-    } else {
+    else
       parsedUrl = parsedUrl.split("/").apply(2)
-    }
 
     val urlTokens = parsedUrl.split("\\.")
 
-    if (urlTokens.length > 1) {
-      // Compose domain name
-      urlTokens.apply(urlTokens.length - 2) + "." + urlTokens.last
-    } else {
-      // Passed URL is malformed
-      throw new MalformedURLException(s"URL is malformed: $url")
-    }
+    // Compose domain name or throw exception
+    if (urlTokens.length > 1) Success(urlTokens.apply(urlTokens.length - 2) + "." + urlTokens.last)
+    else Failure(new MalformedURLException(s"URL is malformed: $url"))
   }
 
   /**
@@ -63,8 +67,8 @@ object URLUtil {
     val lowerCaseUrl = url.trim.toLowerCase
 
     (lowerCaseUrl.endsWith("/")
-    && (lowerCaseUrl.startsWith("http")
-    || lowerCaseUrl.startsWith("https")))
+      && (lowerCaseUrl.startsWith("http")
+      || lowerCaseUrl.startsWith("https")))
   }
 
   /**
@@ -79,7 +83,7 @@ object URLUtil {
       return true
 
     (lowerCaseUrl.startsWith("http")
-    || lowerCaseUrl.startsWith("https"))
+      || lowerCaseUrl.startsWith("https"))
   }
 
   /**
@@ -91,9 +95,9 @@ object URLUtil {
     val lowerCaseUrl = url.trim.toLowerCase
 
     (!lowerCaseUrl.startsWith("/")
-    && !lowerCaseUrl.startsWith("//")
-    && !lowerCaseUrl.startsWith("http")
-    && !lowerCaseUrl.startsWith("https"))
+      && !lowerCaseUrl.startsWith("//")
+      && !lowerCaseUrl.startsWith("http")
+      && !lowerCaseUrl.startsWith("https"))
   }
 
 }
