@@ -14,10 +14,11 @@ object HttpGetter {
   /**
    * Wraps the HTML and the Web page last modified time.
    *
+   * @param url the given Web page url
    * @param html fetched HTML
    * @param headerDate time extracted from response headers
    */
-  case class Result(html: Option[String], headerDate: Option[Date])
+  case class Result(url: String, html: Option[String], headerDate: Option[Date])
 
 }
 
@@ -43,10 +44,10 @@ class HttpGetter(url: String) extends Actor {
   override def receive: Actor.Receive = {
     case Right(res: NettyResponse) =>
       if (res.getStatusCode < 400)
-        context.parent ! new Result(Some(res.getResponseBody), Some(sdf.parseDateTime(res.getHeader("Date")).toDate))
+        context.parent ! new Result(url, Some(res.getResponseBody), Some(sdf.parseDateTime(res.getHeader("Date")).toDate))
       else
-        context.parent ! new Result(None, None)
+        context.parent ! new Result(url, None, None)
     case Left(error) =>
-      context.parent ! new Result(None, None)
+      context.parent ! new Result(url, None, None)
   }
 }
