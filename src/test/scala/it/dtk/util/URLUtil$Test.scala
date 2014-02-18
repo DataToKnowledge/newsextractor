@@ -9,12 +9,12 @@ import java.net.MalformedURLException
  * @author Michele Damiano Torelli <me@mdtorelli.it>
  */
 class URLUtil$Test extends FlatSpec with Matchers {
+  
   "A URLUtils" should "return the domain name" in {
     urls foreach {
       url =>
         val domain = URLUtil.getDomainName(url)
         println(s"- URL: $url => Domain: $domain")
-
         domain should be ("baritoday.it")
     }
   }
@@ -30,8 +30,10 @@ class URLUtil$Test extends FlatSpec with Matchers {
       url =>
         val normalizedUrl = URLUtil.normalize(url)
         println(s"- URL: $url => Normalized: $normalizedUrl")
-
-        normalizedUrl should be ("http://www.baritoday.it/")
+        
+//        normalizedUrl.getOrElse("") should be  ("http://www.baritoday.it/")
+//        normalizedUrl.get should be  ("http://www.baritoday.it/")
+        normalizedUrl.map(_ should be ("http://www.baritoday.it/"))
     }
 
     normUrls2 foreach {

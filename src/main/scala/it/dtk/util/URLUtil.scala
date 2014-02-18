@@ -8,34 +8,24 @@ import java.net.MalformedURLException
  * @author Michele Damiano Torelli <me@mdtorelli.it>
  */
 object URLUtil {
+  
+  val URL_REGEX = "^(http(?:s)?\\:\\/\\/[a-zA-Z0-9\\-]+(?:\\.[a-zA-Z0-9\\-]+)*\\.[a-zA-Z]{2,6}(?:\\/?|(?:\\/[\\w\\-]+)*)(?:\\/?|\\/\\w+\\.[a-zA-Z]{2,4}(?:\\?[\\w]+\\=[\\w\\-]+)?)?(?:\\&[\\w]+\\=[\\w\\-]+)*)$"
 
   /**
    * Normalize a given URL to http(s)://domain.tld/(whatever/) format.
    * @param url URL to normalize
    * @return Normalized URL
    */
-  def normalize(url: String): String = {
-    val URL_REGEX = "^(http(?:s)?\\:\\/\\/[a-zA-Z0-9\\-]+(?:\\.[a-zA-Z0-9\\-]+)*\\.[a-zA-Z]{2,6}(?:\\/?|(?:\\/[\\w\\-]+)*)(?:\\/?|\\/\\w+\\.[a-zA-Z]{2,4}(?:\\?[\\w]+\\=[\\w\\-]+)?)?(?:\\&[\\w]+\\=[\\w\\-]+)*)$"
-    var parsedUrl = url.trim.toLowerCase
-
-    // Remove indexes
-    if (parsedUrl.contains("#"))
-      parsedUrl = parsedUrl.substring(0, parsedUrl.indexOf("#"))
-
-    // Add http if missing
-    if (!parsedUrl.startsWith("http://") && !parsedUrl.startsWith("https://"))
-      parsedUrl = "http://" + parsedUrl
-
-    // Add trailing slash if missing
-    if (!parsedUrl.endsWith("/"))
-      parsedUrl += "/"
+  def normalize(url: String): Option[String] = {
+    val urlToLower = url.trim.toLowerCase
+    val urlNormalize = urlToLower match {
+      case u if u.contains("#") => u.substring(0, u.indexOf("#"))
+      case u if !u.startsWith("http://") && !u.startsWith("https://") => "http://" + u
+      case u if !u.endsWith("/") => u + "/"
+    } 
 
     // Check if composed URL is still valid
-    if (parsedUrl.matches(URL_REGEX)) {
-      parsedUrl
-    } else {
-      throw new MalformedURLException(s"URL is malformed: $url")
-    }
+    if (urlNormalize.matches(URL_REGEX)) Some(urlNormalize) else None
   }
 
   /**
