@@ -4,7 +4,6 @@ import akka.actor.Actor
 import akka.actor.OneForOneStrategy
 import akka.actor.SupervisorStrategy
 import scala.concurrent.duration._
-import akka.actor.ActorRef
 import akka.actor.Props
 import akka.actor.ActorLogging
 import akka.actor.Terminated
@@ -29,25 +28,23 @@ trait WebSiteController extends Actor with ActorLogging {
   override val supervisorStrategy = OneForOneStrategy(maxNrOfRetries = 5) {
     case _: Exception => SupervisorStrategy.Restart
   }
-    
-  protected val baseUrl = "http://bari.repubblica.it/cronaca/"
-    
-  val parallelFactor = 3
 
-  protected val maxIncrement = 23
+  var parallelFactor = 3
+
+  val baseUrl: String
+
+  val maxIncrement: Int
+
+  def httpGetterProps(url: String): Props = Props[HttpGetter]
+
+  def mainContentExtractorProps(record: DataRecord): Props = Props[MainContentExtractor]
 
   /**
    * this should be implemented in each class and point to the actual data record extractor
    */
   def dataRecordExtractorProps: Props
 
-  def httpGetterProps(url: String): Props
-
-  def mainContentExtractorProps(record: DataRecord): Props
-
-  def logicalListUrlGenerator(start: Int, stop: Int) = start to stop map (v => Job(baseUrl + v, v))
-
-
+  def logicalListUrlGenerator(start: Int, stop: Int): Seq
 
   //the maximum duration of the call
   //  context.setReceiveTimeout(10.seconds)
