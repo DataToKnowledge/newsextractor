@@ -15,7 +15,7 @@ class LeccePrimaWebSiteController extends WebSiteController {
 
   override def dataRecordExtractorProps: Props = ???
 
-  override def logicalListUrlGenerator(start: Int, stop: Int) = {
+  override def logicalListUrlGenerator(start: Int, stop: Int) : Seq[Job] = {
     start to stop map(v => Job(baseUrl + "pag/" + v, v))
   }
 }
