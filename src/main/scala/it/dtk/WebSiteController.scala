@@ -35,7 +35,7 @@ trait WebSiteController extends Actor with ActorLogging {
 
   val maxIncrement: Int
 
-  def httpGetterProps(url: String): Props = Props[HttpGetter]
+  def httpGetterProps(url: String): Props = Props(classOf[HttpGetter], url)
 
   def mainContentExtractorProps(record: DataRecord): Props = Props[MainContentExtractor]
 
