@@ -35,7 +35,7 @@ trait WebSiteController extends Actor with ActorLogging {
 
   val maxIncrement: Int
 
-  def httpGetterProps(url: String): Props = Props[HttpGetter]
+  def httpGetterProps(url: String): Props = Props(classOf[HttpGetter], url)
 
   def mainContentExtractorProps(record: DataRecord): Props = Props[MainContentExtractor]
 
@@ -44,7 +44,7 @@ trait WebSiteController extends Actor with ActorLogging {
    */
   def dataRecordExtractorProps: Props
 
-  def logicalListUrlGenerator(start: Int, stop: Int): Traversable[Job]
+  def logicalListUrlGenerator(start: Int, stop: Int): Seq[Job]
 
   //the maximum duration of the call
   //  context.setReceiveTimeout(10.seconds)
@@ -61,7 +61,7 @@ trait WebSiteController extends Actor with ActorLogging {
       context.become(runBatch(jobs, parallelFactor))
   }
 
-  def runBatch(job: Traversable[Job], currentEnd: Int): Receive = {
+  def runBatch(job: Seq[Job], currentEnd: Int): Receive = {
     if (job.isEmpty) waiting
     else {
       job.foreach(j => {
@@ -73,7 +73,7 @@ trait WebSiteController extends Actor with ActorLogging {
     }
   }
 
-  def running(job: Traversable[Job], currentEnd: Int): Receive = {
+  def running(job: Seq[Job], currentEnd: Int): Receive = {
     //it misses the url and 
     case HttpGetter.Result(url, html, date) =>
       log.debug("Getting the data records from the page {}", url)
