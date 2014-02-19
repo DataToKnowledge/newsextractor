@@ -9,6 +9,7 @@ import akka.actor.ActorLogging
 import akka.actor.Terminated
 import akka.actor.ReceiveTimeout
 import it.dtk.db.DataRecord
+import scala.collection.immutable.Seq
 
 object WebSiteController {
   case object Start
@@ -44,7 +45,7 @@ trait WebSiteController extends Actor with ActorLogging {
    */
   def dataRecordExtractorProps: Props
 
-  def logicalListUrlGenerator(start: Int, stop: Int): Seq
+  def logicalListUrlGenerator(start: Int, stop: Int): Seq[Job] 
 
   //the maximum duration of the call
   //  context.setReceiveTimeout(10.seconds)
