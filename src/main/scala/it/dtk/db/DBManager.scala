@@ -13,7 +13,7 @@ object DBManager {
  * persist data in the db MongoDB indexed based on url
  * we should use Casbah http://mongodb.github.io/casbah/
  *
- * @author Michele Damiano Torelli <me@mdtorelli.it>
+ * @author Michele Damiano Torelli <daniele@datatoknowledge.it>
  */
 class DBManager(host: String, port: Int, database: String) extends Actor {
 

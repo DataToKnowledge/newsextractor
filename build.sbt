@@ -27,6 +27,7 @@ libraryDependencies ++= Seq(
   "ch.qos.logback" % "logback-classic" % "1.1.1"
 )  
 
+/* Required by com.gravity.Goose */
 libraryDependencies ++= Seq(
   "org.jsoup" % "jsoup" % "1.5.2",
   "org.apache.httpcomponents" % "httpclient" % "4.1.2",

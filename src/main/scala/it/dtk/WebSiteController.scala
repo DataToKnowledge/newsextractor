@@ -12,11 +12,8 @@ import it.dtk.db.DataRecord
 object WebSiteController {
 
   case object Start
-
   case class Job(url: String, index: Int, terminated: Boolean = false)
-
   case class Done(url: String)
-
   case class Failure(url: String)
 
 }
@@ -66,13 +63,15 @@ trait WebSiteController extends Actor with ActorLogging {
   }
 
   def runBatch(job: Seq[Job], currentEnd: Int): Receive = {
-    if (job.isEmpty) waiting
-    else {
+    if (job.isEmpty) {
+      waiting
+    } else {
       job.foreach(j => {
         log.info("Getting the HTML for the page {} with index {}", j.url, j.index)
         //start a http getter for each url and start getting the HTML
         context.watch(context.actorOf(httpGetterProps(j.url)))
       })
+
       running(job, currentEnd)
     }
   }
@@ -94,9 +93,8 @@ trait WebSiteController extends Actor with ActorLogging {
       //save to the db
       println(res.record)
 
-
     case Terminated(_) =>
-      if (context.children.isEmpty)
+      if (context.children.isEmpty) {
         if (currentEnd < maxIncrement) {
           val start = currentEnd + 1
           val stop = if (start + parallelFactor < maxIncrement) start + parallelFactor else maxIncrement
@@ -104,6 +102,7 @@ trait WebSiteController extends Actor with ActorLogging {
         } else {
           context.parent ! Done(baseUrl)
         }
+      }
 
     case ReceiveTimeout =>
       context.children foreach context.stop

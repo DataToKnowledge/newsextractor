@@ -6,7 +6,7 @@ import scala.util.{Try, Success, Failure}
 /**
  * URL utilities class.
  *
- * @author Michele Damiano Torelli <me@mdtorelli.it>
+ * @author Michele Damiano Torelli <daniele@datatoknowledge.it>
  */
 object URLUtil {
 
