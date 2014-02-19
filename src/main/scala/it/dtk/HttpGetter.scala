@@ -1,6 +1,6 @@
 package it.dtk
 
-import akka.actor.Actor
+import akka.actor.{ActorLogging, Actor}
 import akka.pattern.pipe
 import java.util.{Locale, Date}
 import java.util.concurrent.Executor
@@ -30,7 +30,7 @@ object HttpGetter {
  *
  * @author Andrea Scarpino <andrea@datatoknowledge.it>
  */
-class HttpGetter(url: String) extends Actor {
+class HttpGetter(url: String) extends Actor with ActorLogging {
 
   import dispatch._
 
@@ -46,9 +46,10 @@ class HttpGetter(url: String) extends Actor {
    */
   override def receive: Actor.Receive = {
     case Right(res: NettyResponse) =>
-      if (res.getStatusCode < 400)
+      if (res.getStatusCode < 400) {
+        log.info("Successufully got the HTML")
         context.parent ! Success(new Result(url, res.getResponseBody, sdf.parseDateTime(res.getHeader("Date")).toDate))
-      else
+      } else
         context.parent ! Failure(new PageNotFoundException)
     case Left(error: Throwable) =>
       context.parent ! Failure(error)
