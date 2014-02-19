@@ -7,7 +7,8 @@ import java.util.concurrent.Executor
 import com.ning.http.client.providers.netty.NettyResponse
 import org.joda.time.format.DateTimeFormat
 import scala.concurrent.ExecutionContext
-import it.dtk.HttpGetter.Result
+import it.dtk.HttpGetter.{PageNotFoundException, Result}
+import scala.util.{Success, Failure}
 
 object HttpGetter {
 
@@ -18,7 +19,9 @@ object HttpGetter {
    * @param html fetched HTML
    * @param headerDate time extracted from response headers
    */
-  case class Result(url: String, html: Option[String], headerDate: Option[Date])
+  case class Result(url: String, html: String, headerDate: Date)
+
+  case class PageNotFoundException() extends Throwable
 
 }
 
@@ -44,10 +47,10 @@ class HttpGetter(url: String) extends Actor {
   override def receive: Actor.Receive = {
     case Right(res: NettyResponse) =>
       if (res.getStatusCode < 400)
-        context.parent ! new Result(url, Some(res.getResponseBody), Some(sdf.parseDateTime(res.getHeader("Date")).toDate))
+        context.parent ! Success(new Result(url, res.getResponseBody, sdf.parseDateTime(res.getHeader("Date")).toDate))
       else
-        context.parent ! new Result(url, None, None)
-    case Left(error) =>
-      context.parent ! new Result(url, None, None)
+        context.parent ! Failure(new PageNotFoundException)
+    case Left(error: Throwable) =>
+      context.parent ! Failure(error)
   }
 }

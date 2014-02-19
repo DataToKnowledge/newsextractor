@@ -3,8 +3,8 @@ package it.dtk
 import org.scalatest.{BeforeAndAfterAll, Matchers, WordSpecLike}
 import akka.actor.{ActorRef, Actor, Props, ActorSystem}
 import akka.testkit.{ImplicitSender, TestKit}
-import scala.concurrent.duration._
 import java.util.Date
+import scala.util.{Failure, Success}
 
 /**
  * @author Andrea Scarpino <andrea@datatoknowledge.it>
@@ -26,30 +26,24 @@ with WordSpecLike with Matchers with BeforeAndAfterAll {
 
       system.actorOf(Props(new StepParent(Props(classOf[HttpGetter], "http://www.google.it/"), testActor)))
 
-      val res = expectMsgClass(10500.millis, classOf[Result])
-
-      res.html.getClass should be(classOf[Some[String]])
-      res.headerDate.getClass should be(classOf[Some[Date]])
+      val res = expectMsgClass(classOf[Success[Result]])
+      res.get.html.getClass should be(classOf[String])
+      res.get.headerDate.getClass should be(classOf[Date])
     }
 
     "return an empty result when it fetches a 404" in {
 
       system.actorOf(Props(new StepParent(Props(classOf[HttpGetter], "http://www.google.it/asd"), testActor)))
 
-      val res = expectMsgClass(10500.millis, classOf[Result])
-
-      res.html.getClass should be(None.getClass)
-      res.headerDate.getClass should be(None.getClass)
+      val res = expectMsgClass(classOf[Failure[Throwable]])
+      a [PageNotFoundException] should be thrownBy res.get
     }
 
     "return an empty result when it goes in timeout" in {
 
       system.actorOf(Props(new StepParent(Props(classOf[HttpGetter], "http://www.go.it/"), testActor)))
 
-      val res = expectMsgClass(10500.millis, classOf[Result])
-
-      res.html.getClass should be(None.getClass)
-      res.headerDate.getClass should be(None.getClass)
+      val res = expectMsgClass(classOf[Failure[Throwable]])
     }
 
   }
