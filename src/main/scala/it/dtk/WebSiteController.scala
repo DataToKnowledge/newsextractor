@@ -3,7 +3,6 @@ package it.dtk
 import akka.actor.Actor
 import akka.actor.OneForOneStrategy
 import akka.actor.SupervisorStrategy
-import scala.concurrent.duration._
 import akka.actor.Props
 import akka.actor.ActorLogging
 import akka.actor.Terminated
@@ -11,10 +10,15 @@ import akka.actor.ReceiveTimeout
 import it.dtk.db.DataRecord
 
 object WebSiteController {
+
   case object Start
+
   case class Job(url: String, index: Int, terminated: Boolean = false)
+
   case class Done(url: String)
+
   case class Failure(url: String)
+
 }
 
 /**
@@ -65,7 +69,7 @@ trait WebSiteController extends Actor with ActorLogging {
     if (job.isEmpty) waiting
     else {
       job.foreach(j => {
-        log.debug("Getting the HTML for the page {} with index {}", j.url, j.index)
+        log.info("Getting the HTML for the page {} with index {}", j.url, j.index)
         //start a http getter for each url and start getting the HTML
         context.watch(context.actorOf(httpGetterProps(j.url)))
       })
@@ -76,13 +80,13 @@ trait WebSiteController extends Actor with ActorLogging {
   def running(job: Seq[Job], currentEnd: Int): Receive = {
     //it misses the url and 
     case HttpGetter.Result(url, html, date) =>
-      log.debug("Getting the data records from the page {}", url)
+      log.info("Getting the data records from the page {}", url)
       //FIXME check what happen if the http getter has an error
       context.watch(context.actorOf(dataRecordExtractorProps))
 
     case DataRecordExtractor.ExtractedRecords(url, records) =>
       records.foreach(record => {
-        log.debug("Getting the article main content from the page {}", record)
+        log.info("Getting the article main content from the page {}", record)
         context.watch(context.actorOf(mainContentExtractorProps(record)))
       })
 
@@ -91,7 +95,7 @@ trait WebSiteController extends Actor with ActorLogging {
       println(res.record)
 
 
-    case Terminated(_) => {
+    case Terminated(_) =>
       if (context.children.isEmpty)
         if (currentEnd < maxIncrement) {
           val start = currentEnd + 1
@@ -100,11 +104,10 @@ trait WebSiteController extends Actor with ActorLogging {
         } else {
           context.parent ! Done(baseUrl)
         }
-    }
 
     case ReceiveTimeout =>
       context.children foreach context.stop
-      log.debug("Failure in the extraction of the website {}",baseUrl)
+      log.info("Failure in the extraction of the website {}", baseUrl)
       context.parent ! Failure(baseUrl)
   }
 
