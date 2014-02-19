@@ -1,10 +1,11 @@
 package it.dtk
 
 import org.scalatest.{BeforeAndAfterAll, Matchers, WordSpecLike}
-import akka.actor.{ActorRef, Actor, Props, ActorSystem}
+import akka.actor.{Props, ActorSystem}
 import akka.testkit.{ImplicitSender, TestKit}
 import java.util.Date
 import scala.util.{Failure, Success}
+import it.dtk.util.StepParent
 
 /**
  * @author Andrea Scarpino <andrea@datatoknowledge.it>
@@ -48,19 +49,4 @@ with WordSpecLike with Matchers with BeforeAndAfterAll {
 
   }
 
-}
-
-/**
- * Fake parent Actor as TestKit does not set itselfs as parent
- * see http://hs.ljungblad.nu/post/69922869833/testing-parent-child-relationships-in-akka
- *
- * @param child
- * @param fwd
- */
-class StepParent(child: Props, fwd: ActorRef) extends Actor {
-  context.actorOf(child, "child")
-
-  def receive = {
-    case msg => fwd.tell(msg, sender())
-  }
 }
