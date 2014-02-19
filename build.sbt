@@ -24,5 +24,10 @@ libraryDependencies ++= Seq(
   "org.scalatest" % "scalatest_2.10" % "2.0" % "test",
   "org.scalacheck" %% "scalacheck" % "1.11.3" % "test",
   "org.mongodb" %% "casbah" % "2.7.0-RC0"
+)  
+
+libraryDependencies ++= Seq(
+  "org.jsoup" % "jsoup" % "1.5.2",
+  "org.apache.httpcomponents" % "httpclient" % "4.1.2"
 )
 
