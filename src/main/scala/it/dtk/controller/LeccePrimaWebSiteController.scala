@@ -3,10 +3,9 @@ package it.dtk.controller
 import it.dtk.WebSiteController
 import akka.actor.Props
 import it.dtk.WebSiteController._
-import scala.collection.immutable.Seq
 
 /**
- * @author Andrea Scarpino <me@andreascarpino.it>
+ * @author Andrea Scarpino <andrea@datatoknowledge.it>
  */
 class LeccePrimaWebSiteController extends WebSiteController {
 
@@ -16,5 +15,7 @@ class LeccePrimaWebSiteController extends WebSiteController {
 
   override def dataRecordExtractorProps: Props = ???
 
-  override def logicalListUrlGenerator(start: Int, stop: Int): Seq[Job] = ???
+  override def logicalListUrlGenerator(start: Int, stop: Int) = {
+    start to stop map(v => Job(baseUrl + "pag/" + v, v))
+  }
 }

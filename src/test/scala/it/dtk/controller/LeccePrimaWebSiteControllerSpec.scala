@@ -3,7 +3,7 @@ package it.dtk.controller
 import org.scalatest.{BeforeAndAfterAll, Matchers, WordSpecLike}
 import akka.actor.{Props, ActorSystem}
 import akka.testkit.{ImplicitSender, TestKit}
-import it.dtk.util.StepParent
+import it.dtk.WebSiteController.Start
 
 /**
  * @author Andrea Scarpino <andrea@datatoknowledge.it>
@@ -21,8 +21,9 @@ class LeccePrimaWebSiteControllerSpec(_system: ActorSystem) extends TestKit(_sys
 
     "return the next links" in {
 
-      val controller = system.actorOf(Props(new StepParent(Props(classOf[LeccePrimaWebSiteController]), testActor)))
+      val controller = system.actorOf(Props(classOf[LeccePrimaWebSiteController]))
 
+      controller ! Start
     }
   }
 }

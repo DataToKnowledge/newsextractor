@@ -9,7 +9,6 @@ import akka.actor.ActorLogging
 import akka.actor.Terminated
 import akka.actor.ReceiveTimeout
 import it.dtk.db.DataRecord
-import scala.collection.immutable.Seq
 
 object WebSiteController {
   case object Start
@@ -45,7 +44,7 @@ trait WebSiteController extends Actor with ActorLogging {
    */
   def dataRecordExtractorProps: Props
 
-  def logicalListUrlGenerator(start: Int, stop: Int): Seq[Job] 
+  def logicalListUrlGenerator(start: Int, stop: Int): Traversable[Job]
 
   //the maximum duration of the call
   //  context.setReceiveTimeout(10.seconds)
@@ -62,7 +61,7 @@ trait WebSiteController extends Actor with ActorLogging {
       context.become(runBatch(jobs, parallelFactor))
   }
 
-  def runBatch(job: Seq[Job], currentEnd: Int): Receive = {
+  def runBatch(job: Traversable[Job], currentEnd: Int): Receive = {
     if (job.isEmpty) waiting
     else {
       job.foreach(j => {
@@ -74,7 +73,7 @@ trait WebSiteController extends Actor with ActorLogging {
     }
   }
 
-  def running(job: Seq[Job], currentEnd: Int): Receive = {
+  def running(job: Traversable[Job], currentEnd: Int): Receive = {
     //it misses the url and 
     case HttpGetter.Result(url, html, date) =>
       log.debug("Getting the data records from the page {}", url)
