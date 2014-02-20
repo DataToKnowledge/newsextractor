@@ -2,7 +2,7 @@ package it.dtk.controller
 
 import it.dtk.WebSiteController
 import akka.actor.Props
-import it.dtk.WebSiteController._
+import it.dtk.WebSiteController.Job
 
 /**
  * @author Andrea Scarpino <andrea@datatoknowledge.it>
@@ -15,7 +15,7 @@ class LeccePrimaWebSiteController extends WebSiteController {
 
   override def dataRecordExtractorProps: Props = ???
 
-  override def logicalListUrlGenerator(start: Int, stop: Int) : Seq[Job] = {
-    start to stop map(v => Job(baseUrl + "pag/" + v, v))
+  override def logicalListUrlGenerator(start: Int, stop: Int): Seq[Job] = {
+    start to stop map (v => Job(baseUrl + "pag/" + v, v))
   }
 }

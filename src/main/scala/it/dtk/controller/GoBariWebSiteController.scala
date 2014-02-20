@@ -2,7 +2,7 @@ package it.dtk.controller
 
 import it.dtk.WebSiteController
 import akka.actor.Props
-import it.dtk.WebSiteController._
+import it.dtk.WebSiteController.Job
 
 /**
  * @author Michele Damiano Torelli <daniele@datatoknowledge.it>
@@ -16,7 +16,7 @@ class GoBariWebSiteController extends WebSiteController {
 
   override def dataRecordExtractorProps: Props = ???
 
-  override def logicalListUrlGenerator(start: Int, stop: Int) : Seq[Job] = {
-    start to stop map(v => Job(baseUrl + "index.php?id=0|2&idS=19&pageID=" + v, v))
+  override def logicalListUrlGenerator(start: Int, stop: Int): Seq[Job] = {
+    start to stop map (v => Job(baseUrl + "index.php?id=0|2&idS=19&pageID=" + v, v))
   }
 }
