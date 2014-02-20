@@ -9,7 +9,8 @@ import it.dtk.WebSiteController.Job
  */
 class GoBariWebSiteController extends WebSiteController {
 
-  override val maxIncrement: Int = 162
+  //override val maxIncrement: Int = 162
+  override val maxIncrement: Int = 5
 
   // http://go-bari.it/notizie/cronaca/
   override val baseUrl: String = "http://go-bari.it/"

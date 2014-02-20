@@ -36,8 +36,7 @@ class HttpGetter(url: String) extends Actor with ActorLogging {
 
   implicit val exec = context.dispatcher.asInstanceOf[Executor with ExecutionContext]
 
-  private val sdf = DateTimeFormat.forPattern("EEE, dd MMM yyyy HH:mm:ss z")
-  sdf.withLocale(Locale.ENGLISH)
+  private val sdf = DateTimeFormat.forPattern("EEE, dd MMM yyyy HH:mm:ss z").withLocale(Locale.ENGLISH)
 
   Http(dispatch.url(url)).either pipeTo self
 
@@ -47,11 +46,14 @@ class HttpGetter(url: String) extends Actor with ActorLogging {
   override def receive: Actor.Receive = {
     case Right(res: NettyResponse) =>
       if (res.getStatusCode < 400) {
-        log.info("Successufully got the HTML")
         context.parent ! Success(new Result(url, res.getResponseBody, sdf.parseDateTime(res.getHeader("Date")).toDate))
-      } else
+        context.stop(self)
+      } else {
         context.parent ! Failure(new PageNotFoundException)
+        context.stop(self)
+      }
     case Left(error: Throwable) =>
       context.parent ! Failure(error)
+      context.stop(self)
   }
 }

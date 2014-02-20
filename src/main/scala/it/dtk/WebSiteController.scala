@@ -31,7 +31,7 @@ trait WebSiteController extends Actor with ActorLogging {
   }
 
   // Max concurrent getter actors
-  var parallelFactor = 3
+  val parallelFactor = 3
   // Max call duration
   // context.setReceiveTimeout(10.seconds)
 
@@ -46,55 +46,64 @@ trait WebSiteController extends Actor with ActorLogging {
 
   def mainContentExtractorProps(record: DataRecord): Props = Props[MainContentExtractor]
 
+  private var activeJobs = 0
+  private var currentStop = -1
+
   def receive = waiting
 
   val waiting: Receive = {
     case Start =>
       val jobs = logicalListUrlGenerator(1, parallelFactor)
-      context.become(runBatch(jobs, parallelFactor))
+      currentStop = parallelFactor
+      context.become(runBatch(jobs))
   }
 
-  def runBatch(jobs: Seq[Job], currentStop: Int): Receive = {
+  def runBatch(jobs: Seq[Job]): Receive = {
     if (jobs.isEmpty) {
+      log.info("All done. Waiting for new jobs.")
       waiting
     } else {
+      log.info("Launching getter cycle from index {} to {}", jobs.head.index, jobs.last.index)
       jobs.foreach(job => {
         // Get HTML from each URL
         log.info("Getting the HTML for the page {} with index {}", job.url, job.index)
-        context.watch(context.actorOf(httpGetterProps(job.url)))
+        context.watch(context.actorOf(httpGetterProps(job.url), "HttpGetter@" + job.index))
+        activeJobs += 1
       })
-
-      running(jobs, currentStop)
+      running
     }
   }
 
-  def running(job: Seq[Job], currentStop: Int): Receive = {
-    case HttpGetter.Result(url, html, date) =>
-      // Extract data records from each HTML
-      log.info("Getting the data records from the page {}", url)
-      // FIXME: Check what happens if the HttpGetter has an error
-      context.watch(context.actorOf(dataRecordExtractorProps))
+  def running: Receive = {
+//    case HttpGetter.Result(url, html, date) =>
+//      // Extract data records from each HTML
+//      log.info("Getting the data records from the page {}", url)
+//      // FIXME: Check what happens if the HttpGetter has an error
+//      context.watch(context.actorOf(dataRecordExtractorProps))
+//
+//    case DataRecordExtractor.ExtractedRecords(url, records) =>
+//      records.foreach(record => {
+//        // Extract main content from each data record
+//        log.info("Getting the article main content from the page {}", record)
+//        context.watch(context.actorOf(mainContentExtractorProps(record)))
+//      })
+//
+//    case res: MainContentExtractor.Result =>
+//      // TODO: DB persistency
+//      println(res.record)
 
-    case DataRecordExtractor.ExtractedRecords(url, records) =>
-      records.foreach(record => {
-        // Extract main content from each data record
-        log.info("Getting the article main content from the page {}", record)
-        context.watch(context.actorOf(mainContentExtractorProps(record)))
-      })
+    case Terminated(ref) =>
+      log.debug("Got death letter from {}", ref)
+      activeJobs -= 1
 
-    case res: MainContentExtractor.Result =>
-      // TODO: DB persistency
-      println(res.record)
-
-    case Terminated(_) =>
-      if (context.children.isEmpty) {
-        // Launch next HttpGetter actors cycle
+      if (activeJobs == 0) {
         if (currentStop < maxIncrement) {
           val newStart = currentStop + 1
-          val newStop = if (newStart + parallelFactor < maxIncrement) newStart + parallelFactor else maxIncrement
-          runBatch(logicalListUrlGenerator(newStart, newStop), newStop)
+          currentStop = if (newStart + parallelFactor < maxIncrement) newStart + parallelFactor else maxIncrement
+          runBatch(logicalListUrlGenerator(newStart, currentStop))
         } else {
           context.parent ! Done(baseUrl)
+          runBatch(Seq.empty)
         }
       }
 

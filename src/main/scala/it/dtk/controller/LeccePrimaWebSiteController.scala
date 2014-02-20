@@ -9,7 +9,8 @@ import it.dtk.WebSiteController.Job
  */
 class LeccePrimaWebSiteController extends WebSiteController {
 
-  override val maxIncrement: Int = 843
+  //override val maxIncrement: Int = 843
+  override val maxIncrement: Int = 5
 
   override val baseUrl: String = "http://www.lecceprima.it/cronaca/"
 
