@@ -8,12 +8,14 @@ import akka.actor.ActorLogging
 import akka.actor.Terminated
 import akka.actor.ReceiveTimeout
 import it.dtk.db.DataRecord
+import scala.util.{Failure, Success}
 
 object WebSiteController {
   case object Start
   case class Job(url: String, index: Int, terminated: Boolean = false)
   case class Done(url: String)
-  case class Failure(url: String)
+  case class Fail(url: String)
+
 }
 
 /**
@@ -59,6 +61,7 @@ trait WebSiteController extends Actor with ActorLogging {
   def runBatch(jobs: Seq[Job]): Receive = {
     if (jobs.isEmpty) {
       log.info("All done. Waiting for new jobs.")
+      currentStop = -1
       waiting
     } else {
       log.info("Launching getter cycle from index {} to {}", jobs.head.index, jobs.last.index)
@@ -89,9 +92,17 @@ trait WebSiteController extends Actor with ActorLogging {
 //    case res: MainContentExtractor.Result =>
 //      // TODO: DB persistency
 //      println(res.record)
+    case Success(HttpGetter.Result(url, html, date)) =>
+      log.info("Got the HTML for URL {} having size of {} bytes", url, html.size)
+
+    case Failure(HttpGetter.GetException(url, statusCode)) =>
+      log.info("Failed to get the HTML for URL {} with status code {}", url, statusCode)
+
+    case Failure(HttpGetter.DispatchException(url, error)) =>
+      log.info("Failed to get the HTML for URL {} with exception message {}", url, error.getMessage)
 
     case Terminated(ref) =>
-      log.debug("Got death letter from {}", ref)
+      log.debug("Got a death letter from {}", ref)
       activeJobs -= 1
 
       if (activeJobs == 0) {
@@ -108,7 +119,7 @@ trait WebSiteController extends Actor with ActorLogging {
     case ReceiveTimeout =>
       log.info("Failure in the extraction of the website {}", baseUrl)
       context.children foreach context.stop
-      context.parent ! Failure(baseUrl)
+      context.parent ! Fail(baseUrl)
   }
 
 }

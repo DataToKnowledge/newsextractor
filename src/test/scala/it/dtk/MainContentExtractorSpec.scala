@@ -2,30 +2,39 @@ package it.dtk
 
 import akka.testkit.TestKit
 import akka.actor.ActorSystem
-import org.scalatest.WordSpecLike
-import org.scalatest.BeforeAndAfterAll
 import akka.testkit.ImplicitSender
 import akka.actor.Props
+import org.scalatest.{ BeforeAndAfterAll, Matchers, WordSpecLike }
+import it.dtk.util.StepParent
+import scala.concurrent.duration._
 
-object MainContenExtractorSpec {
+class MainContentExtractorSpec(_system: ActorSystem) extends TestKit(_system) with ImplicitSender
+with WordSpecLike with Matchers with BeforeAndAfterAll {
 
-  val rightHtml = ""
+  import MainContentExtractor._
 
-  val rightTitle = ""
+  def this() = this(ActorSystem("MainContentExtractorSpec"))
 
-  val rightCanonUrl = ""
-
-}
-
-class MainContentExtractorSpec extends TestKit(ActorSystem("MainContentExtractorSpec"))
-  with WordSpecLike with BeforeAndAfterAll with ImplicitSender {
-
-  import MainContenExtractorSpec._
+  override def afterAll() {
+    TestKit.shutdownActorSystem(system)
+  }
 
   "A MainContentExtractor Actor" must {
+
     "return the right main content" in {
-      val mainContentActor = system.actorOf(Props(new MainContentExtractor(rightHtml)))
-      //expectMsg(MainContentExtractor.Result(aContent))
+      system.actorOf(Props(new StepParent(Props(new MainContentExtractor(rightCanonUrl, lines)), testActor)), "rightContent")
+
+      val res = expectMsgClass(10.seconds, classOf[Result])
+      res.record.title.trim should be equals rightTitle
+      res.record.extractionDate should not be null
+      res.record.topImage should not be null
     }
+
   }
+
+  val rightTitle = "Giovani, anziani, asili nido e soldi per il Sud ecco il progetto del governo per l'equità"
+  val rightCanonUrl = "http://www.repubblica.it/economia/2012/05/12/news/giovani_anziani_asili_nido_e_soldi_per_il_sud_ecco_il_progetto_del_governo_per_l_equit-34962952/"
+  val lines = scala.io.Source.fromFile("src/test/resources/TestArticle.html", "utf-8").getLines().mkString
+
+
 }

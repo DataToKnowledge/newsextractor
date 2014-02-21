@@ -5,18 +5,18 @@ import akka.actor.Props
 import it.dtk.WebSiteController.Job
 
 /**
- * @author Michele Damiano Torelli <daniele@datatoknowledge.it>
+ * @author Andrea Scarpino <andrea@datatoknowledge.it>
  */
-class GoBariWebSiteController extends WebSiteController {
+class BrindisiReportWebSiteController extends WebSiteController {
 
-  //override val maxIncrement: Int = 162
+  //override val maxIncrement: Int = 717
   override val maxIncrement: Int = 5
 
-  override val baseUrl: String = "http://go-bari.it/"
+  override val baseUrl: String = "http://www.brindisireport.it/cronaca/page/"
 
   override def dataRecordExtractorProps: Props = ???
 
   override def logicalListUrlGenerator(start: Int, stop: Int): Seq[Job] = {
-    start to stop map (v => Job(baseUrl + "index.php?id=0%7C2&idS=19&pageID=" + v, v))
+    start to stop map (v => Job(baseUrl + v, v))
   }
 }

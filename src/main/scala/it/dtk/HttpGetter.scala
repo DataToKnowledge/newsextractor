@@ -4,11 +4,11 @@ import akka.actor.{ActorLogging, Actor}
 import akka.pattern.pipe
 import java.util.{Locale, Date}
 import java.util.concurrent.Executor
-import com.ning.http.client.providers.netty.NettyResponse
 import org.joda.time.format.DateTimeFormat
 import scala.concurrent.ExecutionContext
-import it.dtk.HttpGetter.{PageNotFoundException, Result}
+import it.dtk.HttpGetter.{DispatchException, GetException, Result}
 import scala.util.{Success, Failure}
+import com.ning.http.client.providers.netty.NettyResponse
 
 object HttpGetter {
 
@@ -21,7 +21,9 @@ object HttpGetter {
    */
   case class Result(url: String, html: String, headerDate: Date)
 
-  case class PageNotFoundException() extends Throwable
+  case class GetException(url: String, statusCode: Int) extends Throwable
+
+  case class DispatchException(url: String, error: Throwable) extends Throwable
 
 }
 
@@ -38,22 +40,23 @@ class HttpGetter(url: String) extends Actor with ActorLogging {
 
   private val sdf = DateTimeFormat.forPattern("EEE, dd MMM yyyy HH:mm:ss z").withLocale(Locale.ENGLISH)
 
-  Http(dispatch.url(url)).either pipeTo self
+  Http.configure(_ setFollowRedirects true)(dispatch.url(url)).either pipeTo self
 
   /**
    * When receives any message it replies with the HTML of the given Web page
    */
   override def receive: Actor.Receive = {
     case Right(res: NettyResponse) =>
-      if (res.getStatusCode < 400) {
+      val statusCode = res.getStatusCode
+      if (statusCode < 400) {
         context.parent ! Success(new Result(url, res.getResponseBody, sdf.parseDateTime(res.getHeader("Date")).toDate))
         context.stop(self)
       } else {
-        context.parent ! Failure(new PageNotFoundException)
+        context.parent ! Failure(new GetException(url, statusCode))
         context.stop(self)
       }
     case Left(error: Throwable) =>
-      context.parent ! Failure(error)
+      context.parent ! Failure(new DispatchException(url, error))
       context.stop(self)
   }
 }
