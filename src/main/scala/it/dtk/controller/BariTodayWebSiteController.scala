@@ -12,11 +12,11 @@ class BariTodayWebSiteController extends WebSiteController {
   //override val maxIncrement: Int = 294
   override val maxIncrement: Int = 5
 
-  override val baseUrl: String = "http://www.baritoday.it/cronaca/"
+  override val baseUrl: String = "http://www.baritoday.it/"
 
   override def dataRecordExtractorProps: Props = ???
 
   override def logicalListUrlGenerator(start: Int, stop: Int): Seq[Job] = {
-    start to stop map (v => Job(baseUrl + "pag/" + v, v))
+    start to stop map (v => Job(baseUrl + "cronaca/pag/" + v, v))
   }
 }

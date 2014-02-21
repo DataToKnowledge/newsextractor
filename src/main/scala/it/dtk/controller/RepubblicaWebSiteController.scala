@@ -12,11 +12,11 @@ class RepubblicaWebSiteController extends WebSiteController {
   //override val maxIncrement: Int = 12
   override val maxIncrement: Int = 5
 
-  override val baseUrl: String = "http://bari.repubblica.it/cronaca/"
+  override val baseUrl: String = "http://bari.repubblica.it/"
 
   override def dataRecordExtractorProps: Props = ???
 
   override def logicalListUrlGenerator(start: Int, stop: Int): Seq[Job] = {
-    start to stop map (v => Job(baseUrl + v, v))
+    start to stop map (v => Job(baseUrl + "cronaca/" + v, v))
   }
 }

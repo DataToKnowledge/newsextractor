@@ -12,11 +12,11 @@ class SenzaColonneWebSiteController extends WebSiteController {
   //override val maxIncrement: Int = 400
   override val maxIncrement: Int = 5
 
-  override val baseUrl: String = "http://www.senzacolonnenews.it/cronaca.html?start="
+  override val baseUrl: String = "http://www.senzacolonnenews.it/"
 
   override def dataRecordExtractorProps: Props = ???
 
   override def logicalListUrlGenerator(start: Int, stop: Int): Seq[Job] = {
-    start to stop map (v => Job(baseUrl + String.valueOf((v - 1) * 5), v))
+    start to stop map (v => Job(baseUrl + "cronaca.html?start=" + String.valueOf((v - 1) * 5), v))
   }
 }

@@ -14,14 +14,14 @@ class CorriereWebSiteController extends WebSiteController {
   //override val maxIncrement: Int = 294
   override val maxIncrement: Int = 5
 
-  override val baseUrl: String = "http://www.corriere.it/cronache/notizie/"
+  override val baseUrl: String = "http://www.corriere.it/"
 
   override def dataRecordExtractorProps: Props = ???
 
   override def logicalListUrlGenerator(start: Int, stop: Int): Seq[Job] = {
     val date = DateTime.now()
 
-    start to stop map (v => Job(baseUrl + date.monthOfYear().getAsText(Locale.ITALIAN) +
+    start to stop map (v => Job(baseUrl + "cronache/notizie/" + date.monthOfYear().getAsText(Locale.ITALIAN) +
       '_' + date.year().getAsText + '_' + v + ".html", v))
   }
 }
