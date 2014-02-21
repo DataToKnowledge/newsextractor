@@ -6,7 +6,7 @@ import java.util.{Locale, Date}
 import java.util.concurrent.Executor
 import org.joda.time.format.DateTimeFormat
 import scala.concurrent.ExecutionContext
-import it.dtk.HttpGetter.{GetException, Result}
+import it.dtk.HttpGetter.{DispatchException, GetException, Result}
 import scala.util.{Success, Failure}
 import com.ning.http.client.providers.netty.NettyResponse
 
@@ -21,7 +21,9 @@ object HttpGetter {
    */
   case class Result(url: String, html: String, headerDate: Date)
 
-  case class GetException(statusCode: Int) extends Throwable
+  case class GetException(url: String, statusCode: Int) extends Throwable
+
+  case class DispatchException(url: String, error: Throwable) extends Throwable
 
 }
 
@@ -50,11 +52,11 @@ class HttpGetter(url: String) extends Actor with ActorLogging {
         context.parent ! Success(new Result(url, res.getResponseBody, sdf.parseDateTime(res.getHeader("Date")).toDate))
         context.stop(self)
       } else {
-        context.parent ! Failure(new GetException(statusCode))
+        context.parent ! Failure(new GetException(url, statusCode))
         context.stop(self)
       }
     case Left(error: Throwable) =>
-      context.parent ! Failure(error)
+      context.parent ! Failure(new DispatchException(url, error))
       context.stop(self)
   }
 }
