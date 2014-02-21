@@ -5,6 +5,9 @@ import com.mongodb.casbah.MongoConnection
 import com.mongodb.casbah.MongoClient
 import com.mongodb.MongoCredential
 import com.mongodb.Mongo
+import com.novus.salat._
+import com.novus.salat.annotations._
+import com.novus.salat.global._
 
 object DBManager {
   case class Save(record: News)

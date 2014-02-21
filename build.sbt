@@ -26,7 +26,7 @@ libraryDependencies ++= Seq(
   "org.scalacheck" %% "scalacheck" % "1.11.3" % "test",
   "org.mongodb" %% "casbah" % "2.7.0-RC0",
   "ch.qos.logback" % "logback-classic" % "1.1.1",
-  "com.novus" %% "salat" % "1.9.6-SNAPSHOT"
+  "com.novus" %% "salat" % "1.9.5"
 )  
 
 /* Required by com.gravity.Goose */
