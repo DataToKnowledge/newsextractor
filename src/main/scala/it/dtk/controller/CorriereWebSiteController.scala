@@ -5,6 +5,7 @@ import akka.actor.Props
 import it.dtk.WebSiteController.Job
 import org.joda.time.DateTime
 import java.util.Locale
+import java.util.Date
 
 /**
  * @author Andrea Scarpino <andrea@datatoknowledge.it>
@@ -16,7 +17,7 @@ class CorriereWebSiteController extends WebSiteController {
 
   override val baseUrl: String = "http://www.corriere.it/"
 
-  override def dataRecordExtractorProps: Props = ???
+  override def dataRecordExtractorProps(url: String, html: String, date: Date): Props = ???
 
   override def logicalListUrlGenerator(start: Int, stop: Int): Seq[Job] = {
     val date = DateTime.now()

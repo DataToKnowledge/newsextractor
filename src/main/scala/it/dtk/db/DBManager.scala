@@ -7,7 +7,7 @@ import com.mongodb.MongoCredential
 import com.mongodb.Mongo
 
 object DBManager {
-  case class Save(record: DataRecord)
+  case class Save(record: News)
   case object Done
   case object Fail
   case object Killed

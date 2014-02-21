@@ -1,38 +1,39 @@
 package it.dtk
 
-import akka.actor.Actor
-import it.dtk.db.DataRecord
+import akka.actor.{Props, Actor}
 import com.gravity.goose.Goose
 import com.gravity.goose.Configuration
-import it.dtk.db.DataRecord
+import it.dtk.db.News
+import scala.util.Success
 
 object MainContentExtractor {
-  case class Result(record: DataRecord)
+
+  case class Result(news: News)
+
 }
 
 /**
  * @author fabiofumarola
  *
  */
-class MainContentExtractor(url: String, html: String) extends Actor {
+class MainContentExtractor(news: News) extends Actor {
 
-  import MainContentExtractor._
-  import it.dtk.db.DataRecord
 
-  val configuration = new Configuration();
-  configuration.setImagemagickConvertPath("convert");
-  configuration.setImagemagickIdentifyPath("identify");
+  context.watch(context.actorOf(Props(classOf[HttpGetter], news.urlNews)))
+
+  val configuration = new Configuration()
+  configuration.setImagemagickConvertPath("convert")
+  configuration.setImagemagickIdentifyPath("identify")
 
   val goose = new Goose(configuration)
-  val article = goose.extractContent(url, html)
-  val dataRecord = DataRecord(id = -1, urlWebSite = article.domain, urlNews=article.canonicalLink, title=article.title, summary=article.metaDescription, newsDate= article.publishDate, //extractionDate=null, 
-      tags= article.tags.toSet , metaDescription= article.metaDescription,metaKeyword= article.metaKeywords, text= article.cleanedArticleText, canonicalUrl=article.canonicalLink, topImage=article.topImage.getImageSrc)
-
-  context.parent ! Result(dataRecord)
 
   def receive = {
-    case _ => 
+    case Success(HttpGetter.Result(url, html, date)) =>
+      val article = goose.extractContent(url, html)
+      context.parent ! news.copy(text = Some(article.cleanedArticleText), tags = Some(article.tags.toSet),
+        metaDescription = Some(article.metaDescription), metaKeyword = Some(article.metaKeywords),
+        canonicalUrl = Some(article.canonicalLink), topImage = Some(article.topImage.getImageSrc))
   }
 
- 
+
 }

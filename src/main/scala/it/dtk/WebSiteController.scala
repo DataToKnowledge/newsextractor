@@ -7,13 +7,18 @@ import akka.actor.Props
 import akka.actor.ActorLogging
 import akka.actor.Terminated
 import akka.actor.ReceiveTimeout
-import it.dtk.db.DataRecord
+import it.dtk.db.News
 import scala.util.{Failure, Success}
+import java.util.Date
 
 object WebSiteController {
+
   case object Start
+
   case class Job(url: String, index: Int, terminated: Boolean = false)
+
   case class Done(url: String)
+
   case class Fail(url: String)
 
 }
@@ -38,13 +43,13 @@ trait WebSiteController extends Actor with ActorLogging {
   val baseUrl: String
   val maxIncrement: Int
 
-  def dataRecordExtractorProps: Props
+  def dataRecordExtractorProps(url: String, html: String, date: Date): Props
 
   def logicalListUrlGenerator(start: Int, stop: Int): Seq[Job]
 
   def httpGetterProps(url: String): Props = Props(classOf[HttpGetter], url)
 
-  def mainContentExtractorProps(record: DataRecord): Props = Props[MainContentExtractor]
+  def mainContentExtractorProps(record: News): Props = Props[MainContentExtractor]
 
   private var activeJobs = 0
   private var currentStop = -1
@@ -76,30 +81,32 @@ trait WebSiteController extends Actor with ActorLogging {
   }
 
   def running: Receive = {
-//    case HttpGetter.Result(url, html, date) =>
-//      // Extract data records from each HTML
-//      log.info("Getting the data records from the page {}", url)
-//      // FIXME: Check what happens if the HttpGetter has an error
-//      context.watch(context.actorOf(dataRecordExtractorProps))
-//
-//    case DataRecordExtractor.ExtractedRecords(url, records) =>
-//      records.foreach(record => {
-//        // Extract main content from each data record
-//        log.info("Getting the article main content from the page {}", record)
-//        context.watch(context.actorOf(mainContentExtractorProps(record)))
-//      })
-//
-//    case res: MainContentExtractor.Result =>
-//      // TODO: DB persistency
-//      println(res.record)
+
     case Success(HttpGetter.Result(url, html, date)) =>
       log.info("Got the HTML for URL {} having size of {} bytes", url, html.size)
+      context.watch(context.actorOf(dataRecordExtractorProps(url, html, date)))
 
     case Failure(HttpGetter.GetException(url, statusCode)) =>
       log.info("Failed to get the HTML for URL {} with status code {}", url, statusCode)
+    // FIXME: Check what happens if the HttpGetter has an error
 
     case Failure(HttpGetter.DispatchException(url, error)) =>
       log.info("Failed to get the HTML for URL {} with exception message {}", url, error.getMessage)
+    // FIXME: Check what happens if the HttpGetter has an error
+
+    case DataRecordExtractor.DataRecords(url, date, records) =>
+      records.foreach(record => {
+        // Extract main content from each data record
+        log.info("Getting main article content for URL {}", url)
+
+        val recordNews = new News(0, baseUrl, record.newsUrl, record.title, record.summary, date)
+
+        context.watch(context.actorOf(mainContentExtractorProps(recordNews)))
+      })
+
+    case MainContentExtractor.Result(news) =>
+      // TODO: DB persistency
+        log.info("Got main article content for URL {}", news.urlNews)
 
     case Terminated(ref) =>
       log.debug("Got a death letter from {}", ref)
