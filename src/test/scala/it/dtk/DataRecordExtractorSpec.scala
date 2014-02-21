@@ -5,11 +5,11 @@ import akka.actor.ActorSystem
 import org.scalatest.WordSpecLike
 import org.scalatest.BeforeAndAfterAll
 import akka.testkit.ImplicitSender
-import it.dtk.db.DataRecord
+import it.dtk.db.News
 
 object DataRecordExtractorSpec {
   
-  val righDataRecords: Vector[DataRecord] = Vector()
+  val righDataRecords: Vector[News] = Vector()
   
   val inputUrl: String = ""
   
