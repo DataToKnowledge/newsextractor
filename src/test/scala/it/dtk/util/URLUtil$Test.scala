@@ -6,7 +6,7 @@ import java.net.MalformedURLException
 /**
  * URL utilities ScalaTest class.
  *
- * @author Michele Damiano Torelli <me@mdtorelli.it>
+ * @author Michele Damiano Torelli <daniele@datatoknowledge.it>
  */
 class URLUtil$Test extends FlatSpec with Matchers {
   
