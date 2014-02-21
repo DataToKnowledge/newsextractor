@@ -4,10 +4,9 @@ import akka.actor.{ActorLogging, Actor}
 import akka.pattern.pipe
 import java.util.{Locale, Date}
 import java.util.concurrent.Executor
-import com.ning.http.client.providers.netty.NettyResponse
 import org.joda.time.format.DateTimeFormat
 import scala.concurrent.ExecutionContext
-import it.dtk.HttpGetter.{PageNotFoundException, Result}
+import it.dtk.HttpGetter.{GetException, Result}
 import scala.util.{Success, Failure}
 
 object HttpGetter {
@@ -21,7 +20,7 @@ object HttpGetter {
    */
   case class Result(url: String, html: String, headerDate: Date)
 
-  case class PageNotFoundException() extends Throwable
+  case class GetException(statusCode: Int) extends Throwable
 
 }
 
@@ -47,11 +46,12 @@ class HttpGetter(url: String) extends Actor with ActorLogging {
    */
   override def receive: Actor.Receive = {
     case Right(res: Map[String, String]) =>
-      if (res.get("statusCode").get.toInt < 400) {
+      val statusCode = res.get("statusCode").get.toInt
+      if (statusCode < 400) {
         context.parent ! Success(new Result(url, res.get("body").get, sdf.parseDateTime(res.get("date").get).toDate))
         context.stop(self)
       } else {
-        context.parent ! Failure(new PageNotFoundException)
+        context.parent ! Failure(new GetException(statusCode))
         context.stop(self)
       }
     case Left(error: Throwable) =>

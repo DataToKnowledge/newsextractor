@@ -32,12 +32,12 @@ with WordSpecLike with Matchers with BeforeAndAfterAll {
       res.get.headerDate.getClass should be(classOf[Date])
     }
 
-    "return an empty result when it fetches a 404" in {
+    "return a GetException when it fails to fetch a URL" in {
 
       system.actorOf(Props(new StepParent(Props(classOf[HttpGetter], "http://www.google.it/asd"), testActor)))
 
       val res = expectMsgClass(classOf[Failure[Throwable]])
-      a [PageNotFoundException] should be thrownBy res.get
+      a [GetException] should be thrownBy res.get
     }
 
     "return an empty result when it goes in timeout" in {
