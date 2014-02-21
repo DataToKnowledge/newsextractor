@@ -18,6 +18,6 @@ class GoBariWebSiteController extends WebSiteController {
   override def dataRecordExtractorProps: Props = ???
 
   override def logicalListUrlGenerator(start: Int, stop: Int): Seq[Job] = {
-    start to stop map (v => Job(baseUrl + "index.php?id=0|2&idS=19&pageID=" + v, v))
+    start to stop map (v => Job(baseUrl + "index.php?id=0%7C2&idS=19&pageID=" + v, v))
   }
 }
