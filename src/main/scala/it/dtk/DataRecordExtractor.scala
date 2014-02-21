@@ -5,7 +5,6 @@ import akka.actor.ActorLogging
 import scala.xml.Node
 import scala.xml.NodeSeq
 import scala.collection.mutable.Map
-import it.dtk.DataRecordExtractor.DataRecords
 import java.util.Date
 
 object DataRecordExtractor {
