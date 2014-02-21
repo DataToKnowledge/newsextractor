@@ -23,7 +23,7 @@ with WordSpecLike with Matchers with BeforeAndAfterAll {
 
   "An HttpGetter actor" must {
 
-    "return the body page" in {
+    "returns the body in a page" in {
 
       system.actorOf(Props(new StepParent(Props(classOf[HttpGetter], "http://www.google.it/"), testActor)))
 
@@ -32,7 +32,7 @@ with WordSpecLike with Matchers with BeforeAndAfterAll {
       res.get.headerDate.getClass should be(classOf[Date])
     }
 
-    "return a GetException when it fails to fetch a URL" in {
+    "returns an empty result when it fetches a 404" in {
 
       system.actorOf(Props(new StepParent(Props(classOf[HttpGetter], "http://www.google.it/asd"), testActor)))
 
@@ -40,11 +40,21 @@ with WordSpecLike with Matchers with BeforeAndAfterAll {
       a [GetException] should be thrownBy res.get
     }
 
-    "return an empty result when it goes in timeout" in {
+    "returns an empty result when it goes in timeout" in {
 
       system.actorOf(Props(new StepParent(Props(classOf[HttpGetter], "http://www.go.it/"), testActor)))
 
       expectMsgClass(classOf[Failure[Throwable]])
+    }
+
+    "returns the body from the destination page when it fetches a 301 on the first page" in {
+
+      system.actorOf(Props(new StepParent(Props(classOf[HttpGetter], "http://www.lecceprima.it/cronaca/pag/1/"), testActor)))
+
+      val res = expectMsgClass(classOf[Success[Result]])
+      res.get.html.getClass should be(classOf[String])
+      assert(!res.get.html.isEmpty)
+      res.get.headerDate.getClass should be(classOf[Date])
     }
 
   }

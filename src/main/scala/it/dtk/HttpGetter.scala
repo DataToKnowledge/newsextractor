@@ -8,6 +8,7 @@ import org.joda.time.format.DateTimeFormat
 import scala.concurrent.ExecutionContext
 import it.dtk.HttpGetter.{GetException, Result}
 import scala.util.{Success, Failure}
+import com.ning.http.client.providers.netty.NettyResponse
 
 object HttpGetter {
 
@@ -37,18 +38,16 @@ class HttpGetter(url: String) extends Actor with ActorLogging {
 
   private val sdf = DateTimeFormat.forPattern("EEE, dd MMM yyyy HH:mm:ss z").withLocale(Locale.ENGLISH)
 
-  Http(dispatch.url(url) > {
-    r => Map("statusCode" -> String.valueOf(r.getStatusCode), "body" -> r.getResponseBody, "date" -> r.getHeader("Date"))
-  }).either pipeTo self
+  Http.configure(_ setFollowRedirects true)(dispatch.url(url)).either pipeTo self
 
   /**
    * When receives any message it replies with the HTML of the given Web page
    */
   override def receive: Actor.Receive = {
-    case Right(res: Map[String, String]) =>
-      val statusCode = res.get("statusCode").get.toInt
+    case Right(res: NettyResponse) =>
+      val statusCode = res.getStatusCode
       if (statusCode < 400) {
-        context.parent ! Success(new Result(url, res.get("body").get, sdf.parseDateTime(res.get("date").get).toDate))
+        context.parent ! Success(new Result(url, res.getResponseBody, sdf.parseDateTime(res.getHeader("Date")).toDate))
         context.stop(self)
       } else {
         context.parent ! Failure(new GetException(statusCode))
