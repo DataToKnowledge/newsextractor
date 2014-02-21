@@ -26,6 +26,7 @@ with WordSpecLike with Matchers with BeforeAndAfterAll {
       val res = expectMsgClass(classOf[Result])
       res.record.title.trim should be equals (rightTitle)
       res.record.extractionDate should not be null
+      res.record.topImage should not be null
     }
 
   }
