@@ -10,12 +10,10 @@ import akka.actor.ReceiveTimeout
 import it.dtk.db.DataRecord
 
 object WebSiteController {
-
   case object Start
   case class Job(url: String, index: Int, terminated: Boolean = false)
   case class Done(url: String)
   case class Failure(url: String)
-
 }
 
 /**

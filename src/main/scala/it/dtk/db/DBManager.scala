@@ -1,9 +1,13 @@
 package it.dtk.db
 
 import akka.actor.Actor
+import com.mongodb.casbah.MongoConnection
+import com.mongodb.casbah.MongoClient
+import com.mongodb.MongoCredential
+import com.mongodb.Mongo
 
 object DBManager {
-  case class Save(record: AnyRef)
+  case class Save(record: DataRecord)
   case object Done
   case object Fail
   case object Killed
@@ -18,9 +22,14 @@ object DBManager {
 class DBManager(host: String, port: Int, database: String) extends Actor {
 
   import DBManager._
+  
+  val mongoClient = MongoClient(host,port)
+  //val credentials = MongoCredential.createPlainCredential(userName, source, password)
+  val db = mongoClient(database)
 
   def receive = {
-    case "hello" =>
+    case Save(datarecord) =>
+      //db.
       sender ! Done
 
     case "kill" =>
@@ -32,3 +41,14 @@ class DBManager(host: String, port: Int, database: String) extends Actor {
   }
 
 }
+
+class DBWorker(conn: MongoConnection) extends Actor{
+  
+  
+  def receive = ???
+}
+
+
+
+
+
