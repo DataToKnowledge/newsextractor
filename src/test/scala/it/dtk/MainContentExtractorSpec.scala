@@ -6,6 +6,7 @@ import akka.testkit.ImplicitSender
 import akka.actor.Props
 import org.scalatest.{ BeforeAndAfterAll, Matchers, WordSpecLike }
 import it.dtk.util.StepParent
+import scala.concurrent.duration._
 
 class MainContentExtractorSpec(_system: ActorSystem) extends TestKit(_system) with ImplicitSender
 with WordSpecLike with Matchers with BeforeAndAfterAll {
@@ -23,8 +24,8 @@ with WordSpecLike with Matchers with BeforeAndAfterAll {
     "return the right main content" in {
       system.actorOf(Props(new StepParent(Props(new MainContentExtractor(rightCanonUrl, lines)), testActor)), "rightContent")
 
-      val res = expectMsgClass(classOf[Result])
-      res.record.title.trim should be equals (rightTitle)
+      val res = expectMsgClass(10.seconds, classOf[Result])
+      res.record.title.trim should be equals rightTitle
       res.record.extractionDate should not be null
       res.record.topImage should not be null
     }

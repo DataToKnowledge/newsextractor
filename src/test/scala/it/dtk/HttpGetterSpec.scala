@@ -6,6 +6,7 @@ import akka.testkit.{ImplicitSender, TestKit}
 import java.util.Date
 import scala.util.{Failure, Success}
 import it.dtk.util.StepParent
+import scala.concurrent.duration._
 
 /**
  * @author Andrea Scarpino <andrea@datatoknowledge.it>
@@ -27,7 +28,7 @@ with WordSpecLike with Matchers with BeforeAndAfterAll {
 
       system.actorOf(Props(new StepParent(Props(classOf[HttpGetter], "http://www.google.it/"), testActor)))
 
-      val res = expectMsgClass(classOf[Success[Result]])
+      val res = expectMsgClass(10.seconds, classOf[Success[Result]])
       res.get.html.getClass should be(classOf[String])
       res.get.headerDate.getClass should be(classOf[Date])
     }
@@ -36,7 +37,7 @@ with WordSpecLike with Matchers with BeforeAndAfterAll {
 
       system.actorOf(Props(new StepParent(Props(classOf[HttpGetter], "http://www.google.it/asd"), testActor)))
 
-      val res = expectMsgClass(classOf[Failure[Throwable]])
+      val res = expectMsgClass(10.seconds, classOf[Failure[Throwable]])
       a [GetException] should be thrownBy res.get
     }
 
@@ -51,7 +52,7 @@ with WordSpecLike with Matchers with BeforeAndAfterAll {
 
       system.actorOf(Props(new StepParent(Props(classOf[HttpGetter], "http://www.lecceprima.it/cronaca/pag/1/"), testActor)))
 
-      val res = expectMsgClass(classOf[Success[Result]])
+      val res = expectMsgClass(10.seconds, classOf[Success[Result]])
       res.get.html.getClass should be(classOf[String])
       assert(!res.get.html.isEmpty)
       res.get.headerDate.getClass should be(classOf[Date])
