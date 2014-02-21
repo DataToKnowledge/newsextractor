@@ -7,16 +7,16 @@ import it.dtk.WebSiteController.Job
 /**
  * @author Andrea Scarpino <andrea@datatoknowledge.it>
  */
-class SenzaColonneWebSiteController extends WebSiteController {
+class BrindisiLiberaWebSiteController extends WebSiteController {
 
-  //override val maxIncrement: Int = 400
+  //override val maxIncrement: Int = 36
   override val maxIncrement: Int = 5
 
-  override val baseUrl: String = "http://www.senzacolonnenews.it/cronaca.html?start="
+  override val baseUrl: String = "http://www.brindisilibera.it/new/index.php?limitstart="
 
   override def dataRecordExtractorProps: Props = ???
 
   override def logicalListUrlGenerator(start: Int, stop: Int): Seq[Job] = {
-    start to stop map (v => Job(baseUrl + String.valueOf((v - 1) * 5), v))
+    start to stop map (v => Job(baseUrl + String.valueOf((v - 1) * 35), v))
   }
 }
