@@ -9,19 +9,20 @@ import scala.collection.mutable.Map
 import scala.collection.mutable.ListBuffer
 
 object DataRecordExtractor {
+
   case class ExtractedRecords(url: String, dataRecords: ListBuffer[DataRecord])
 
 }
 
 trait DataRecordExtractor extends Actor with ActorLogging {
 
-  def dataRecordXPath(e: Elem): NodeSeq = ???
+  def dataRecordXPath(e: Elem): NodeSeq
 
-  def title(e: Elem): String = ???
+  def title(e: Elem): String
 
-  def summary(e: Elem): String = ???
+  def summary(e: Elem): String
 
-  def newsDetailUrl(e: Elem): String = ???
+  def newsDetailUrl(e: Elem): String
 
   /**
    * @param node
@@ -46,5 +47,7 @@ trait DataRecordExtractor extends Actor with ActorLogging {
     }
     map
   }
+
+  override def receive: Actor.Receive = ???
 
 }
