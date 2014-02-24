@@ -11,7 +11,7 @@ import java.util.Date
 class BariTodayDataRecordExtractor(url: String, html: String, date: Date) extends DataRecordExtractor {
 
   //get the data records
-  val records = dataRecordXPath(XML.load(html))
+  val records = dataRecordXPath(XML.loadString(html))
 
   context.parent ! new DataRecords(url, date, records.map(r => {
     DataRecord(title(r), summary(r), newsUrl(r))
