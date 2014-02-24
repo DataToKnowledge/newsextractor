@@ -9,7 +9,7 @@ import it.dtk.util.StepParent
 import scala.concurrent.duration._
 
 class MainContentExtractorSpec(_system: ActorSystem) extends TestKit(_system) with ImplicitSender
-with WordSpecLike with Matchers with BeforeAndAfterAll {
+  with WordSpecLike with Matchers with BeforeAndAfterAll {
 
   import MainContentExtractor._
 
@@ -18,7 +18,7 @@ with WordSpecLike with Matchers with BeforeAndAfterAll {
   override def afterAll() {
     TestKit.shutdownActorSystem(system)
   }
-/*
+  /*
   "A MainContentExtractor Actor" must {
 
     "return the right main content" in {
@@ -35,6 +35,5 @@ with WordSpecLike with Matchers with BeforeAndAfterAll {
   val rightTitle = "Giovani, anziani, asili nido e soldi per il Sud ecco il progetto del governo per l'equità"
   val rightCanonUrl = "http://www.repubblica.it/economia/2012/05/12/news/giovani_anziani_asili_nido_e_soldi_per_il_sud_ecco_il_progetto_del_governo_per_l_equit-34962952/"
   val lines = scala.io.Source.fromFile("src/test/resources/TestArticle.html", "utf-8").getLines().mkString
-
 
 }
