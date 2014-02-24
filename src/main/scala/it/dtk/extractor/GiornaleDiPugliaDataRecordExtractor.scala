@@ -13,10 +13,11 @@ import scala.collection.JavaConversions._
 
 class GiornaleDiPugliaDataRecordExtractor(url: String, html: String, date: Date) extends DataRecordExtractor{
   val doc = Jsoup.parse(html)
-  val records= doc.getElementsByClass("post-wrapper") map ( r => DataRecord(title(r), summary(r), newsUrl(r)))
+  val records= doc.getElementsByClass("post-wrapper") map ( 
+		  r => DataRecord(title(r), summary(r), newsUrl(r)))
  
 
-  context.parent ! records
+  context.parent ! DataRecords(url,date,records)
 
   def title(node: Element) =  node.getElementsByClass("post-title").text()
   

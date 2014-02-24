@@ -11,7 +11,7 @@ import it.dtk.DataRecordExtractor.DataRecords
 
 object GiornaleDiPugliaRecordExtractorSpec {
 
-  val html = ""
+  val html = scala.io.Source.fromFile("src/test/resources/testGiornaleDiPuglia.html", "utf-8").getLines().mkString
 
   val url = "http://www.giornaledipuglia.com/search/label/CRONACA/1"
 
@@ -25,7 +25,8 @@ class GiornaleDiPugliaDataRecordExtractorSpec extends MySpec("GiornaleDiPugliaRe
 
   "the giornale di puglia record extractor" should {
     "extract records" in {
-      val dataRecordActor = system.actorOf(Props(classOf[StepParent], (Props(classOf[GiornaleDiPugliaDataRecordExtractor], url, html, date), testActor)))
+      val dataRecordProps = Props(classOf[GiornaleDiPugliaDataRecordExtractor], url, html, date)
+      val dataRecordActor = system.actorOf(Props(classOf[StepParent], dataRecordProps, testActor))
       
       val results = expectMsgClass(classOf[DataRecords])
       println(results)
