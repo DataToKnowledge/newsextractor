@@ -8,26 +8,25 @@ import it.dtk.util.StepParent
 import it.dtk.DataRecordExtractor
 import scala.concurrent.duration._
 import scala.io.Source
-import scala.concurrent.duration._
 
-object LeccePrimaDataRecordExtractorSpec {
+object BariTodayDataRecordExtractorSpec {
 
-  val url = "http://www.lecceprima.it/cronaca/"
+  val url = "http://www.baritoday.it/cronaca/"
 
   val date = DateTime.now().toDate()
 
 }
 
-class LeccePrimaDataRecordExtractorSpec extends MySpec("LeccePrimaRecordExtactor") {
+class BariTodayDataRecordExtractorSpec extends MySpec("BariTodayDataRecordExtractorSpec") {
 
-  import LeccePrimaDataRecordExtractorSpec._
+  import BariTodayDataRecordExtractorSpec._
   import DataRecordExtractor._
 
-  val html = Source.fromFile("./src/test/resources/LeccePrimaCronocaList.html", "UTF-8").getLines.mkString
+  val html = Source.fromFile("./src/test/resources/BariTodayCronacaList.html", "UTF-8").getLines.mkString
   
-  "the lecce prima record extractor" should {
+  "the bari today record extractor" should {
     "extract records 25 data records" in {
-      val dataRecordProps = Props(classOf[LeccePrimaDataRecordExtractor], url, html, date)
+      val dataRecordProps = Props(classOf[BariTodayDataRecordExtractor], url, html, date)
       val dataRecordActor = system.actorOf(Props(classOf[StepParent], dataRecordProps, testActor))
       val results = expectMsgClass(15.seconds,classOf[DataRecords])
 
