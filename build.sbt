@@ -36,6 +36,7 @@ libraryDependencies ++= Seq(
   "org.jsoup" % "jsoup" % "1.5.2",
   "org.apache.httpcomponents" % "httpclient" % "4.1.2",
   "commons-lang" % "commons-lang" % "2.6",
-  "commons-io" % "commons-io" % "2.0.1"
+  "commons-io" % "commons-io" % "2.0.1",
+  "org.jsoup" % "jsoup" % "1.7.2"
 )
 
