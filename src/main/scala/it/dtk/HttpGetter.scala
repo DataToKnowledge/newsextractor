@@ -9,6 +9,9 @@ import scala.concurrent.ExecutionContext
 import it.dtk.HttpGetter.{DispatchException, GetException, Result}
 import scala.util.{Success, Failure}
 import com.ning.http.client.providers.netty.NettyResponse
+import org.jsoup.safety.{Whitelist, Cleaner}
+import org.jsoup.nodes.Document
+import org.jsoup.Jsoup
 
 object HttpGetter {
 
@@ -49,7 +52,8 @@ class HttpGetter(url: String) extends Actor with ActorLogging {
     case Right(res: NettyResponse) =>
       val statusCode = res.getStatusCode
       if (statusCode < 400) {
-        context.parent ! Success(new Result(url, res.getResponseBody, sdf.parseDateTime(res.getHeader("Date")).toDate))
+        val html = new Cleaner(Whitelist.relaxed()).clean(Jsoup.parse(res.getResponseBody)).html
+        context.parent ! Success(new Result(url, Jsoup.parseBodyFragment(html).body().html, sdf.parseDateTime(res.getHeader("Date")).toDate))
         context.stop(self)
       } else {
         context.parent ! Failure(new GetException(url, statusCode))

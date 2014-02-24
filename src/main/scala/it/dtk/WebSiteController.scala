@@ -88,11 +88,11 @@ trait WebSiteController extends Actor with ActorLogging {
 
     case Failure(HttpGetter.GetException(url, statusCode)) =>
       log.info("Failed to get the HTML for URL {} with status code {}", url, statusCode)
-    // FIXME: Check what happens if the HttpGetter has an error
+      // FIXME: Check what happens if the HttpGetter has an error
 
     case Failure(HttpGetter.DispatchException(url, error)) =>
       log.info("Failed to get the HTML for URL {} with exception message {}", url, error.getMessage)
-    // FIXME: Check what happens if the HttpGetter has an error
+      // FIXME: Check what happens if the HttpGetter has an error
 
     case DataRecordExtractor.DataRecords(url, date, records) =>
       records.foreach(record => {
@@ -105,7 +105,7 @@ trait WebSiteController extends Actor with ActorLogging {
       })
 
     case MainContentExtractor.Result(news) =>
-      // TODO: DB persistency
+        // TODO: DB persistency
         log.info("Got main article content for URL {}", news.urlNews)
 
     case Terminated(ref) =>
