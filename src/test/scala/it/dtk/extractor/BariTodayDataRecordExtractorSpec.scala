@@ -13,7 +13,7 @@ object BariTodayDataRecordExtractorSpec {
 
   val url = "http://www.baritoday.it/cronaca/"
 
-  val date = DateTime.now().toDate()
+  val date = DateTime.now().toDate
 
 }
 
@@ -22,10 +22,10 @@ class BariTodayDataRecordExtractorSpec extends MySpec("BariTodayDataRecordExtrac
   import BariTodayDataRecordExtractorSpec._
   import DataRecordExtractor._
 
-  val html = Source.fromFile("./src/test/resources/BariTodayCronacaList.html", "UTF-8").getLines.mkString
+  val html = Source.fromFile("./src/test/resources/BariTodayCronacaList.html", "UTF-8").getLines().mkString
   
-  "the bari today record extractor" should {
-    "extract records 25 data records" in {
+  "The BariToday record extractor" should {
+    "extract 25 data records" in {
       val dataRecordProps = Props(classOf[BariTodayDataRecordExtractor], url, html, date)
       val dataRecordActor = system.actorOf(Props(classOf[StepParent], dataRecordProps, testActor))
       val results = expectMsgClass(15.seconds,classOf[DataRecords])

@@ -1,32 +1,32 @@
 package it.dtk.extractor
 
-import it.dtk.DataRecordExtractor
 import it.dtk.util.MySpec
 import akka.actor.Props
 import it.dtk.util.StepParent
 import org.joda.time.DateTime
 import it.dtk.DataRecordExtractor.DataRecords
-
+import scala.concurrent.duration._
 
 
 object GiornaleDiPugliaRecordExtractorSpec {
 
-  val html = scala.io.Source.fromFile("src/test/resources/testGiornaleDiPuglia.html", "utf-8").getLines().mkString
-
   val url = "http://www.giornaledipuglia.com/search/label/CRONACA/1"
 
-  val date = DateTime.now().toDate()
+  val date = DateTime.now().toDate
 
 }
 
-class GiornaleDiPugliaDataRecordExtractorSpec extends MySpec("GiornaleDiPugliaRecordExtractor") {
+class GiornaleDiPugliaDataRecordExtractorSpec extends MySpec("GiornaleDiPugliaRecordExtractorSpec") {
 
   import GiornaleDiPugliaRecordExtractorSpec._
 
-  "the giornale di puglia record extractor" should {
-    "extract records" in {
+  val html = scala.io.Source.fromFile("src/test/resources/GiornaleDiPugliaCronacaList.html", "UTF-8").getLines().mkString
+
+  "The GiornaleDiPuglia record extractor" should {
+    "extract 20 data records" in {
       val dataRecordProps = Props(classOf[GiornaleDiPugliaDataRecordExtractor], url, html, date)
       val dataRecordActor = system.actorOf(Props(classOf[StepParent], dataRecordProps, testActor))
+<<<<<<< HEAD
       
       val results = expectMsgClass(classOf[DataRecords])
       results.dataRecords.foreach(n => {
@@ -35,6 +35,14 @@ class GiornaleDiPugliaDataRecordExtractorSpec extends MySpec("GiornaleDiPugliaRe
          )
       println(results)
       //expectMsg(DataRecords(url,date,Seq[DataRecord]()))
+=======
+      val results = expectMsgClass(15.seconds, classOf[DataRecords])
+
+      assert(results.dataRecords.size == 20)
+      results.dataRecords.foreach(dr =>
+        assert(dr.title.length() > 0)
+      )
+>>>>>>> b414a3ebde7da7b99c6761942b84ec2fcc5e5814
     }
   }
 }
