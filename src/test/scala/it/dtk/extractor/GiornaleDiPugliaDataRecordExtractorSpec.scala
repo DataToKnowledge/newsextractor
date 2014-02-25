@@ -29,6 +29,10 @@ class GiornaleDiPugliaDataRecordExtractorSpec extends MySpec("GiornaleDiPugliaRe
       val dataRecordActor = system.actorOf(Props(classOf[StepParent], dataRecordProps, testActor))
       
       val results = expectMsgClass(classOf[DataRecords])
+      results.dataRecords.foreach(n => {
+       println(n) 
+      }
+         )
       println(results)
       //expectMsg(DataRecords(url,date,Seq[DataRecord]()))
     }
