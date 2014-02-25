@@ -26,23 +26,12 @@ class GiornaleDiPugliaDataRecordExtractorSpec extends MySpec("GiornaleDiPugliaRe
     "extract 20 data records" in {
       val dataRecordProps = Props(classOf[GiornaleDiPugliaDataRecordExtractor], url, html, date)
       val dataRecordActor = system.actorOf(Props(classOf[StepParent], dataRecordProps, testActor))
-<<<<<<< HEAD
-      
-      val results = expectMsgClass(classOf[DataRecords])
-      results.dataRecords.foreach(n => {
-       println(n) 
-      }
-         )
-      println(results)
-      //expectMsg(DataRecords(url,date,Seq[DataRecord]()))
-=======
       val results = expectMsgClass(15.seconds, classOf[DataRecords])
 
       assert(results.dataRecords.size == 20)
       results.dataRecords.foreach(dr =>
         assert(dr.title.length() > 0)
       )
->>>>>>> b414a3ebde7da7b99c6761942b84ec2fcc5e5814
     }
   }
 }
