@@ -12,8 +12,7 @@ scalacOptions ++= Seq(
 resolvers ++= Seq(
   "Typesafe Repository" at "http://repo.typesafe.com/typesafe/releases/",
   "Local Maven Repository" at "file://"+Path.userHome.absolutePath+"/.m2/repository",
-  "Sonatype Releases" at "http://oss.sonatype.org/content/repositories/releases",
-  "Sonatype OSS Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots"
+  "Sonatype Releases" at "http://oss.sonatype.org/content/repositories/releases"
 )
 
 libraryDependencies ++= Seq(
