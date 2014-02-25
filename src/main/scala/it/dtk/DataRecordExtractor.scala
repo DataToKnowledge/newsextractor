@@ -2,54 +2,54 @@ package it.dtk
 
 import akka.actor.Actor
 import akka.actor.ActorLogging
-import scala.xml.Node
-import scala.xml.NodeSeq
-import scala.collection.mutable.Map
 import java.util.Date
+import org.jsoup.select.Elements
+import org.jsoup.nodes.Document
+import org.jsoup.nodes.Element
+import scala.collection.JavaConversions._
 
 object DataRecordExtractor {
 
   case class DataRecord(title: String, summary: String, newsUrl: String)
-
   case class DataRecords(url: String, date: Date, dataRecords: Seq[DataRecord])
 
 }
 
 trait DataRecordExtractor extends Actor with ActorLogging {
+    
+  def dataRecordXPath(cssSelector: String)(implicit doc: Document): Elements = doc.select(cssSelector)
 
-  def dataRecordXPath(e: Node): NodeSeq
+  def title(node: Element): String
 
-  def title(e: Node): String
+  def summary(node: Element): String
 
-  def summary(e: Node): String
-
-  def newsUrl(e: Node): String
+  def newsUrl(node: Element): String
 
   /**
    * @param node
    * @return a map with key url and list of text anchor as value
    */
-  def linkExtractor(node: Node): Map[String, List[String]] = {
+  def linkExtractor(node: Element): Map[String, List[String]] = {
+    //get the nodes
+    val nodes = node.select("a[href]")
 
-    val nodes = node \\ "a"
-    val map = Map[String, List[String]]()
+    var map = Map[String, List[String]]()
 
     for (n <- nodes) {
       val text = n.text
-      val nodes = n.attribute("href")
-      //add the href only if it exists and it is not empty
-      nodes.map(n => n.text) match {
-        case Some(href) if !href.isEmpty =>
-          if (!map.contains(href))
-            map += href -> List()
+      val href: String = n.attr("href")
 
-          map += href -> map(href) .:: (text)
-        case _ =>
+      val list = map.get(href) match {
+        case Some(l) => text :: l
+        case None => List(text)
       }
+      map + (href -> list)
     }
-    map
+    map.toMap
   }
 
-  override def receive: Actor.Receive = ???
+  def receive: Actor.Receive = {
+    case _ =>
+  }
 
 }
