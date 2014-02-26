@@ -12,8 +12,7 @@ scalacOptions ++= Seq(
 resolvers ++= Seq(
   "Typesafe Repository" at "http://repo.typesafe.com/typesafe/releases/",
   "Local Maven Repository" at "file://"+Path.userHome.absolutePath+"/.m2/repository",
-  "Sonatype Releases" at "http://oss.sonatype.org/content/repositories/releases",
-  "Sonatype OSS Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots"
+  "Sonatype Releases" at "http://oss.sonatype.org/content/repositories/releases"
 )
 
 libraryDependencies ++= Seq(
@@ -26,13 +25,11 @@ libraryDependencies ++= Seq(
   "org.scalacheck" %% "scalacheck" % "1.11.3" % "test",
   "org.mongodb" %% "casbah" % "2.7.0-RC0",
   "org.jsoup" % "jsoup" % "1.7.3",
-  "ch.qos.logback" % "logback-classic" % "1.1.1",
-  "org.reactivemongo" %% "reactivemongo" % "0.10.0"
+  "ch.qos.logback" % "logback-classic" % "1.1.1"
 )
 
 /* Required by com.gravity.Goose */
 libraryDependencies ++= Seq(
-  "org.jsoup" % "jsoup" % "1.5.2",
   "org.apache.httpcomponents" % "httpclient" % "4.1.2",
   "commons-lang" % "commons-lang" % "2.6",
   "commons-io" % "commons-io" % "2.0.1"
