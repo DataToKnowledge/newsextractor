@@ -4,6 +4,7 @@ import it.dtk.WebSiteController
 import akka.actor.Props
 import it.dtk.WebSiteController.Job
 import java.util.Date
+import it.dtk.extractor.BariTodayDataRecordExtractor
 
 /**
  * @author Andrea Scarpino <andrea@datatoknowledge.it>
@@ -15,7 +16,7 @@ class BariTodayWebSiteController extends WebSiteController {
 
   override val baseUrl: String = "http://www.baritoday.it/"
 
-  override def dataRecordExtractorProps(url: String, html: String, date: Date): Props = ???
+  override def dataRecordExtractorProps(url: String, html: String, date: Date): Props = Props(classOf[BariTodayDataRecordExtractor],url,html,date)
 
   override def logicalListUrlGenerator(start: Int, stop: Int): Seq[Job] = {
     start to stop map (v => Job(baseUrl + "cronaca/pag/" + v, v))

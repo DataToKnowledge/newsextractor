@@ -17,7 +17,7 @@ class CorriereWebSiteController extends WebSiteController {
 
   override val baseUrl: String = "http://www.corriere.it/"
 
-  override def dataRecordExtractorProps(url: String, html: String, date: Date): Props = ???
+  override def dataRecordExtractorProps(url: String, html: String, date: Date): Props = ???//Props(classOf[],url,html,date)
 
   override def logicalListUrlGenerator(start: Int, stop: Int): Seq[Job] = {
     val date = DateTime.now()

@@ -15,7 +15,7 @@ class SenzaColonneWebSiteController extends WebSiteController {
 
   override val baseUrl: String = "http://www.senzacolonnenews.it/"
 
-  override def dataRecordExtractorProps(url: String, html: String, date: Date): Props = ???
+  override def dataRecordExtractorProps(url: String, html: String, date: Date): Props = ???//Props(classOf[],url,html,date)
 
   override def logicalListUrlGenerator(start: Int, stop: Int): Seq[Job] = {
     start to stop map (v => Job(baseUrl + "cronaca.html?start=" + String.valueOf((v - 1) * 5), v))
