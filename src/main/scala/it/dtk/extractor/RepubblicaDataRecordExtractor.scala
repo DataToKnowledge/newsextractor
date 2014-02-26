@@ -8,23 +8,20 @@ import scala.collection.JavaConversions._
 import org.jsoup.nodes.Element
 import it.dtk.DataRecordExtractor._
 
-/**
- * @author Andrea Scarpino <andrea@datatoknowledge.it>
- */
-class BariTodayDataRecordExtractor(url: String, html: String, date: Date) extends DataRecordExtractor {
+class RepubblicaDataRecordExtractor(url: String, html: String, date: Date) extends DataRecordExtractor {
 
   implicit val doc = Jsoup.parse(html, url)
 
   //get the data records
-  val records = dataRecordXPath("article[class= post p-small clearfix]") map (
+  val records = dataRecordXPath("article[class=article]") map (
     r => DataRecord(title(r), summary(r), newsUrl(r)))
     
   context.parent ! DataRecords(url,date,records)
     
-  def title(node: Element) = node.select("header > figure > a > img[alt]").attr("alt")
+  def title(node: Element) = node.select("h1").text
   
-  def summary(node: Element) = node.select("p").text
+  def summary(node: Element) = node.select("p.summary").text
   
-  def newsUrl(node: Element) = node.select("header > h1 > a").attr("href")
+  def newsUrl(node: Element) = node.select("h1 > a").attr("href")
 
 }
