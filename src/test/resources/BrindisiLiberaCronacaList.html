@@ -1,0 +1,1212 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="it-it" lang="it-it" dir="ltr" xmlns:fb="http://www.facebook.com/2008/fbml" >
+<head>
+
+
+<script language=JavaScript>
+<!--
+
+var message="© Riproduzione Riservata!";
+
+///////////////////////////////////
+function clickIE4(){
+if (event.button==2){
+alert(message);
+return false;
+}
+}
+
+function clickNS4(e){
+if (document.layers||document.getElementById&&!document.all){
+if (e.which==2||e.which==3){
+alert(message);
+return false;
+}
+}
+}
+
+if (document.layers){
+document.captureEvents(Event.MOUSEDOWN);
+document.onmousedown=clickNS4;
+}
+else if (document.all&&!document.getElementById){
+document.onmousedown=clickIE4;
+}
+
+document.oncontextmenu=new Function("alert(message);return false")
+
+// --> 
+</script>
+
+
+<script language="JavaScript">
+var txt="Brindisilibera.it - Aiutaci a sostenere il giornale con un versamento di 2 €. -  Brindisilibera.it -  l'informazione libera della città di Brindisi______________________";
+var espera=200;
+var refresco=null;
+
+function rotulo_title() {
+        document.title=txt;
+        txt=txt.substring(1,txt.length)+txt.charAt(0);        
+        refresco=setTimeout("rotulo_title()",espera);}
+rotulo_title();
+// --></script><script>  
+
+var delayb4scroll=1000 //Specify initial delay before marquee starts to scroll on page (2000=2 seconds)
+var marqueespeed=1 //Specify marquee scroll speed (larger is faster 1-10)
+var pauseit=1 //Pause marquee onMousever (0=no. 1=yes)?
+
+
+var copyspeed=marqueespeed
+var pausespeed=(pauseit==0)? copyspeed: 0
+var actualheight=''
+
+function scrollmarquee(){
+if (parseInt(cross_marquee.style.top)>(actualheight*(-1)+8))
+cross_marquee.style.top=parseInt(cross_marquee.style.top)-copyspeed+"px"
+else
+cross_marquee.style.top=parseInt(marqueeheight)+8+"px"
+}
+
+function initializemarquee(){
+cross_marquee=document.getElementById("vmarquee")
+cross_marquee.style.top=0
+marqueeheight=document.getElementById("marqueecontainer").offsetHeight
+actualheight=cross_marquee.offsetHeight
+if (window.opera || navigator.userAgent.indexOf("Netscape/7")!=-1){ //if Opera or Netscape 7x, add scrollbars to scroll and exit
+cross_marquee.style.height=marqueeheight+"px"
+cross_marquee.style.overflow="scroll"
+return
+}
+setTimeout('lefttime=setInterval("scrollmarquee()",30)', delayb4scroll)
+}
+
+if (window.addEventListener)
+window.addEventListener("load", initializemarquee, false)
+else if (window.attachEvent)
+window.attachEvent("onload", initializemarquee)
+else if (document.getElementById)
+window.onload=initializemarquee
+
+
+function FP_swapImg() {//v1.0
+ var doc=document,args=arguments,elm,n; doc.$imgSwaps=new Array(); for(n=2; n<args.length;
+ n+=2) { elm=FP_getObjectByID(args[n]); if(elm) { doc.$imgSwaps[doc.$imgSwaps.length]=elm;
+ elm.$src=elm.src; elm.src=args[n+1]; } }
+}
+
+function FP_preloadImgs() {//v1.0
+ var d=document,a=arguments; if(!d.FP_imgs) d.FP_imgs=new Array();
+ for(var i=0; i<a.length; i++) { d.FP_imgs[i]=new Image; d.FP_imgs[i].src=a[i]; }
+}
+
+function FP_getObjectByID(id,o) {//v1.0
+ var c,el,els,f,m,n; if(!o)o=document; if(o.getElementById) el=o.getElementById(id);
+ else if(o.layers) c=o.layers; else if(o.all) el=o.all[id]; if(el) return el;
+ if(o.id==id || o.name==id) return o; if(o.childNodes) c=o.childNodes; if(c)
+ for(n=0; n<c.length; n++) { el=FP_getObjectByID(id,c[n]); if(el) return el; }
+ f=o.forms; if(f) for(n=0; n<f.length; n++) { els=f[n].elements;
+ for(m=0; m<els.length; m++){ el=FP_getObjectByID(id,els[n]); if(el) return el; } }
+ return null;
+}
+function FP_swapImgRestore() {//v1.0
+ var doc=document,i; if(doc.$imgSwaps) { for(i=0;i<doc.$imgSwaps.length;i++) {
+  var elm=doc.$imgSwaps[i]; if(elm) { elm.src=elm.$src; elm.$src=null; } } 
+  doc.$imgSwaps=null; }
+}
+
+function FP_setStatusBarText(txt) {//v1.0
+ window.status=txt;
+}
+// -->
+</script>
+
+<link href='http://fonts.googleapis.com/css?family=Dosis' rel='stylesheet' type='text/css'>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+  <meta name="robots" content="index, follow" />
+  <meta name="keywords" content="News e informazione della città di Brindisi" />
+  <meta name="description" content="News e  informazione della città di Brindisi" />
+  <meta name="generator" content="Joomla! 1.5 - Open Source Content Management" />
+  <title>Cronaca</title>
+  <link href="/new/index.php?option=com_content&amp;view=section&amp;layout=blog&amp;id=18&amp;Itemid=75&amp;format=feed&amp;type=rss" rel="alternate" type="application/rss+xml" title="RSS 2.0" />
+  <link href="/new/index.php?option=com_content&amp;view=section&amp;layout=blog&amp;id=18&amp;Itemid=75&amp;format=feed&amp;type=atom" rel="alternate" type="application/atom+xml" title="Atom 1.0" />
+  <link href="/new/templates/magazine/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+  <link rel="stylesheet" href="/new/components/com_jcomments/tpl/default/style.css?v=21" type="text/css" />
+  <link rel="stylesheet" href="/new/plugins/system/jcemediabox/css/jcemediabox.css?version=114" type="text/css" />
+  <link rel="stylesheet" href="/new/plugins/system/jcemediabox/themes/standard/css/style.css?version=114" type="text/css" />
+  <link rel="stylesheet" href="http://www.brindisilibera.it/new/plugins/system/myApiConnect/myApi.css" type="text/css" />
+  <link rel="stylesheet" href="http://www.brindisilibera.it/new/components/com_adsmanager/css/ui-lightness/jquery-ui-1.8.23.custom.css" type="text/css" />
+  <link rel="stylesheet" href="http://www.brindisilibera.it/new/modules/mod_socialsharebuttons/style.css" type="text/css" />
+  <link rel="stylesheet" href="/new/modules/mod_cbnews/assets/cbnews.css" type="text/css" />
+  <script type="text/javascript" src="/new/plugins/system/mtupgrade/mootools.js"></script>
+  <script type="text/javascript" src="/new/media/system/js/caption.js"></script>
+  <script type="text/javascript" src="/new/plugins/content/avreloaded/silverlight.js"></script>
+  <script type="text/javascript" src="/new/plugins/content/avreloaded/wmvplayer.js"></script>
+  <script type="text/javascript" src="/new/plugins/content/avreloaded/swfobject.js"></script>
+  <script type="text/javascript" src="/new/plugins/content/avreloaded/avreloaded.js"></script>
+  <script type="text/javascript" src="/new/plugins/system/jcemediabox/js/jcemediabox.js?version=114"></script>
+  <script type="text/javascript" src="http://www.brindisilibera.it/new/plugins/system/myApiConnect/myApiModal-J1.5.js"></script>
+  <script type="text/javascript" src="http://www.brindisilibera.it/new/components/com_adsmanager/js/jquery-1.8.0.min.js"></script>
+  <script type="text/javascript" src="http://www.brindisilibera.it/new/components/com_adsmanager/js/noconflict.js"></script>
+  <script type="text/javascript" src="http://www.brindisilibera.it/new/components/com_adsmanager/js/jquery-ui-1.8.23.custom.min.js"></script>
+  <script type="text/javascript">
+JCEMediaObject.init('/new/', {flash:"10,0,22,87",windowmedia:"5,1,52,701",quicktime:"6,0,2,0",realmedia:"7,0,0,0",shockwave:"8,5,1,0"});JCEMediaBox.init({popup:{width:"",height:"",legacy:0,lightbox:0,shadowbox:0,resize:1,icons:1,overlay:1,overlayopacity:0.8,overlaycolor:"#000000",fadespeed:500,scalespeed:500,hideobjects:1,scrolling:"fixed",close:2,labels:{'close':'Close','next':'Next','previous':'Previous','cancel':'Cancel','numbers':'{$current} of {$total}'}},tooltip:{className:"tooltip",opacity:0.8,speed:150,position:"br",offsets:{x: 16, y: 16}},base:"/new/",imgpath:"plugins/system/jcemediabox/img",theme:"standard",themecustom:"",themepath:"plugins/system/jcemediabox/themes"});
+  </script>
+  <script type="text/javascript" src="http://www.brindisilibera.it/new/plugins/system/protos.lightbox.js"></script>
+  <script type="text/javascript">    
+    hs.graphicsDir = 'http://www.brindisilibera.it/new/plugins/system/protos.lightbox/';
+    hs.outlineType = 'rounded-white';
+	</script>
+  <link href="http://www.brindisilibera.it/new/plugins/system/protos.lightbox.js.css" rel="stylesheet" type="text/css" />
+
+    <link rel="stylesheet" type="text/css" href="/new/templates/magazine/css/template.css" media="screen" />
+    <!--[if IE]><link href="/new/templates/magazine/css/ie.css" rel="stylesheet" type="text/css" /><![endif]-->
+    <!--[if lte IE 6]><link href="/new/templates/magazine/css/ie6.css" rel="stylesheet" type="text/css" /><![endif]-->
+
+<!-- inzio codice per collassare le colonne left -right -->
+<style type="text/css">
+ #main 
+{
+width:650px; 
+}
+</style>
+<!-- fine codice per collassare le colonne left -right -->
+
+
+<!-- Google Analytics for Joomla by Analytics For Joomla v1.0 | http://www.analyticsforjoomla.com/ -->
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-6232493-1']);
+    _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+<!-- End of Google Analytics for Joomla by Analytics For Joomla v1.0 -->
+</head>
+<body>
+ <!--[if lte IE 6]><script type="text/javascript" src="/new/templates/magazine/js/ie6/warning.js"></script><![endif]-->
+
+<div id="container">
+ <div id="banner-top">
+  <center><hr size="1"></center>
+
+ </div>
+  <!-- Parte superiore -->
+  <div id="head">
+  
+    <div id="logo">
+	<div id="logo-left">
+			<div class="moduletable">
+					<div class="bannergroup">
+
+<div class="banneritem"><a href="/new/index.php?option=com_banners&amp;task=click&amp;bid=9" target="_blank"><img src="http://www.brindisilibera.it/new/images/banners/b_11spotflashback2.jpg" alt="Banner" /></a><div class="clr"></div>
+	</div>
+
+</div>		</div>
+	
+	</div><!--/#logo-left-->
+	<div id="logo-right">
+			<div class="moduletable">
+					<div class="bannergroup">
+
+<div class="banneritem"><a href="/new/index.php?option=com_banners&amp;task=click&amp;bid=9" target="_blank"><img src="http://www.brindisilibera.it/new/images/banners/b_11spotflashback2.jpg" alt="Banner" /></a><div class="clr"></div>
+	</div>
+
+</div>		</div>
+	
+	</div><!--/#logo-right-->
+	</div><!--/#logo-->
+ 	
+ 
+    <!--
+    Skip Navigation Links
+    Scorciatoie nascoste che migliorano l'accessibilita.
+    Appaiono al focus (usando il pulsante TAB della tastiera), ai browser testuali e agli screenreaders
+    Per maggiori informazioni leggere l'articolo:
+    http://nemesisdesign.net/blog/accessibility/nice-css-skip-links-appearing-focus/
+    -->
+    <ul id="skip" class="robots-nocontent">
+      <li><a href="/new/index.php?option=com_content&amp;amp;view=section&amp;amp;layout=blog&amp;amp;id=18&amp;amp;Itemid=75#content-anchor" accesskey="1" rel="nofollow">Vai al contenuto principale</a></li>
+      <li><a href="/new/index.php?option=com_content&amp;amp;view=section&amp;amp;layout=blog&amp;amp;id=18&amp;amp;Itemid=75#search-anchor" accesskey="2" rel="nofollow">Vai alla colonna destra / ricerca</a></li>
+    </ul>
+ 
+    <div id="navigation">
+      <ul class="menu"><li class="item1"><a href="http://www.brindisilibera.it/new/"><span>Home</span></a></li><li class="item83"><a href="/new/index.php?option=com_content&amp;view=category&amp;layout=blog&amp;id=43&amp;Itemid=83"><span>&gt;&gt; Primo Piano</span></a></li><li id="current" class="active item75"><a href="/new/index.php?option=com_content&amp;view=section&amp;layout=blog&amp;id=18&amp;Itemid=75"><span>Cronaca</span></a></li><li class="item68"><a href="/new/index.php?option=com_content&amp;view=section&amp;layout=blog&amp;id=5&amp;Itemid=68"><span>Politica</span></a></li><li class="item69"><a href="/new/index.php?option=com_content&amp;view=section&amp;layout=blog&amp;id=12&amp;Itemid=69"><span>Sport</span></a></li><li class="item84"><a href="/new/index.php?option=com_content&amp;view=section&amp;layout=blog&amp;id=7&amp;Itemid=84"><span>Spettacolo</span></a></li><li class="item77"><a href="/new/index.php?option=com_content&amp;view=section&amp;layout=blog&amp;id=8&amp;Itemid=77"><span>Cultura</span></a></li><li class="item76"><a href="/new/index.php?option=com_content&amp;view=section&amp;layout=blog&amp;id=6&amp;Itemid=76"><span>Economia</span></a></li><li class="item78"><a href="/new/index.php?option=com_content&amp;view=section&amp;layout=blog&amp;id=10&amp;Itemid=78"><span>Turismo</span></a></li><li class="item79"><a href="/new/index.php?option=com_content&amp;view=section&amp;layout=blog&amp;id=11&amp;Itemid=79"><span>Ambiente</span></a></li><li class="item81"><a href="/new/index.php?option=com_content&amp;view=section&amp;layout=blog&amp;id=15&amp;Itemid=81"><span>Focus</span></a></li></ul>
+    </div><!--/#navigation-->
+ 
+  </div><!--/#head-->
+ 
+  <div id="body">
+ 
+    <a name="content-anchor" class="accessibility">Contenuto Principale</a>
+ 
+   
+ 
+ 	<!-- Slideshow, sotto il menu a sinistra -->
+ 	
+	<div id="slide">
+	 		<div class="moduletable">
+					<script type="text/javascript" src="/new/modules/mod_cbnews/assets/jquery.min.js"></script>
+<script type="text/javascript" src="/new/modules/mod_cbnews/assets/jquery-ui.min.js"></script>
+<script type="text/javascript">
+	$(document).ready(function(){
+		$("#featured > ul").tabs({fx:{opacity: "toggle"}}).tabs("rotate", 5000, true);
+	});
+</script>
+<div id="featured" >
+  <ul class="ui-tabs-nav">
+  				<li class="ui-tabs-nav-item ui-tabs-selected" id="nav-fragment-0"><a href="#fragment-0"><img src="/new/images/stories/thumbnails/lucianoloiacono_50_49.jpg" alt="Problematiche del  Porto brindisino."  /><span>Problematiche del  Porto brindisino.</span></a></li>
+				<li class="ui-tabs-nav-item ui-tabs-selected" id="nav-fragment-1"><a href="#fragment-1"><img src="/new/images/stories/thumbnails/mauriziobruno_50_50.jpg" alt="Maurizio  Bruno candidato Sindaco del Centro Sinistra a Francavilla Fontana"  /><span>Maurizio  Bruno candidato Sindaco del Centro Sinistra a Francavilla Fontana</span></a></li>
+				<li class="ui-tabs-nav-item ui-tabs-selected" id="nav-fragment-2"><a href="#fragment-2"><img src="/new/images/stories/thumbnails/puntoprocessoenel_50_50.jpg" alt="Facciamo il punto  sul Processo Enel "  /><span>Facciamo il punto  sul Processo Enel </span></a></li>
+				<li class="ui-tabs-nav-item ui-tabs-selected" id="nav-fragment-3"><a href="#fragment-3"><img src="/new/images/stories/thumbnails/senzacure_50_34.jpg" alt="Sempre   più poveri : 5 milioni di Italiani   rimasti  senza cure.  "  /><span>Sempre   più poveri : 5 milioni di Italiani   rimasti  senza cure.  </span></a></li>
+	   
+  </ul>
+  			
+			  <!-- First Content -->
+			  <div id="fragment-0" class="ui-tabs-panel" style=""> <img src="/new/images/stories/thumbnails/lucianoloiacono_258_250.jpg" alt="Problematiche del  Porto brindisino." width='400' height='250'/>				<div class="info" >
+				  <h2><a href="/new/index.php?option=com_content&amp;view=article&amp;id=9633%3Aproblematiche-del-porto-brindisino&amp;catid=14%3Aslide&amp;Itemid=75" >Problematiche del  Porto brindisino.</a></h2>
+				  <p>
+					<p style="text-align: justify;">
+<strong>
+Conferenza stampa questa mattina presso la Sala Ma...
+</strong>
+</p>
+	  	
+				  </p>
+				</div>
+			  </div>  
+				
+			  <!-- First Content -->
+			  <div id="fragment-1" class="ui-tabs-panel" style=""> <img src="/new/images/stories/thumbnails/mauriziobruno_251_250.jpg" alt="Maurizio  Bruno candidato Sindaco del Centro Sinistra a Francavilla Fontana" width='400' height='250'/>				<div class="info" >
+				  <h2><a href="/new/index.php?option=com_content&amp;view=article&amp;id=9590%3Amaurizio-bruno-attuale-segretario-provinciale-del-partito-democratico-&amp;catid=14%3Aslide&amp;Itemid=75" >Maurizio  Bruno candidato Sindaco del Centro Sinistra a Francavilla Fontana</a></h2>
+				  <p>
+					<p style="text-align: justify;">
+<strong>
+E' l' attuale segretario provinciale del Partito D...
+</strong>
+</p>
+	  	
+				  </p>
+				</div>
+			  </div>  
+				
+			  <!-- First Content -->
+			  <div id="fragment-2" class="ui-tabs-panel" style=""> <img src="/new/images/stories/thumbnails/puntoprocessoenel_251_250.jpg" alt="Facciamo il punto  sul Processo Enel " width='400' height='250'/>				<div class="info" >
+				  <h2><a href="/new/index.php?option=com_content&amp;view=article&amp;id=9567%3Afacciamo-il-punto-sul-processo-enel-&amp;catid=14%3Aslide&amp;Itemid=75" >Facciamo il punto  sul Processo Enel </a></h2>
+				  <p>
+					<p style="text-align: justify;">
+<strong>
+Assemblea Pubblica organizzata da Salute Pubblica,...
+</strong>
+</p>
+	  	
+				  </p>
+				</div>
+			  </div>  
+				
+			  <!-- First Content -->
+			  <div id="fragment-3" class="ui-tabs-panel" style=""> <img src="/new/images/stories/thumbnails/senzacure_377_250.jpg" alt="Sempre   più poveri : 5 milioni di Italiani   rimasti  senza cure.  " width='400' height='250'/>				<div class="info" >
+				  <h2><a href="/new/index.php?option=com_content&amp;view=article&amp;id=9512%3Asempre-piu-poveri-5-milioni-di-italiani-rimasti-senza-cure-&amp;catid=14%3Aslide&amp;Itemid=75" >Sempre   più poveri : 5 milioni di Italiani   rimasti  senza cure.  </a></h2>
+				  <p>
+					<p style="text-align: justify;">
+<strong>
+" Rapporto shock " sui medicinali nella crisi, cre...
+</strong>
+</p>
+	  	
+				  </p>
+				</div>
+			  </div>  
+	   
+</div>		</div>
+	
+	</div><!--/#slide-->
+	<div id="user1">
+	 		<div class="module">
+			<div>
+				<div>
+					<div>
+											<div data-configid="9627414/5570516" style="width: 280px; height: 256px;" class="issuuembed"></div><script type="text/javascript" src="//e.issuu.com/embed.js" async="true"></script>					</div>
+				</div>
+			</div>
+		</div>
+	
+	</div><!--/#user1-->
+	
+  <!-- Modulo Breadcrumb o pathway -->
+    <div id="breadcrumb"><span>Sei qui:</span> <span class="breadcrumbs pathway">
+<a href="http://www.brindisilibera.it/new/" class="pathway">Home</a> <img src="/new/images/M_images/arrow.png" alt=""  /> Cronaca</span>
+</div>
+	
+    <!-- Area contenuti a sinistra -->
+    <div id="main">
+ 
+      <!-- Messaggio di avviso o errore -->
+      
+ 
+      <div class="componentheading">
+	Cronaca</div>
+<table class="blog" cellpadding="0" cellspacing="0">
+<tr>
+	<td valign="top">
+					<div>
+		
+<table class="contentpaneopen">
+<tr>
+		<td class="contentheading" width="100%">
+				<a href="/new/index.php?option=com_content&amp;view=article&amp;id=9645:carovigno-31enne-arrestato-per-detenzione-di-sostanza-stupefacente-ai-fini-di-spaccio&amp;catid=41:cronaca&amp;Itemid=75" class="contentpagetitle">
+			CAROVIGNO: 31ENNE ARRESTATO PER DETENZIONE DI SOSTANZA STUPEFACENTE AI FINI DI SPACCIO</a>
+			</td>
+	
+		<td align="right" width="100%" class="buttonheading">
+	<a href="/new/index.php?view=article&amp;catid=41%3Acronaca&amp;id=9645%3Acarovigno-31enne-arrestato-per-detenzione-di-sostanza-stupefacente-ai-fini-di-spaccio&amp;format=pdf&amp;option=com_content&amp;Itemid=75" title="PDF" onclick="window.open(this.href,'win2','status=no,toolbar=no,scrollbars=yes,titlebar=no,menubar=no,resizable=yes,width=640,height=480,directories=no,location=no'); return false;" rel="nofollow"><img src="/new/images/M_images/pdf_button.png" alt="PDF"  /></a>	</td>
+	
+		<td align="right" width="100%" class="buttonheading">
+	<a href="/new/index.php?view=article&amp;catid=41%3Acronaca&amp;id=9645%3Acarovigno-31enne-arrestato-per-detenzione-di-sostanza-stupefacente-ai-fini-di-spaccio&amp;tmpl=component&amp;print=1&amp;layout=default&amp;page=&amp;option=com_content&amp;Itemid=75" title="Stampa" onclick="window.open(this.href,'win2','status=no,toolbar=no,scrollbars=yes,titlebar=no,menubar=no,resizable=yes,width=640,height=480,directories=no,location=no'); return false;" rel="nofollow"><img src="/new/images/M_images/printButton.png" alt="Stampa"  /></a>	</td>
+	
+		<td align="right" width="100%" class="buttonheading">
+	<a href="/new/index.php?option=com_mailto&amp;tmpl=component&amp;link=756e6b8c0e9c590bae4a4c9464e8a4787c171364" title="E-mail" onclick="window.open(this.href,'win2','width=400,height=350,menubar=yes,resizable=yes'); return false;"><img src="/new/images/M_images/emailButton.png" alt="E-mail"  /></a>	</td>
+		
+		
+</tr>
+</table>
+<table class="contentpaneopen">
+
+<tr>
+	<td width="70%"  valign="top" colspan="2">
+		<span class="small">
+			Scritto da Redazione		</span>
+		&nbsp;&nbsp;
+	</td>
+</tr>
+
+<tr>
+	<td valign="top" colspan="2" class="createdate">
+		Mercoledì 26 Febbraio 2014 15:10	</td>
+</tr>
+
+
+<tr>
+<td valign="top" colspan="2">
+<p><a target="_blank" rel="title[Bellanova Fedele]" class="jcepopup" href="/new/images/stories/cronaca/bellanova.jpg"><img style="display: block; margin-left: auto; margin-right: auto;" alt="bellanova" src="/new/images/stories/cronaca/bellanova.jpg" height="244" width="185" /></a></p>
+<p style="text-align: justify;">I CARABINIERI DELLA COMPAGNIA DI SAN VITO DEI NORMANNI, A SEGUITO DI SPECIFICI SERVIZI TESI AL CONTRASTO DELLO SPACCIO DI SOSTANZE STUPEFACENTI, EFFETTUATI NEL TERRITORIO DEL COMUNE DI CAROVIGNO, HANNO TRATTO IN ARRESTO, IN FLAGRANZA DI REATO, BELLANOVA FEDELE. COSTUI, A SEGUITO DI PERQUISIZIONE DOMICILIARE,</p>
+<div class="jcomments-links"><a class="readmore-link" href="/new/index.php?option=com_content&amp;view=article&amp;id=9645:carovigno-31enne-arrestato-per-detenzione-di-sostanza-stupefacente-ai-fini-di-spaccio&amp;catid=41:cronaca&amp;Itemid=75" title="CAROVIGNO: 31ENNE ARRESTATO PER DETENZIONE DI SOSTANZA STUPEFACENTE AI FINI DI SPACCIO">Leggi tutto...</a> <a class="comments-link" href="/new/index.php?option=com_content&amp;view=article&amp;id=9645:carovigno-31enne-arrestato-per-detenzione-di-sostanza-stupefacente-ai-fini-di-spaccio&amp;catid=41:cronaca&amp;Itemid=75#addcomment" title="Aggiungi commento">Aggiungi commento</a> </div>
+</td>
+</tr>
+
+
+
+</table>
+<span class="article_separator">&nbsp;</span>
+		</div>
+		</td>
+</tr>
+
+<tr>
+	<td valign="top">
+		<table width="100%"  cellpadding="0" cellspacing="0">
+		<tr>
+											<td valign="top"
+						width="50%"
+						class="article_column">
+						
+<table class="contentpaneopen">
+<tr>
+		<td class="contentheading" width="100%">
+				<a href="/new/index.php?option=com_content&amp;view=article&amp;id=9644:brindisi-incendio-autovettura&amp;catid=41:cronaca&amp;Itemid=75" class="contentpagetitle">
+			BRINDISI. INCENDIO AUTOVETTURA.</a>
+			</td>
+	
+		<td align="right" width="100%" class="buttonheading">
+	<a href="/new/index.php?view=article&amp;catid=41%3Acronaca&amp;id=9644%3Abrindisi-incendio-autovettura&amp;format=pdf&amp;option=com_content&amp;Itemid=75" title="PDF" onclick="window.open(this.href,'win2','status=no,toolbar=no,scrollbars=yes,titlebar=no,menubar=no,resizable=yes,width=640,height=480,directories=no,location=no'); return false;" rel="nofollow"><img src="/new/images/M_images/pdf_button.png" alt="PDF"  /></a>	</td>
+	
+		<td align="right" width="100%" class="buttonheading">
+	<a href="/new/index.php?view=article&amp;catid=41%3Acronaca&amp;id=9644%3Abrindisi-incendio-autovettura&amp;tmpl=component&amp;print=1&amp;layout=default&amp;page=&amp;option=com_content&amp;Itemid=75" title="Stampa" onclick="window.open(this.href,'win2','status=no,toolbar=no,scrollbars=yes,titlebar=no,menubar=no,resizable=yes,width=640,height=480,directories=no,location=no'); return false;" rel="nofollow"><img src="/new/images/M_images/printButton.png" alt="Stampa"  /></a>	</td>
+	
+		<td align="right" width="100%" class="buttonheading">
+	<a href="/new/index.php?option=com_mailto&amp;tmpl=component&amp;link=202a2a313587d630080de7d72ec17254effc678f" title="E-mail" onclick="window.open(this.href,'win2','width=400,height=350,menubar=yes,resizable=yes'); return false;"><img src="/new/images/M_images/emailButton.png" alt="E-mail"  /></a>	</td>
+		
+		
+</tr>
+</table>
+<table class="contentpaneopen">
+
+<tr>
+	<td width="70%"  valign="top" colspan="2">
+		<span class="small">
+			Scritto da Redazione		</span>
+		&nbsp;&nbsp;
+	</td>
+</tr>
+
+<tr>
+	<td valign="top" colspan="2" class="createdate">
+		Mercoledì 26 Febbraio 2014 15:09	</td>
+</tr>
+
+
+<tr>
+<td valign="top" colspan="2">
+<p><img style="display: block; margin-left: auto; margin-right: auto;" alt="AUTOCARABINIERI" src="/new/images/stories/cronaca/AUTOCARABINIERI.jpg" height="132" width="176" /></p>
+<p style="text-align: justify;">I CARABINIERI DELLA COMPAGNIA DI BRINDISI HANNO AVVIATO LE INDAGINI FINALIZZATE A ACCERTARE LE CAUSE DELL'INCENDIO DI UNA RENAULT KANGOO, AVVENUTO NELLA NOTTE IN VIA DEI VETRAI, DI PROPRIETÀ DI UN OPERAIO. LE FIAMME SONO STATE SPENTE DAI VIGILI DEL FUOCO DI BRINDISI</p><div class="jcomments-links"> <a class="comments-link" href="/new/index.php?option=com_content&amp;view=article&amp;id=9644:brindisi-incendio-autovettura&amp;catid=41:cronaca&amp;Itemid=75#addcomment" title="Aggiungi commento">Aggiungi commento</a> </div>
+</td>
+</tr>
+
+
+
+</table>
+<span class="article_separator">&nbsp;</span>
+
+<table class="contentpaneopen">
+<tr>
+		<td class="contentheading" width="100%">
+				<a href="/new/index.php?option=com_content&amp;view=article&amp;id=9642:tuturano-tenta-di-rubare-materiale-per-ledilizia-arrestato&amp;catid=41:cronaca&amp;Itemid=75" class="contentpagetitle">
+			Tuturano: tenta di rubare materiale per l'edilizia, arrestato.</a>
+			</td>
+	
+		<td align="right" width="100%" class="buttonheading">
+	<a href="/new/index.php?view=article&amp;catid=41%3Acronaca&amp;id=9642%3Atuturano-tenta-di-rubare-materiale-per-ledilizia-arrestato&amp;format=pdf&amp;option=com_content&amp;Itemid=75" title="PDF" onclick="window.open(this.href,'win2','status=no,toolbar=no,scrollbars=yes,titlebar=no,menubar=no,resizable=yes,width=640,height=480,directories=no,location=no'); return false;" rel="nofollow"><img src="/new/images/M_images/pdf_button.png" alt="PDF"  /></a>	</td>
+	
+		<td align="right" width="100%" class="buttonheading">
+	<a href="/new/index.php?view=article&amp;catid=41%3Acronaca&amp;id=9642%3Atuturano-tenta-di-rubare-materiale-per-ledilizia-arrestato&amp;tmpl=component&amp;print=1&amp;layout=default&amp;page=&amp;option=com_content&amp;Itemid=75" title="Stampa" onclick="window.open(this.href,'win2','status=no,toolbar=no,scrollbars=yes,titlebar=no,menubar=no,resizable=yes,width=640,height=480,directories=no,location=no'); return false;" rel="nofollow"><img src="/new/images/M_images/printButton.png" alt="Stampa"  /></a>	</td>
+	
+		<td align="right" width="100%" class="buttonheading">
+	<a href="/new/index.php?option=com_mailto&amp;tmpl=component&amp;link=95b9eb19b52f606d3bf1a2111439d8b3ab33b86c" title="E-mail" onclick="window.open(this.href,'win2','width=400,height=350,menubar=yes,resizable=yes'); return false;"><img src="/new/images/M_images/emailButton.png" alt="E-mail"  /></a>	</td>
+		
+		
+</tr>
+</table>
+<table class="contentpaneopen">
+
+<tr>
+	<td width="70%"  valign="top" colspan="2">
+		<span class="small">
+			Scritto da Redazione		</span>
+		&nbsp;&nbsp;
+	</td>
+</tr>
+
+<tr>
+	<td valign="top" colspan="2" class="createdate">
+		Mercoledì 26 Febbraio 2014 14:57	</td>
+</tr>
+
+
+<tr>
+<td valign="top" colspan="2">
+<p style="text-align: justify;"><strong>I carabinieri della Stazione di Tuturano hanno tratto in arresto in flagranza di reato LOBELLO Cosimo, 57enne del posto, per tentato furto aggravato.</strong></p>
+<p><strong><img style="display: block; margin-left: auto; margin-right: auto;" alt="AUTOCARABINIERI" src="/new/images/stories/cronaca/AUTOCARABINIERI.jpg" height="156" width="208" /></strong></p>
+<p style="text-align: justify;">L'uomo è stato sorpreso dai militari operanti mentre in una via del centro tentata di rubare del materiale inerte per l'edilizia, appartenente a una ditta di costruzioni operante sul posto. La refurtiva è stata restituita all'avente diritto. LOBELLO Cosimo, su disposizione dell'Autorità Giudiziaria, è stato sottoposto agli arresti domiciliari.</p><div class="jcomments-links"> <a class="comments-link" href="/new/index.php?option=com_content&amp;view=article&amp;id=9642:tuturano-tenta-di-rubare-materiale-per-ledilizia-arrestato&amp;catid=41:cronaca&amp;Itemid=75#addcomment" title="Aggiungi commento">Aggiungi commento</a> </div>
+</td>
+</tr>
+
+
+
+</table>
+<span class="article_separator">&nbsp;</span>
+
+<table class="contentpaneopen">
+<tr>
+		<td class="contentheading" width="100%">
+				<a href="/new/index.php?option=com_content&amp;view=article&amp;id=9624:brindisi-39enne-in-carcere-per-furto-aggravato-in-concorso&amp;catid=41:cronaca&amp;Itemid=75" class="contentpagetitle">
+			Brindisi: 39enne in carcere per furto aggravato in concorso.</a>
+			</td>
+	
+		<td align="right" width="100%" class="buttonheading">
+	<a href="/new/index.php?view=article&amp;catid=41%3Acronaca&amp;id=9624%3Abrindisi-39enne-in-carcere-per-furto-aggravato-in-concorso&amp;format=pdf&amp;option=com_content&amp;Itemid=75" title="PDF" onclick="window.open(this.href,'win2','status=no,toolbar=no,scrollbars=yes,titlebar=no,menubar=no,resizable=yes,width=640,height=480,directories=no,location=no'); return false;" rel="nofollow"><img src="/new/images/M_images/pdf_button.png" alt="PDF"  /></a>	</td>
+	
+		<td align="right" width="100%" class="buttonheading">
+	<a href="/new/index.php?view=article&amp;catid=41%3Acronaca&amp;id=9624%3Abrindisi-39enne-in-carcere-per-furto-aggravato-in-concorso&amp;tmpl=component&amp;print=1&amp;layout=default&amp;page=&amp;option=com_content&amp;Itemid=75" title="Stampa" onclick="window.open(this.href,'win2','status=no,toolbar=no,scrollbars=yes,titlebar=no,menubar=no,resizable=yes,width=640,height=480,directories=no,location=no'); return false;" rel="nofollow"><img src="/new/images/M_images/printButton.png" alt="Stampa"  /></a>	</td>
+	
+		<td align="right" width="100%" class="buttonheading">
+	<a href="/new/index.php?option=com_mailto&amp;tmpl=component&amp;link=0911bae250fb03f293669954fc37b4f4f75f11fe" title="E-mail" onclick="window.open(this.href,'win2','width=400,height=350,menubar=yes,resizable=yes'); return false;"><img src="/new/images/M_images/emailButton.png" alt="E-mail"  /></a>	</td>
+		
+		
+</tr>
+</table>
+<table class="contentpaneopen">
+
+<tr>
+	<td width="70%"  valign="top" colspan="2">
+		<span class="small">
+			Scritto da Redazione		</span>
+		&nbsp;&nbsp;
+	</td>
+</tr>
+
+<tr>
+	<td valign="top" colspan="2" class="createdate">
+		Martedì 25 Febbraio 2014 13:52	</td>
+</tr>
+
+
+<tr>
+<td valign="top" colspan="2">
+<p>I carabinieri della Stazione di Brindisi Casale hanno eseguito un ordine di esecuzione per la carcerazione emesso dalla Procura Generale della Repubblica presso la Corte di Appello di Lecce nei confronti di URBANO Francesco, 39enne del posto.</p>
+<p><img style="display: block; margin-left: auto; margin-right: auto;" alt="AUTOCARABINIERI" src="/new/images/stories/cronaca/AUTOCARABINIERI.jpg" height="169" width="226" /></p>
+<p>Costui, riconosciuto responsabile di furto aggravato in concorso (reati commessi nel 2002), deve espiare la pena di anni 3 e mesi 8 di reclusione. Dopo le formalità di rito, URBANO Francesco è stato associato alla casa circondariale di Brindisi.</p><div class="jcomments-links"> <a class="comments-link" href="/new/index.php?option=com_content&amp;view=article&amp;id=9624:brindisi-39enne-in-carcere-per-furto-aggravato-in-concorso&amp;catid=41:cronaca&amp;Itemid=75#addcomment" title="Aggiungi commento">Aggiungi commento</a> </div>
+</td>
+</tr>
+
+
+
+</table>
+<span class="article_separator">&nbsp;</span>
+
+<table class="contentpaneopen">
+<tr>
+		<td class="contentheading" width="100%">
+				<a href="/new/index.php?option=com_content&amp;view=article&amp;id=9622:francavilla-fontana-rapinano-un-supermercato-bottino-da-quantificare-&amp;catid=41:cronaca&amp;Itemid=75" class="contentpagetitle">
+			Francavilla Fontana: Rapinano un supermercato. bottino da quantificare. </a>
+			</td>
+	
+		<td align="right" width="100%" class="buttonheading">
+	<a href="/new/index.php?view=article&amp;catid=41%3Acronaca&amp;id=9622%3Afrancavilla-fontana-rapinano-un-supermercato-bottino-da-quantificare-&amp;format=pdf&amp;option=com_content&amp;Itemid=75" title="PDF" onclick="window.open(this.href,'win2','status=no,toolbar=no,scrollbars=yes,titlebar=no,menubar=no,resizable=yes,width=640,height=480,directories=no,location=no'); return false;" rel="nofollow"><img src="/new/images/M_images/pdf_button.png" alt="PDF"  /></a>	</td>
+	
+		<td align="right" width="100%" class="buttonheading">
+	<a href="/new/index.php?view=article&amp;catid=41%3Acronaca&amp;id=9622%3Afrancavilla-fontana-rapinano-un-supermercato-bottino-da-quantificare-&amp;tmpl=component&amp;print=1&amp;layout=default&amp;page=&amp;option=com_content&amp;Itemid=75" title="Stampa" onclick="window.open(this.href,'win2','status=no,toolbar=no,scrollbars=yes,titlebar=no,menubar=no,resizable=yes,width=640,height=480,directories=no,location=no'); return false;" rel="nofollow"><img src="/new/images/M_images/printButton.png" alt="Stampa"  /></a>	</td>
+	
+		<td align="right" width="100%" class="buttonheading">
+	<a href="/new/index.php?option=com_mailto&amp;tmpl=component&amp;link=6e1b58d46fb490c213e5ee16823f54f048f06e6f" title="E-mail" onclick="window.open(this.href,'win2','width=400,height=350,menubar=yes,resizable=yes'); return false;"><img src="/new/images/M_images/emailButton.png" alt="E-mail"  /></a>	</td>
+		
+		
+</tr>
+</table>
+<table class="contentpaneopen">
+
+<tr>
+	<td width="70%"  valign="top" colspan="2">
+		<span class="small">
+			Scritto da Redazione		</span>
+		&nbsp;&nbsp;
+	</td>
+</tr>
+
+<tr>
+	<td valign="top" colspan="2" class="createdate">
+		Martedì 25 Febbraio 2014 13:48	</td>
+</tr>
+
+
+<tr>
+<td valign="top" colspan="2">
+<p><img style="display: block; margin-left: auto; margin-right: auto;" alt="AUTOCARABINIERI" src="/new/images/stories/cronaca/AUTOCARABINIERI.jpg" height="157" width="210" /></p>
+<p style="text-align: justify;">Carabinieri della Stazione Carabinieri di Francavilla Fontana, nella tarda serata di ieri sera, hanno attivato le indagini finalizzate alla identificazione di due individui, che si sono resi responsabili di una rapina ai danni di una proprietaria di un supermercato del luogo. I malviventi, travisati da passamontagna, dopo aver avvicinato la donna, la strattonavano, si impossessavano della sua borsa contenente la somma in via di quantificazione, dileguandosi immediatamente a piedi per le vie cittadine.</p><div class="jcomments-links"> <a class="comments-link" href="/new/index.php?option=com_content&amp;view=article&amp;id=9622:francavilla-fontana-rapinano-un-supermercato-bottino-da-quantificare-&amp;catid=41:cronaca&amp;Itemid=75#addcomment" title="Aggiungi commento">Aggiungi commento</a> </div>
+</td>
+</tr>
+
+
+
+</table>
+<span class="article_separator">&nbsp;</span>
+</td>
+															<td valign="top"
+						width="50%"
+						class="article_column column_separator">
+						
+<table class="contentpaneopen">
+<tr>
+		<td class="contentheading" width="100%">
+				<a href="/new/index.php?option=com_content&amp;view=article&amp;id=9643:brindisi-39enne-in-carcere-per-furto-aggravato-in-concorso&amp;catid=41:cronaca&amp;Itemid=75" class="contentpagetitle">
+			Brindisi: 39enne in carcere per furto aggravato in concorso.</a>
+			</td>
+	
+		<td align="right" width="100%" class="buttonheading">
+	<a href="/new/index.php?view=article&amp;catid=41%3Acronaca&amp;id=9643%3Abrindisi-39enne-in-carcere-per-furto-aggravato-in-concorso&amp;format=pdf&amp;option=com_content&amp;Itemid=75" title="PDF" onclick="window.open(this.href,'win2','status=no,toolbar=no,scrollbars=yes,titlebar=no,menubar=no,resizable=yes,width=640,height=480,directories=no,location=no'); return false;" rel="nofollow"><img src="/new/images/M_images/pdf_button.png" alt="PDF"  /></a>	</td>
+	
+		<td align="right" width="100%" class="buttonheading">
+	<a href="/new/index.php?view=article&amp;catid=41%3Acronaca&amp;id=9643%3Abrindisi-39enne-in-carcere-per-furto-aggravato-in-concorso&amp;tmpl=component&amp;print=1&amp;layout=default&amp;page=&amp;option=com_content&amp;Itemid=75" title="Stampa" onclick="window.open(this.href,'win2','status=no,toolbar=no,scrollbars=yes,titlebar=no,menubar=no,resizable=yes,width=640,height=480,directories=no,location=no'); return false;" rel="nofollow"><img src="/new/images/M_images/printButton.png" alt="Stampa"  /></a>	</td>
+	
+		<td align="right" width="100%" class="buttonheading">
+	<a href="/new/index.php?option=com_mailto&amp;tmpl=component&amp;link=4903df24dab70de6eef2f4cdc062d7d755ed866a" title="E-mail" onclick="window.open(this.href,'win2','width=400,height=350,menubar=yes,resizable=yes'); return false;"><img src="/new/images/M_images/emailButton.png" alt="E-mail"  /></a>	</td>
+		
+		
+</tr>
+</table>
+<table class="contentpaneopen">
+
+<tr>
+	<td width="70%"  valign="top" colspan="2">
+		<span class="small">
+			Scritto da Redazione		</span>
+		&nbsp;&nbsp;
+	</td>
+</tr>
+
+<tr>
+	<td valign="top" colspan="2" class="createdate">
+		Mercoledì 26 Febbraio 2014 15:00	</td>
+</tr>
+
+
+<tr>
+<td valign="top" colspan="2">
+<p style="text-align: justify;"><strong>I carabinieri della Stazione di Brindisi Casale hanno eseguito un ordine di esecuzione per la carcerazione emesso dalla Procura Generale della Repubblica presso la Corte di Appello di Lecce nei confronti di URBANO Francesco, 39enne del posto.</strong></p>
+<p><strong><img style="display: block; margin-left: auto; margin-right: auto;" alt="URBANO Francesco" src="/new/images/stories/cronaca/URBANO%20Francesco.jpg" height="280" width="180" /></strong></p>
+<p style="text-align: justify;"><strong>BRINDISI</strong> - Costui, riconosciuto responsabile di furto aggravato in concorso (reati commessi nel 2002), deve espiare la pena di anni 3 e mesi 8 di reclusione. Dopo le formalità di rito, URBANO Francesco è stato associato alla casa circondariale di Brindisi.</p><div class="jcomments-links"> <a class="comments-link" href="/new/index.php?option=com_content&amp;view=article&amp;id=9643:brindisi-39enne-in-carcere-per-furto-aggravato-in-concorso&amp;catid=41:cronaca&amp;Itemid=75#addcomment" title="Aggiungi commento">Aggiungi commento</a> </div>
+</td>
+</tr>
+
+
+
+</table>
+<span class="article_separator">&nbsp;</span>
+
+<table class="contentpaneopen">
+<tr>
+		<td class="contentheading" width="100%">
+				<a href="/new/index.php?option=com_content&amp;view=article&amp;id=9625:rapina-sulle-ss-379-rinvenuta-in-una-masseria-a-cerano-tutta-la-refurtiva-e-le-armi-utilizzate-dai-malviventi-arrestato-il-proprietario-della-tenuta&amp;catid=41:cronaca&amp;Itemid=75" class="contentpagetitle">
+			RAPINA SULLE SS 379: RINVENUTA IN UNA MASSERIA A CERANO TUTTA LA REFURTIVA E LE ARMI UTILIZZATE DAI MALVIVENTI ARRESTATO IL PROPRIETARIO DELLA TENUTA</a>
+			</td>
+	
+		<td align="right" width="100%" class="buttonheading">
+	<a href="/new/index.php?view=article&amp;catid=41%3Acronaca&amp;id=9625%3Arapina-sulle-ss-379-rinvenuta-in-una-masseria-a-cerano-tutta-la-refurtiva-e-le-armi-utilizzate-dai-malviventi-arrestato-il-proprietario-della-tenuta&amp;format=pdf&amp;option=com_content&amp;Itemid=75" title="PDF" onclick="window.open(this.href,'win2','status=no,toolbar=no,scrollbars=yes,titlebar=no,menubar=no,resizable=yes,width=640,height=480,directories=no,location=no'); return false;" rel="nofollow"><img src="/new/images/M_images/pdf_button.png" alt="PDF"  /></a>	</td>
+	
+		<td align="right" width="100%" class="buttonheading">
+	<a href="/new/index.php?view=article&amp;catid=41%3Acronaca&amp;id=9625%3Arapina-sulle-ss-379-rinvenuta-in-una-masseria-a-cerano-tutta-la-refurtiva-e-le-armi-utilizzate-dai-malviventi-arrestato-il-proprietario-della-tenuta&amp;tmpl=component&amp;print=1&amp;layout=default&amp;page=&amp;option=com_content&amp;Itemid=75" title="Stampa" onclick="window.open(this.href,'win2','status=no,toolbar=no,scrollbars=yes,titlebar=no,menubar=no,resizable=yes,width=640,height=480,directories=no,location=no'); return false;" rel="nofollow"><img src="/new/images/M_images/printButton.png" alt="Stampa"  /></a>	</td>
+	
+		<td align="right" width="100%" class="buttonheading">
+	<a href="/new/index.php?option=com_mailto&amp;tmpl=component&amp;link=82f9defd1b6c1f6f87738acf79273250caab298d" title="E-mail" onclick="window.open(this.href,'win2','width=400,height=350,menubar=yes,resizable=yes'); return false;"><img src="/new/images/M_images/emailButton.png" alt="E-mail"  /></a>	</td>
+		
+		
+</tr>
+</table>
+<table class="contentpaneopen">
+
+<tr>
+	<td width="70%"  valign="top" colspan="2">
+		<span class="small">
+			Scritto da Redazione		</span>
+		&nbsp;&nbsp;
+	</td>
+</tr>
+
+<tr>
+	<td valign="top" colspan="2" class="createdate">
+		Martedì 25 Febbraio 2014 13:56	</td>
+</tr>
+
+
+<tr>
+<td valign="top" colspan="2">
+<p style="text-align: justify;"><strong>Questa notte veniva perpetrata una rapina sulla Statale 379, all'altezza dello svincolo per Torre Canne in danno dell'autista di un'autoarticolato che trasportava un ingentissimo carico di scarpe marca "TOD'S". </strong></p>
+<p><a target="_blank" rel="title[Zinzeri  Luigi]" class="jcepopup" href="/new/images/stories/cronaca/zinzeri%20%20luigi.jpg"><strong><img style="display: block; margin-left: auto; margin-right: auto;" alt="zinzeri  luigi" src="/new/images/stories/cronaca/zinzeri%20%20luigi.jpg" height="227" width="222" /></strong></a></p>
+<p style="text-align: justify;"><strong>BRINDISI</strong> - La rapina, a dire del denunciante, che si portava per la formalizzazione della stessa, presso il Commissariato di P.S. di Monopoli (BA), veniva posta in essere, con perfetto stile militare, da tre autovetture, i cui occupanti, almeno otto persone, costringevano il camion a fermarsi sotto la minaccia di alcune armi e dopo aver costretto l'autista ad infilarsi nel bagagliaio di una delle loro auto, si impossessavano del camion stesso e di tutto il suo contenuto.</p>
+<div class="jcomments-links"><a class="readmore-link" href="/new/index.php?option=com_content&amp;view=article&amp;id=9625:rapina-sulle-ss-379-rinvenuta-in-una-masseria-a-cerano-tutta-la-refurtiva-e-le-armi-utilizzate-dai-malviventi-arrestato-il-proprietario-della-tenuta&amp;catid=41:cronaca&amp;Itemid=75" title="RAPINA SULLE SS 379: RINVENUTA IN UNA MASSERIA A CERANO TUTTA LA REFURTIVA E LE ARMI UTILIZZATE DAI MALVIVENTI ARRESTATO IL PROPRIETARIO DELLA TENUTA">Leggi tutto...</a> <a class="comments-link" href="/new/index.php?option=com_content&amp;view=article&amp;id=9625:rapina-sulle-ss-379-rinvenuta-in-una-masseria-a-cerano-tutta-la-refurtiva-e-le-armi-utilizzate-dai-malviventi-arrestato-il-proprietario-della-tenuta&amp;catid=41:cronaca&amp;Itemid=75#addcomment" title="Aggiungi commento">Aggiungi commento</a> </div>
+</td>
+</tr>
+
+
+
+</table>
+<span class="article_separator">&nbsp;</span>
+
+<table class="contentpaneopen">
+<tr>
+		<td class="contentheading" width="100%">
+				<a href="/new/index.php?option=com_content&amp;view=article&amp;id=9623:tuturano-tenta-di-rubare-materiale-per-ledilizia-arrestato&amp;catid=41:cronaca&amp;Itemid=75" class="contentpagetitle">
+			Tuturano: tenta di rubare materiale per l'edilizia, arrestato.</a>
+			</td>
+	
+		<td align="right" width="100%" class="buttonheading">
+	<a href="/new/index.php?view=article&amp;catid=41%3Acronaca&amp;id=9623%3Atuturano-tenta-di-rubare-materiale-per-ledilizia-arrestato&amp;format=pdf&amp;option=com_content&amp;Itemid=75" title="PDF" onclick="window.open(this.href,'win2','status=no,toolbar=no,scrollbars=yes,titlebar=no,menubar=no,resizable=yes,width=640,height=480,directories=no,location=no'); return false;" rel="nofollow"><img src="/new/images/M_images/pdf_button.png" alt="PDF"  /></a>	</td>
+	
+		<td align="right" width="100%" class="buttonheading">
+	<a href="/new/index.php?view=article&amp;catid=41%3Acronaca&amp;id=9623%3Atuturano-tenta-di-rubare-materiale-per-ledilizia-arrestato&amp;tmpl=component&amp;print=1&amp;layout=default&amp;page=&amp;option=com_content&amp;Itemid=75" title="Stampa" onclick="window.open(this.href,'win2','status=no,toolbar=no,scrollbars=yes,titlebar=no,menubar=no,resizable=yes,width=640,height=480,directories=no,location=no'); return false;" rel="nofollow"><img src="/new/images/M_images/printButton.png" alt="Stampa"  /></a>	</td>
+	
+		<td align="right" width="100%" class="buttonheading">
+	<a href="/new/index.php?option=com_mailto&amp;tmpl=component&amp;link=e4d2d827ec82cdede90010ee63967b50aecf4a86" title="E-mail" onclick="window.open(this.href,'win2','width=400,height=350,menubar=yes,resizable=yes'); return false;"><img src="/new/images/M_images/emailButton.png" alt="E-mail"  /></a>	</td>
+		
+		
+</tr>
+</table>
+<table class="contentpaneopen">
+
+<tr>
+	<td width="70%"  valign="top" colspan="2">
+		<span class="small">
+			Scritto da Redazione		</span>
+		&nbsp;&nbsp;
+	</td>
+</tr>
+
+<tr>
+	<td valign="top" colspan="2" class="createdate">
+		Martedì 25 Febbraio 2014 13:50	</td>
+</tr>
+
+
+<tr>
+<td valign="top" colspan="2">
+<p style="text-align: justify;"><strong>I carabinieri della Stazione di Tuturano hanno tratto in arresto in flagranza di reato LOBELLO Cosimo, 57enne del posto, per tentato furto aggravato.</strong></p>
+<p><strong><img style="display: block; margin-left: auto; margin-right: auto;" alt="LOBELLO Cosimo" src="/new/images/stories/cronaca/LOBELLO%20Cosimo.jpg" height="340" width="216" /></strong></p>
+<p style="text-align: justify;">L'uomo è stato sorpreso dai militari operanti mentre in una via del centro tentata di rubare del materiale inerte per l'edilizia, appartenente a una ditta di costruzioni operante sul posto. La refurtiva è stata restituita all'avente diritto. LOBELLO Cosimo, su disposizione dell'Autorità Giudiziaria, è stato sottoposto agli arresti domiciliari.</p><div class="jcomments-links"> <a class="comments-link" href="/new/index.php?option=com_content&amp;view=article&amp;id=9623:tuturano-tenta-di-rubare-materiale-per-ledilizia-arrestato&amp;catid=41:cronaca&amp;Itemid=75#addcomment" title="Aggiungi commento">Aggiungi commento</a> </div>
+</td>
+</tr>
+
+
+
+</table>
+<span class="article_separator">&nbsp;</span>
+
+<table class="contentpaneopen">
+<tr>
+		<td class="contentheading" width="100%">
+				<a href="/new/index.php?option=com_content&amp;view=article&amp;id=9604:latiano-forza-in-posto-di-controllo-e-rifiuta-di-sottoporsi-agli-accertamenti-arrestato&amp;catid=41:cronaca&amp;Itemid=75" class="contentpagetitle">
+			Latiano: forza in posto di controllo e rifiuta di sottoporsi agli accertamenti, arrestato.</a>
+			</td>
+	
+		<td align="right" width="100%" class="buttonheading">
+	<a href="/new/index.php?view=article&amp;catid=41%3Acronaca&amp;id=9604%3Alatiano-forza-in-posto-di-controllo-e-rifiuta-di-sottoporsi-agli-accertamenti-arrestato&amp;format=pdf&amp;option=com_content&amp;Itemid=75" title="PDF" onclick="window.open(this.href,'win2','status=no,toolbar=no,scrollbars=yes,titlebar=no,menubar=no,resizable=yes,width=640,height=480,directories=no,location=no'); return false;" rel="nofollow"><img src="/new/images/M_images/pdf_button.png" alt="PDF"  /></a>	</td>
+	
+		<td align="right" width="100%" class="buttonheading">
+	<a href="/new/index.php?view=article&amp;catid=41%3Acronaca&amp;id=9604%3Alatiano-forza-in-posto-di-controllo-e-rifiuta-di-sottoporsi-agli-accertamenti-arrestato&amp;tmpl=component&amp;print=1&amp;layout=default&amp;page=&amp;option=com_content&amp;Itemid=75" title="Stampa" onclick="window.open(this.href,'win2','status=no,toolbar=no,scrollbars=yes,titlebar=no,menubar=no,resizable=yes,width=640,height=480,directories=no,location=no'); return false;" rel="nofollow"><img src="/new/images/M_images/printButton.png" alt="Stampa"  /></a>	</td>
+	
+		<td align="right" width="100%" class="buttonheading">
+	<a href="/new/index.php?option=com_mailto&amp;tmpl=component&amp;link=9035bd6cbbc0526ee1d6e5113517a7d5473c6439" title="E-mail" onclick="window.open(this.href,'win2','width=400,height=350,menubar=yes,resizable=yes'); return false;"><img src="/new/images/M_images/emailButton.png" alt="E-mail"  /></a>	</td>
+		
+		
+</tr>
+</table>
+<table class="contentpaneopen">
+
+<tr>
+	<td width="70%"  valign="top" colspan="2">
+		<span class="small">
+			Scritto da Redazione		</span>
+		&nbsp;&nbsp;
+	</td>
+</tr>
+
+<tr>
+	<td valign="top" colspan="2" class="createdate">
+		Lunedì 24 Febbraio 2014 17:29	</td>
+</tr>
+
+
+<tr>
+<td valign="top" colspan="2">
+<p style="text-align: justify;"><strong>I carabinieri del Nucleo Operativo e Radiomobile della Compagnia di San Vito dei Normanni, nell'ambito di servizi di controllo alla circolazione stradale, hanno tratto in arresto in flagranza di reato SALONNE Daniele, 28enne da Latiano, per resistenza a pubblico ufficiale e rifiuto di sottoporsi agli accertamenti sullo stato di ebbrezza e sull'uso di stupefacenti.</strong></p>
+<p><strong><img style="display: block; margin-left: auto; margin-right: auto;" alt="SALONNE Daniele" src="/new/images/stories/cronaca/SALONNE%20Daniele.jpg" height="249" width="173" /></strong></p>
+<p style="text-align: justify;"><strong>San Vito dei Normanni (Br)</strong> - Costui nel corso della mattinata alla guida della propria autovettura non si è fermato all'alt intimato dal personale operante, dando luogo a un inseguimento conclusosi dopo alcuni chilometri. il conducente, una volta fermato, ha opposto resistenza nei confronti dei militari rifiutando di sottoporsi agli accertamenti volti a verificare l'assunzione di sostanze stupefacenti ed alcoliche.</p>
+<div class="jcomments-links"><a class="readmore-link" href="/new/index.php?option=com_content&amp;view=article&amp;id=9604:latiano-forza-in-posto-di-controllo-e-rifiuta-di-sottoporsi-agli-accertamenti-arrestato&amp;catid=41:cronaca&amp;Itemid=75" title="Latiano: forza in posto di controllo e rifiuta di sottoporsi agli accertamenti, arrestato.">Leggi tutto...</a> <a class="comments-link" href="/new/index.php?option=com_content&amp;view=article&amp;id=9604:latiano-forza-in-posto-di-controllo-e-rifiuta-di-sottoporsi-agli-accertamenti-arrestato&amp;catid=41:cronaca&amp;Itemid=75#addcomment" title="Aggiungi commento">Aggiungi commento</a> </div>
+</td>
+</tr>
+
+
+
+</table>
+<span class="article_separator">&nbsp;</span>
+</td>
+						 
+		</tr>
+		</table>
+	</td>
+</tr>
+<tr>
+	<td valign="top">
+		<div class="blog_more">
+			<div>
+	<strong>Altri articoli...</strong>
+</div>
+<ul>
+	<li>
+		<a class="blogsection" href="/new/index.php?option=com_content&amp;view=article&amp;id=9603:mesagne-sorpresi-a-rubare-nel-centro-commerciale-arrestati&amp;catid=41:cronaca&amp;Itemid=75">
+			Mesagne: sorpresi a rubare nel centro commerciale, arrestati.</a>
+	</li>
+	<li>
+		<a class="blogsection" href="/new/index.php?option=com_content&amp;view=article&amp;id=9578:latiano-minacciano-un-pensionato-denunciati&amp;catid=41:cronaca&amp;Itemid=75">
+			Latiano: minacciano un pensionato, denunciati.</a>
+	</li>
+	<li>
+		<a class="blogsection" href="/new/index.php?option=com_content&amp;view=article&amp;id=9577:brindisi-sorpreso-senza-patente-denunciato&amp;catid=41:cronaca&amp;Itemid=75">
+			Brindisi: sorpreso senza patente, denunciato.</a>
+	</li>
+	<li>
+		<a class="blogsection" href="/new/index.php?option=com_content&amp;view=article&amp;id=9576:carovigno-trovato-in-possesso-di-unarma-modificata-arrestato&amp;catid=41:cronaca&amp;Itemid=75">
+			Carovigno: trovato in possesso di un'arma modificata, arrestato.</a>
+	</li>
+	<li>
+		<a class="blogsection" href="/new/index.php?option=com_content&amp;view=article&amp;id=9575:oria-ruba-lenergia-elettrica-arrestato&amp;catid=41:cronaca&amp;Itemid=75">
+			Oria: ruba l'energia elettrica, arrestato.</a>
+	</li>
+	<li>
+		<a class="blogsection" href="/new/index.php?option=com_content&amp;view=article&amp;id=9574:ceglie-messapica-esecuzione-di-provvedimento-restrittivo&amp;catid=41:cronaca&amp;Itemid=75">
+			Ceglie Messapica: esecuzione di provvedimento restrittivo.</a>
+	</li>
+	<li>
+		<a class="blogsection" href="/new/index.php?option=com_content&amp;view=article&amp;id=9573:esecuzione-di-due-provvedimenti-restrittivi&amp;catid=41:cronaca&amp;Itemid=75">
+			Esecuzione di due provvedimenti restrittivi.</a>
+	</li>
+	<li>
+		<a class="blogsection" href="/new/index.php?option=com_content&amp;view=article&amp;id=9561:san-pancrazio-salentino-deteneva-illegalmente-due-katane-denunciato&amp;catid=41:cronaca&amp;Itemid=75">
+			San Pancrazio Salentino: deteneva illegalmente due katane, denunciato.</a>
+	</li>
+	<li>
+		<a class="blogsection" href="/new/index.php?option=com_content&amp;view=article&amp;id=9560:tuturano-trovati-in-possesso-di-due-motocicli-e-un-telaio-di-dubbia-provenienza-denunciati&amp;catid=41:cronaca&amp;Itemid=75">
+			Tuturano: trovati in possesso di due motocicli e un telaio di dubbia provenienza, denunciati.</a>
+	</li>
+</ul>
+		</div>
+	</td>
+</tr>
+
+<tr>
+	<td valign="top" align="center">
+		&lt;&lt; <span class="pagenav">Inizio</span> &lt; <span class="pagenav">Prec.</span> <span class="pagenav">1</span> <a title="2" href="/new/index.php?option=com_content&amp;view=section&amp;layout=blog&amp;id=18&amp;Itemid=75&amp;limitstart=18" class="pagenav">2</a> <a title="3" href="/new/index.php?option=com_content&amp;view=section&amp;layout=blog&amp;id=18&amp;Itemid=75&amp;limitstart=36" class="pagenav">3</a> <a title="4" href="/new/index.php?option=com_content&amp;view=section&amp;layout=blog&amp;id=18&amp;Itemid=75&amp;limitstart=54" class="pagenav">4</a> <a title="5" href="/new/index.php?option=com_content&amp;view=section&amp;layout=blog&amp;id=18&amp;Itemid=75&amp;limitstart=72" class="pagenav">5</a> <a title="6" href="/new/index.php?option=com_content&amp;view=section&amp;layout=blog&amp;id=18&amp;Itemid=75&amp;limitstart=90" class="pagenav">6</a> <a title="7" href="/new/index.php?option=com_content&amp;view=section&amp;layout=blog&amp;id=18&amp;Itemid=75&amp;limitstart=108" class="pagenav">7</a> <a title="8" href="/new/index.php?option=com_content&amp;view=section&amp;layout=blog&amp;id=18&amp;Itemid=75&amp;limitstart=126" class="pagenav">8</a> <a title="9" href="/new/index.php?option=com_content&amp;view=section&amp;layout=blog&amp;id=18&amp;Itemid=75&amp;limitstart=144" class="pagenav">9</a> <a title="10" href="/new/index.php?option=com_content&amp;view=section&amp;layout=blog&amp;id=18&amp;Itemid=75&amp;limitstart=162" class="pagenav">10</a> <a title="Succ." href="/new/index.php?option=com_content&amp;view=section&amp;layout=blog&amp;id=18&amp;Itemid=75&amp;limitstart=18" class="pagenav">Succ.</a> &gt; <a title="Fine" href="/new/index.php?option=com_content&amp;view=section&amp;layout=blog&amp;id=18&amp;Itemid=75&amp;limitstart=216" class="pagenav">Fine</a> &gt;&gt;		<br /><br />
+	</td>
+</tr>
+<tr>
+	<td valign="top" align="center">
+		Pagina 1 di 13	</td>
+</tr>
+</table>
+
+ 
+    </div><!--/#main-->
+ 
+    <!-- Colonna di destra -->
+    <div id="side">
+ 
+      <a name="search-anchor" class="accessibility">Ricerca / Colonna destra</a>
+ 
+      		<div class="module">
+			<div>
+				<div>
+					<div>
+											<div class="bannergroup">
+
+<div class="banneritem"><a href="/new/index.php?option=com_banners&amp;task=click&amp;bid=11" target="_blank"><img src="http://www.brindisilibera.it/new/images/banners/banner_timandolabanda.gif" alt="Banner" /></a><div class="clr"></div>
+	</div>
+
+</div>					</div>
+				</div>
+			</div>
+		</div>
+			<div class="module">
+			<div>
+				<div>
+					<div>
+											<form action="index.php" method="post">
+	<div class="search">
+		<input name="searchword" id="mod_search_searchword" maxlength="30" alt="cerca" class="inputbox" type="text" size="30" value="cerca..."  onblur="if(this.value=='') this.value='cerca...';" onfocus="if(this.value=='cerca...') this.value='';" /><input type="submit" value="cerca" class="button" onclick="this.form.searchword.focus();"/>	</div>
+	<input type="hidden" name="task"   value="search" />
+	<input type="hidden" name="option" value="com_search" />
+	<input type="hidden" name="Itemid" value="75" />
+</form>					</div>
+				</div>
+			</div>
+		</div>
+			<div class="module">
+			<div>
+				<div>
+					<div>
+													<h3>Calendario Miss Summer Salento 2014</h3>
+											<div data-configid="9627414/6676376" style="width: 280px; height: 256px;" class="issuuembed"></div><script type="text/javascript" src="//e.issuu.com/embed.js" async="true"></script>
+
+<div data-configid="0/6149088" style="width: 280px; height: 256px;" class="issuuembed">&nbsp;</div>
+<p>MODA:Marika Manno (Miss Summer Salento 2013), Roberta Musarò e Federika Palestro in un calendario per il concorso di bellezza della reginetta del Tacco D'Italia. Media Partner brindisilibera.it</p>
+<p><a target="_blank" href="/new/images/stories/Spettacolo/Calendario%20miss%20Summer%20Salento%202014.pdf">SCARICA IL PDF</a></p>					</div>
+				</div>
+			</div>
+		</div>
+			<div class="module">
+			<div>
+				<div>
+					<div>
+																</div>
+				</div>
+			</div>
+		</div>
+			<div class="module">
+			<div>
+				<div>
+					<div>
+													<h3>Aiutaci a sostenere il giornale con 2 €.</h3>
+											<table style="width: 234px; height: 43px;" align="center" border="0">
+<tbody>
+<tr>
+<td><form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
+<input type="hidden" name="cmd" value="_s-xclick">
+<input type="hidden" name="hosted_button_id" value="ZX8JB6P85FVAU">
+<input type="image" src="https://www.paypalobjects.com/it_IT/IT/i/btn/btn_donateCC_LG.gif" border="0" name="submit" alt="PayPal - Il metodo rapido, affidabile e innovativo per pagare e farsi pagare.">
+<img alt="" border="0" src="https://www.paypalobjects.com/it_IT/i/scr/pixel.gif" width="1" height="1">
+</form>
+</td>
+</tr>
+</tbody>
+</table>					</div>
+				</div>
+			</div>
+		</div>
+			<div class="module">
+			<div>
+				<div>
+					<div>
+											<p><a href="/new/index.php?option=com_content&amp;view=category&amp;layout=blog&amp;id=56&amp;Itemid=104"><img style="display: block; margin-left: auto; margin-right: auto;" alt="editoriali" src="/new/images/stories/editoriali.jpg" height="51" width="275" /></a></p>
+<p><a href="/new/index.php?option=com_content&amp;view=category&amp;layout=blog&amp;id=58&amp;Itemid=106"><img style="display: block; margin-left: auto; margin-right: auto;" alt="evidenza" src="/new/images/stories/evidenza.jpg" height="51" width="278" /></a></p>
+<p><a href="/new/index.php?option=com_morfeoshow&amp;Itemid=105"><img style="display: block; margin-left: auto; margin-right: auto;" alt="galleria fotografica" src="/new/images/stories/galleria%20fotografica.jpg" height="51" width="278" /></a></p>					</div>
+				</div>
+			</div>
+		</div>
+			<div class="module">
+			<div>
+				<div>
+					<div>
+											<script type="text/javascript">
+	var mod_yooholiday_path = "http://www.brindisilibera.it/new/modules/mod_yoo_holidays/";
+</script>
+
+					</div>
+				</div>
+			</div>
+		</div>
+			<div class="module">
+			<div>
+				<div>
+					<div>
+											<ul class="menu">
+<li><a href="/new/index.php?option=com_adsmanager&amp;view=front"><span>Annunci</span></a></li>
+<li><a href="/new/index.php?option=com_adsmanager&amp;task=write"><span>Inserisci un annuncio</span></a></li>
+<li><a href="/new/index.php?option=com_comprofiler&amp;task=userDetails"><span>Il mio profilo</span></a></li>
+<li><a href="/new/index.php?option=com_comprofiler&amp;task=showProfile&amp;tab=AdsManagerTab"><span>I miei annunci</span></a></li>
+<li><a href="/new/index.php?option=com_adsmanager&amp;view=rules"><span>Termini e condizioni</span></a></li>
+<li><span class="separator" ><hr/></span></li>
+		<li><a href="/new/index.php?option=com_adsmanager&amp;view=list"><span>Tutti gli annunci (6)</span></a></li>
+	
+			<li><span class="separator" ><hr/></span></li>
+						 <li class="">
+				 <a href="/new/index.php?option=com_adsmanager&amp;view=list&amp;catid=1" ><span>Casa (4)</span></a>				 </li>
+				 				 <li class="">
+				 <a href="/new/index.php?option=com_adsmanager&amp;view=list&amp;catid=2" ><span>Motori (0)</span></a>				 </li>
+				 				 <li class="">
+				 <a href="/new/index.php?option=com_adsmanager&amp;view=list&amp;catid=9" ><span>Lavoro (0)</span></a>				 </li>
+				 				 <li class="">
+				 <a href="/new/index.php?option=com_adsmanager&amp;view=list&amp;catid=10" ><span>Altro (2)</span></a>				 </li>
+				 </ul>					</div>
+				</div>
+			</div>
+		</div>
+			<div class="module">
+			<div>
+				<div>
+					<div>
+											<table width="100%" border="0" cellpadding="0" cellspacing="1"><tr><td nowrap="nowrap"><a href="/new/index.php?option=com_comprofiler&amp;Itemid=98" class="mainlevel-nav" >Profilo</a><span class="mainlevel-nav"> | </span><a href="/new/index.php?option=com_comprofiler&amp;task=userslist&amp;Itemid=99" class="mainlevel-nav" >Utenti</a><span class="mainlevel-nav"> | </span><a href="/new/index.php?option=com_fireboard&amp;Itemid=100" class="mainlevel-nav" >Forum. Gli esperti rispondono</a></td></tr></table>					</div>
+				</div>
+			</div>
+		</div>
+			<div class="module">
+			<div>
+				<div>
+					<div>
+													<h3>Login</h3>
+											<form action="http://www.brindisilibera.it/new/index.php?option=com_comprofiler&amp;task=login" method="post" id="mod_loginform" class="cbLoginForm" style="margin:0px;">
+Uno spazio tutto tuo, ed essere connesso direttamente con i redatori di brindisilibera. Inserire e gestire i tuoi annunci, e ricevere tutte le news piu imposrtanti sulla tua email.
+<table width="100%" border="0" cellspacing="0" cellpadding="0" class="mod_login">
+<tr><td><span><input type="text" name="username" id="mod_login_username" class="inputbox" size="14" alt="Nome utente" value="Nome utente" onfocus="if (this.value=='Nome utente') this.value=''" onblur="if(this.value=='') { this.value='Nome utente'; return false; }" title="Nome utente" /></span><br />
+<span><input type="password" name="passwd" id="mod_login_password" class="inputbox" size="14" alt="Password" value="paswww" onfocus="if (this.value=='paswww') this.value=''" onblur="if(this.value=='') { this.value='paswww'; return false; }" title="Password" /></span><br />
+<input type="hidden" name="op2" value="login" />
+<input type="hidden" name="lang" value="italian" />
+<input type="hidden" name="force_session" value="1" />
+<input type="hidden" name="return" value="B:aHR0cDovL3d3dy5icmluZGlzaWxpYmVyYS5pdC9uZXcvaW5kZXgucGhwP29wdGlvbj1jb21fY29udGVudCZhbXA7dmlldz1zZWN0aW9uJmFtcDtsYXlvdXQ9YmxvZyZhbXA7aWQ9MTgmYW1wO0l0ZW1pZD03NQ==" />
+<input type="hidden" name="message" value="0" />
+<input type="hidden" name="loginfrom" value="loginmodule" />
+<input type="hidden" name="cbsecuritym3" value="cbm_5b7c10cb_2d20599a_b3db6c71181196e1f779a2cdf3c7e30d" />
+<input type="hidden" name="j889b718489b7d525a5d69fc3ec82dba9" value="1" />
+<input type="checkbox" name="remember" id="mod_login_remember" value="yes" /> <span id="mod_login_remembermetext"><label for="mod_login_remember">Ricordami</label></span><br />
+<span class="cbLoginButtonSpan"><input type="submit" name="Submit" class="button" value="Accedi" style="min-height:20px;padding-left:30px;cursor:pointer;background-image:url(http://www.brindisilibera.it/new/modules/mod_cblogin/mod_cblogin/login.png);background-position:0 0;background-repeat:no-repeat;width:auto;" /></span></td></tr>
+<tr><td><a href="http://www.brindisilibera.it/new/index.php?option=com_comprofiler&amp;task=lostpassword" class="mod_login">Accesso dimenticato?</a></td></tr>
+<tr><td><a href="http://www.brindisilibera.it/new/index.php?option=com_comprofiler&amp;task=registers" class="mod_login">Registrati</a></td></tr>
+</table></form>Forum: I nostri esperti risponderanno alle domande..Le domande e le risposte sono pubbliche. Per Fare una domanda è necessario aprire un ticket dopo essersi loggati.
+					</div>
+				</div>
+			</div>
+		</div>
+			<div class="module">
+			<div>
+				<div>
+					<div>
+													<h3>In Linea</h3>
+											Nessuno					</div>
+				</div>
+			</div>
+		</div>
+			<div class="module">
+			<div>
+				<div>
+					<div>
+																</div>
+				</div>
+			</div>
+		</div>
+			<div class="module">
+			<div>
+				<div>
+					<div>
+											﻿<iframe src="http://www.facebook.com/plugins/likebox.php?href=https%3A%2F%2Fwww.facebook.com%2Fpages%2FBrindisiliberait%2F120661224668027%3Fref%3Dts&amp;width=280&amp;colorscheme=light&amp;show_faces=true&amp;border_color=%23CCCCCC&amp;connections=&amp;stream=false&amp;header=true&amp;locale=it_IT&amp;force_wall=false&amp;height=290" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:280px; height:290px;" allowtransparency="yes"></iframe><br /><div style="display:none;"><a href="http://www.freshinterior.me/">Interior design ideas</a> </div>					</div>
+				</div>
+			</div>
+		</div>
+			<div class="module">
+			<div>
+				<div>
+					<div>
+											
+<!-- Social Share Buttons | Powered by <a href="http://www.e-max.it" title="Web Agency" target="_blank">Web Agency</a> --><div class="social-share-button-mod">
+    <div class="social-share-button-mod-fbl"><div id="fb-root"></div><script src="http://connect.facebook.net/it_IT/all.js#xfbml=1"></script>
+                <fb:like 
+                href="http://www.brindisilibera.it/new/index.php?option=com_content&view=section&layout=blog&id=18&Itemid=75" 
+                layout="button_count" 
+                show_faces="true" 
+                width="80" 
+                colorscheme="light" send="true" action="like" font="arial"></fb:like>
+                </div>
+                
+                <div class="social-share-button-mod-fbsh">
+                <script>var fbShare = {
+    url: "http://www.brindisilibera.it/new/index.php?option=com_content&view=section&layout=blog&id=18&Itemid=75",
+    title: "Cronaca",
+    size: "small",
+    badge_text: "FFFFFF",
+    badge_color: "3B5998",
+    google_analytics: "false"
+    }</script>
+    <script src="http://widgets.fbshare.me/files/fbshare.js"></script>
+                </div>
+                
+            <div class="social-share-button-mod-tw">
+            <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://www.brindisilibera.it/new/index.php?option=com_content&view=section&layout=blog&id=18&Itemid=75" data-text="Cronaca" data-count="horizontal" data-via="Brindisilibera" data-lang="it">Tweet</a><script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+            </div>
+            
+            <div class="social-share-button-mod-gone">
+            <!-- Place this tag in your head or just before your close body tag -->
+            <script type="text/javascript" src="http://apis.google.com/js/plusone.js"> {lang: 'it'}</script>
+            <!-- Place this tag where you want the +1 button to render -->
+            <g:plusone size="small" href="http://www.brindisilibera.it/new/index.php?option=com_content&view=section&layout=blog&id=18&Itemid=75"></g:plusone>
+            </div>
+            </div>
+<div style="clear:both;"></div>
+<div class="social_share_buttons_credits" style="display:none;">Powered by <a href="http://www.e-max.it" title="Web Agency" target="_blank">Web Agency</a></div><!-- Social Share Buttons | Powered by <a href="http://www.e-max.it" title="Web Agency" target="_blank">Web Agency</a> --><div style="clear:both;"></div>					</div>
+				</div>
+			</div>
+		</div>
+			<div class="module">
+			<div>
+				<div>
+					<div>
+											<div class="shinystat">
+
+
+<div  style="text-align: center;" >
+
+<!-- Inizio Codice Shinystat Freeware -->
+<script type="text/javascript" src="http://codice.shinystat.com/cgi-bin/getcod.cgi?USER=brindisilibera"> </script>
+<noscript>
+<a href="http://www.shinystat.com/" target="_top">
+<img src="http://www.shinystat.com/cgi-bin/shinystat.cgi?USER=brindisilibera" alt="Statistiche accessi gratis" border="0"></a>
+</noscript>
+<!-- Fine Codice Shinystat Freeware -->
+
+
+</div>
+
+</div>					</div>
+				</div>
+			</div>
+		</div>
+	
+ 
+      
+ 
+ 
+    </div><!--/#side-->
+ <div id="down">
+ 	<div id="user6">
+ 				<div class="module">
+			<div>
+				<div>
+					<div>
+													<h3>Porto</h3>
+											<p style="text-align: center;"><a target="_blank" rel="title[Rubriche::Notizie e Progetti dal Porto di Brindisi]" class="jcepopup" href="/new/images/stories/porto-brindisi.jpg"><img alt="porto-brindisi" src="/new/images/stories/porto-brindisi.jpg" height="140" width="187" /></a></p>
+<p style="text-align: center;"><strong>Notizie</strong><em><strong></strong></em><strong> dal Porto di Brindisi</strong></p>					</div>
+				</div>
+			</div>
+		</div>
+	
+ 	</div><!--/#user6-->
+ 	<div id="user7">
+ 				<div class="module">
+			<div>
+				<div>
+					<div>
+													<h3>Viaggi</h3>
+											<p style="text-align: center;"><a type="image" rel="title[Rubriche::Informazioni di Viaggio e Turistiche]" class="jcepopup" target="_blank" href="/new/images/stories/images.jpg"><img alt="images" src="/new/images/stories/images.jpg" height="140" width="195" /></a></p>
+<p style="text-align: center;"><strong>Viaggi e Turismo</strong></p>					</div>
+				</div>
+			</div>
+		</div>
+	
+ 	</div><!--/#user7-->
+	<div id="user8">
+ 				<div class="module">
+			<div>
+				<div>
+					<div>
+													<h3>Moda</h3>
+											<p style="text-align: center;"><a href="/new/index.php?option=com_content&amp;view=category&amp;layout=blog&amp;id=59&amp;Itemid=108"><img alt="moda2" src="/new/images/stories/moda2.jpg" height="140" width="197" /></a></p>
+<p style="text-align: center;"><strong><a href="/new/index.php?option=com_content&amp;view=category&amp;layout=blog&amp;id=59&amp;Itemid=108">Fashion, Moda e Glamour</a><br /></strong></p>					</div>
+				</div>
+			</div>
+		</div>
+	
+ 	</div><!--/#user8-->
+	<div id="user9">
+ 				<div class="module">
+			<div>
+				<div>
+					<div>
+													<h3>Salute</h3>
+											<p style="text-align: center;"><a target="_blank" rel="title[Rubriche::Informazioni utili da esperti del settore sulla salute pubblica]" class="jcepopup" href="/new/images/stories/salute.jpg"><img src="/new/images/stories/salute.jpg" border="0" height="140" width="192" /></a></p>
+<p style="text-align: center;"><strong>Salute e Benessere<br /></strong></p>					</div>
+				</div>
+			</div>
+		</div>
+	
+ 	</div><!--/#user9-->
+	
+ </div><!--/#down-->
+  </div><!--/#body-->
+
+<!-- Footer -->
+<div id="foot">
+ 
+ 
+    <p><!--Testo footer-->Copyright © 2013 Brindisi Libera (Flashback Magazine), Reg. Trib. BR n.1944-10/03/2003 . Tutti i diritti riservati. - Brindisilibera.it è  la versione online del Flashback Magazine testata stampa della Ass. Culturale Flashback - Sede leg/Amm. Via R. Flores, 1 - Brindisi - Direttore Resp. Ferdinando COCCIOLO - Direttore Editoriale Marcello ALTOMARE -  Coordinatore Editoriale Giovanni STASI - P.IVA/C.F. 02017390747 . - Fax 0831.1810977 - email redazione@brindisilibera.it - Pec flashback@gigapec.it - Tutti i diritti riservati</p>
+    <p><center>		<div class="moduletable">
+					<table width="100%" border="0" cellpadding="0" cellspacing="1"><tr><td nowrap="nowrap"><a href="/new/index.php?option=com_contact&amp;view=contact&amp;id=1&amp;Itemid=80" class="mainlevel-nav" >Contatti</a></td></tr></table>		</div>
+			<div class="moduletable">
+					 <a class="markupchooser" href="http://www.brindisilibera.it/new/index2.php?option=com_mobilejoomla&amp;task=setmarkup&amp;markup=mobile&amp;return=L25ldy9pbmRleC5waHA/b3B0aW9uPWNvbV9jb250ZW50JnZpZXc9c2VjdGlvbiZsYXlvdXQ9YmxvZyZpZD0xOCZJdGVtaWQ9NzU=">Mobile Version</a><span class="markupchooser"> | </span><span class="markupchooser">Standard Version</span>		</div>
+	</center></p>
+</div><!--/#foot-->
+ 
+</div><!--/#container-->
+<div id="fb-root"></div><script type="text/javascript">document.getElementsByTagName("html")[0].style.display="block"; /* <![CDATA[ */		
+window.addEvent('domready',function(){
+	(function() {
+		var e = document.createElement('script'); e.async = true;
+		e.src = document.location.protocol +
+		  '//connect.facebook.net/it_IT/all.js';
+		document.getElementById('fb-root').appendChild(e);
+	}());
+});
+window.fbAsyncInit = function() {
+     FB.init({appId: "368420379904545", status: true, cookie: true, xfbml: true, channelUrl: "http://www.brindisilibera.it/new/plugins/system/facebookXD.html", oauth: true});
+	 
+};
+/* ]]> */</script></body>
+
+</html>
