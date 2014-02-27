@@ -7,7 +7,7 @@ import akka.actor.Props
 import akka.actor.ActorLogging
 import akka.actor.Terminated
 import akka.actor.ReceiveTimeout
-import it.dtk.db.News
+import it.dtk.db.{DBManager, News}
 import scala.util.{Failure, Success}
 import java.util.Date
 
@@ -105,8 +105,17 @@ trait WebSiteController extends Actor with ActorLogging {
       })
 
     case MainContentExtractor.Result(news) =>
-        // TODO: DB persistency
-        log.info("Got main article content for URL {}", news.urlNews)
+      // TODO: DB persistency
+      log.info("Got main article content for URL {}", news.urlNews)
+
+    case DBManager.Done(news) =>
+      log.info("Successfully persisted news for URL {}", news.urlNews)
+
+    case DBManager.Fail(news) =>
+      log.info("Failed to persist news for URL {}", news.urlNews)
+
+    case DBManager.SaveException(news, message) =>
+      log.info("Database error while persisting news for URL {}\nMessage: {}", news.urlNews, message)
 
     case Terminated(ref) =>
       log.debug("Got a death letter from {}", ref)
