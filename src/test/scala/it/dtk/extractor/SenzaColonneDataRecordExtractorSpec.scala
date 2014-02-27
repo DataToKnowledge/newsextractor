@@ -18,13 +18,13 @@ object SenzaColonneDataRecordExtractorSpec{
 
 class SenzaColonneDataRecordExtractorSpec extends MySpec("SenzaColonneDataRecordExtractorSpec") {
 
-  import BrindisiLiberaDataRecordExtractorSpec._
+  import SenzaColonneDataRecordExtractorSpec._
   import DataRecordExtractor._
 
   val html = Source.fromFile("./src/test/resources/SenzaColonne.html", "UTF-8").getLines().mkString
   
-  "The Brindisi Libera record extractor" should {
-    "extract 9 data records" in {
+  "Senza Colonne record extractor" should {
+    "extract 5 data records" in {
       val dataRecordProps = Props(classOf[SenzaColonneDataRecordExtractor], url, html, date)
       val dataRecordActor = system.actorOf(Props(classOf[StepParent], dataRecordProps, testActor))
       val results = expectMsgClass(15.seconds,classOf[DataRecords])
