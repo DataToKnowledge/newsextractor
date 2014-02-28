@@ -16,9 +16,9 @@ resolvers ++= Seq(
 )
 
 libraryDependencies ++= Seq(
-  "com.typesafe.akka" %% "akka-actor" % "2.3.0-RC2",
-  "com.typesafe.akka" %% "akka-testkit" % "2.3.0-RC2",
-  "com.typesafe.akka" %% "akka-cluster" % "2.3.0-RC2",
+  "com.typesafe.akka" %% "akka-actor" % "2.3.0-RC4",
+  "com.typesafe.akka" %% "akka-testkit" % "2.3.0-RC4",
+  "com.typesafe.akka" %% "akka-cluster" % "2.3.0-RC4",
   "net.databinder.dispatch" %% "dispatch-core" % "0.11.0",
   "com.github.nscala-time" %% "nscala-time" % "0.8.0",
   "org.scalatest" % "scalatest_2.10" % "2.0" % "test",
