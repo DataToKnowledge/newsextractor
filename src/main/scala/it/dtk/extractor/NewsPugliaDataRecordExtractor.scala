@@ -8,11 +8,12 @@ import org.jsoup.Jsoup
 import scala.collection.JavaConversions._
 import org.jsoup.nodes.Element
 import it.dtk.DataRecordExtractor._
+import org.joda.time.DateTime
 
 /**
  * @author Andrea Scarpino <andrea@datatoknowledge.it>
  */
-class NewsPugliaDataRecordExtractor(url: String, html: String, date: Date) extends DataRecordExtractor {
+class NewsPugliaDataRecordExtractor(url: String, html: String, date: DateTime) extends DataRecordExtractor {
 
   implicit val doc = Jsoup.parse(html, url)
 

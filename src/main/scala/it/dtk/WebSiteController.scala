@@ -10,6 +10,8 @@ import akka.actor.ReceiveTimeout
 import it.dtk.db.News
 import scala.util.{Failure, Success}
 import java.util.Date
+import org.joda.time.DateTime
+import it.dtk.db.DBManager
 
 object WebSiteController {
 
@@ -43,13 +45,19 @@ trait WebSiteController extends Actor with ActorLogging {
   val baseUrl: String
   val maxIncrement: Int
 
-  def dataRecordExtractorProps(url: String, html: String, date: Date): Props
+  def dataRecordExtractorProps(url: String, html: String, date: DateTime): Props
 
   def logicalListUrlGenerator(start: Int, stop: Int): Seq[Job]
 
   def httpGetterProps(url: String): Props = Props(classOf[HttpGetter], url)
 
   def mainContentExtractorProps(record: News): Props = Props[MainContentExtractor]
+  
+  def host = "localhost"
+    
+  def db = "dbNews" 
+  
+  val dbActor = context.actorOf(Props(classOf[DBManager],host,db))
 
   private var activeJobs = 0
   private var currentStop = -1
@@ -57,6 +65,7 @@ trait WebSiteController extends Actor with ActorLogging {
   def receive = waiting
 
   val waiting: Receive = {
+    
     case Start =>
       val jobs = logicalListUrlGenerator(1, parallelFactor)
       currentStop = parallelFactor
@@ -84,7 +93,7 @@ trait WebSiteController extends Actor with ActorLogging {
 
     case Success(HttpGetter.Result(url, html, date)) =>
       log.info("Got the HTML for URL {} having size of {} bytes", url, html.size)
-      context.watch(context.actorOf(dataRecordExtractorProps(url, html, date)))
+      context.watch(context.actorOf(dataRecordExtractorProps(url, html, new DateTime(date))))
 
     case Failure(HttpGetter.GetException(url, statusCode)) =>
       log.info("Failed to get the HTML for URL {} with status code {}", url, statusCode)
@@ -99,15 +108,18 @@ trait WebSiteController extends Actor with ActorLogging {
         // Extract main content from each data record
         log.info("Getting main article content for URL {}", url)
 
-        val recordNews = new News(0, baseUrl, record.newsUrl, record.title, record.summary, date)
-
+        val recordNews = News(None,Some(baseUrl),Some(record.newsUrl),Some(record.title),Some(record.summary),Some(date))
         context.watch(context.actorOf(mainContentExtractorProps(recordNews)))
       })
 
     case MainContentExtractor.Result(news) =>
         // TODO: DB persistency
         log.info("Got main article content for URL {}", news.urlNews)
-
+        dbActor ! DBManager.Insert(news)
+        
+    case DBManager.Fail(news) =>
+        log.info("error inserting the new in the db {}", news.urlNews)
+        
     case Terminated(ref) =>
       log.debug("Got a death letter from {}", ref)
       activeJobs -= 1

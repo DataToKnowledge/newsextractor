@@ -7,11 +7,12 @@ import org.jsoup.Jsoup
 import org.jsoup.nodes.Element
 import scala.collection.JavaConversions._
 import it.dtk.DataRecordExtractor._
+import org.joda.time.DateTime
 
 /**
  * @author Andrea Scarpino <andrea@datatoknowledge.it>
  */
-class LeccePrimaDataRecordExtractor(url: String, html: String, date: Date) extends DataRecordExtractor {
+class LeccePrimaDataRecordExtractor(url: String, html: String, date: DateTime) extends DataRecordExtractor {
   
   implicit val doc = Jsoup.parse(html, url)
 

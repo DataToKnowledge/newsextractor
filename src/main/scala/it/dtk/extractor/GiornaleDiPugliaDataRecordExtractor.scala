@@ -9,9 +9,10 @@ import org.jsoup.nodes.Document
 import org.jsoup.select.Elements
 import org.jsoup.nodes.Element
 import scala.collection.JavaConversions._
+import org.joda.time.DateTime
 
 
-class GiornaleDiPugliaDataRecordExtractor(url: String, html: String, date: Date) extends DataRecordExtractor{
+class GiornaleDiPugliaDataRecordExtractor(url: String, html: String, date: DateTime) extends DataRecordExtractor{
   val doc = Jsoup.parse(html)
   val records= doc.getElementsByClass("post-wrapper") map ( 
 		  r => DataRecord(title(r), summary(r), newsUrl(r)))

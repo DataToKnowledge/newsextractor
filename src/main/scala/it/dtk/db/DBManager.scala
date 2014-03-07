@@ -1,16 +1,16 @@
 package it.dtk.db
 
 import akka.actor.Actor
-import com.mongodb.casbah.MongoConnection
-import com.mongodb.casbah.MongoClient
-import com.mongodb.MongoCredential
-import com.mongodb.Mongo
+import reactivemongo.api.MongoDriver
+import scala.concurrent.ExecutionContext.Implicits.global
+import akka.pattern._
+import scala.util.Success
+import scala.util.Failure
 
 object DBManager {
-  case class Save(record: News)
+  case class Insert(record: News)
   case object Done
-  case object Fail
-  case object Killed
+  case class Fail(record: News)
 }
 
 /**
@@ -19,34 +19,42 @@ object DBManager {
  *
  * @author Michele Damiano Torelli <daniele@datatoknowledge.it>
  */
-class DBManager(host: String, port: Int, database: String) extends Actor {
+class DBManager(host: String, database: String) extends Actor {
 
   import DBManager._
-  
-  val mongoClient = MongoClient(host,port)
-  //val credentials = MongoCredential.createPlainCredential(userName, source, password)
-  val db = mongoClient(database)
+  import News._
+
+  val driver = new MongoDriver
+  //connect to the host
+  val connection = driver.connection(List(host))
+
+  //get a connection to the db
+  val db = connection(database)
+  //retrieve the collection
+  val geoNews = db("geoNews")
 
   def receive = {
-    case Save(datarecord) =>
-      //db.
-      sender ! Done
+    case Insert(datarecord) =>
+      val send = sender
+      val future = geoNews.insert(datarecord)
+      future.onComplete {
+        case Failure(e) => {
+          send ! Fail(datarecord)
+        }
+        case Success(lastError) => {
+          println("successfully inserted document: " + lastError)
+          send ! Done
+          println(sender.path)
+        }
+      }
+  }
 
-    case "kill" =>
-      context.stop(self)
-      sender ! Killed
-
-    case _ =>
-      sender ! Fail
+  override def postStop(): Unit = {
+    driver.close
   }
 
 }
 
-class DBWorker(conn: MongoConnection) extends Actor{
-  
-  
-  def receive = ???
-}
 
 
 

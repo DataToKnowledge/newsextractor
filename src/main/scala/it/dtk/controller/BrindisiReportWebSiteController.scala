@@ -5,6 +5,7 @@ import akka.actor.Props
 import it.dtk.WebSiteController.Job
 import java.util.Date
 import it.dtk.extractor.BrindisiReportDataRecordExtractor
+import org.joda.time.DateTime
 
 /**
  * @author Andrea Scarpino <andrea@datatoknowledge.it>
@@ -16,7 +17,7 @@ class BrindisiReportWebSiteController extends WebSiteController {
 
   override val baseUrl: String = "http://www.brindisireport.it/cronaca/page/"
 
-  override def dataRecordExtractorProps(url: String, html: String, date: Date): Props = Props(classOf[BrindisiReportDataRecordExtractor],url,html,date)
+  override def dataRecordExtractorProps(url: String, html: String, date: DateTime): Props = Props(classOf[BrindisiReportDataRecordExtractor],url,html,date)
 
   override def logicalListUrlGenerator(start: Int, stop: Int): Seq[Job] = {
     start to stop map (v => Job(baseUrl + v, v))

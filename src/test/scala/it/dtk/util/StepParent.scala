@@ -17,7 +17,7 @@ class StepParent(child: Props, fwd: ActorRef) extends Actor {
   context.actorOf(child, "child")
 
   def receive = {
-    case msg => fwd.tell(msg, sender())
+    case msg => fwd.tell(msg, sender)
   }
 }
 

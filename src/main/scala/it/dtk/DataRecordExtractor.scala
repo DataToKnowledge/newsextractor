@@ -7,11 +7,12 @@ import org.jsoup.select.Elements
 import org.jsoup.nodes.Document
 import org.jsoup.nodes.Element
 import scala.collection.JavaConversions._
+import org.joda.time.DateTime
 
 object DataRecordExtractor {
 
   case class DataRecord(title: String, summary: String, newsUrl: String)
-  case class DataRecords(url: String, date: Date, dataRecords: Seq[DataRecord])
+  case class DataRecords(url: String, date: DateTime, dataRecords: Seq[DataRecord])
 
 }
 

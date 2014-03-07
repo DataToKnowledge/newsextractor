@@ -9,8 +9,9 @@ import org.jsoup.nodes.Document
 import org.jsoup.select.Elements
 import org.jsoup.nodes.Element
 import scala.collection.JavaConversions._
+import org.joda.time.DateTime
 
-class SenzaColonneDataRecordExtractor(url: String, html: String, date: Date) extends DataRecordExtractor {
+class SenzaColonneDataRecordExtractor(url: String, html: String, date: DateTime) extends DataRecordExtractor {
 
   implicit val doc = Jsoup.parse(html, url)
 
