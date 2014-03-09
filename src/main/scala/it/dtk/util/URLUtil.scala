@@ -10,7 +10,7 @@ import scala.util.{Try, Success, Failure}
  */
 object URLUtil {
 
-  val URL_REGEX = "^(http(?:s)?\\:\\/\\/[a-zA-Z0-9\\-]+(?:\\.[a-zA-Z0-9\\-]+)*\\.[a-zA-Z]{2,6}(?:\\/?|(?:\\/[\\w\\-]+)*)(?:\\/?|\\/\\w+\\.[a-zA-Z]{2,4}(?:\\?[\\w]+\\=[\\w\\-]+)?)?(?:\\&[\\w]+\\=[\\w\\-]+)*)/$"
+  val URL_REGEX = "^(http(?:s)?\\:\\/\\/[a-zA-Z0-9\\-]+(?:\\.[a-zA-Z0-9\\-]+)*\\.[a-zA-Z]{2,6}(?:\\/?|(?:\\/[\\w\\-]+)*)(?:\\/?|\\/\\w+\\.[a-zA-Z]{2,4}(?:\\?[\\w]+\\=[\\w\\-]+)?)?(?:\\&[\\w]+\\=[\\w\\-]+)*)$"
 
   /**
    * Normalize a given URL to http(s)://domain.tld/(whatever/) format.
@@ -32,9 +32,36 @@ object URLUtil {
     if (!parsedUrl.endsWith("/"))
       parsedUrl = parsedUrl + "/"
 
+    /*
+     * FIXME: If match fails, find and remove filename with extension
+     * and try again, then reappend and return it
+     * I.E.: http://www.baritoday.it/cronaca/ciccio-cappuccio.html does not pass but it have to.
+     */
     // Check if composed URL is still valid
     if (parsedUrl.matches(URL_REGEX)) Success(parsedUrl)
     else Failure(new MalformedURLException(s"URL is malformed: $url"))
+  }
+
+  /**
+   * Normalize a given base URL with given relative path
+   * to http(s)://baseUrl/relativePath/ format.
+   * @param baseUrl Base URL
+   * @param relativePath Relative path to append to base URL
+   * @return Normalized baseUrl + relativePath or MalformedURLException
+   */
+  def normalize(baseUrl: String, relativePath: String): Try[String] = {
+    val lowerBaseUrl = baseUrl.trim.toLowerCase
+    val lowerRelativePath = relativePath.trim.toLowerCase
+
+    if (!isAbsolute(lowerBaseUrl))
+      Failure(new MalformedURLException(s"Base URL is not absolute: $lowerBaseUrl"))
+    if (!isRelative(lowerRelativePath))
+      Failure(new MalformedURLException(s"Path is not relative: $lowerRelativePath"))
+
+    if (!lowerBaseUrl.endsWith("/"))
+      normalize(lowerBaseUrl + "/" + lowerRelativePath)
+    else
+      normalize(lowerBaseUrl + lowerRelativePath)
   }
 
   /**
