@@ -14,6 +14,8 @@ object DataModel {
 
 }
 
+case class WebControllerData(id: Option[BSONObjectID] = None, controllerName: Option[String], stopsUrl: Vector[String], enabled: Boolean)
+
 /**
  * @author fabiofumarola
  * @param id it is the progressive counter of the news extracted by the actor. the counter is reset to 0 every day
