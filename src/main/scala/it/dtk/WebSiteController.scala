@@ -8,7 +8,7 @@ import akka.actor.ActorLogging
 import akka.actor.Terminated
 import akka.actor.ReceiveTimeout
 import it.dtk.db.{ DBManager, News }
-import scala.util.Failure
+import scala.util.{Success, Failure}
 import org.joda.time.DateTime
 import it.dtk.db.DBManager
 import akka.actor.ActorRef
@@ -86,20 +86,13 @@ trait WebSiteController extends Actor with ActorLogging {
       val filteredRecords = records.takeWhile(r => !stopUrls.contains(r.newsUrl))
 
       val normalizedRecords = records.map(r => {
-        val normalizedUrl = if (URLUtil.isRelative(r.newsUrl))
-          baseUrl + r.newsUrl
-        else
-          r.newsUrl
+          URLUtil.normalize(baseUrl, r.newsUrl) match {
+            case Success(normalizedUrl) =>
+              News(None, Some(baseUrl), Some(normalizedUrl), Some(r.title), Some(r.summary), Some(date))
 
-        // FIXME: Issue #21
-        //        val recordNews: News = URLUtil.normalize(baseUrl, r.newsUrl) match {
-        //          case Success(url) =>
-        //            News(None, Some(baseUrl), Some(url), Some(r.title), Some(r.summary), Some(date))
-        //
-        //          case Failure(ex) =>
-        //            News(None, Some(baseUrl), Some(r.newsUrl), Some(r.title), Some(r.summary), Some(date))
-        //        }
-        r.copy(newsUrl = normalizedUrl)
+            case Failure(_) =>
+              News(None, Some(baseUrl), Some(r.newsUrl), Some(r.title), Some(r.summary), Some(date))
+          }
       })
 
       normalizedRecords.foreach(r => {
