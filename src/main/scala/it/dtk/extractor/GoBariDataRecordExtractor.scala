@@ -1,7 +1,7 @@
 package it.dtk.extractor
 
 import it.dtk.DataRecordExtractor
-import it.dtk.DataRecordExtractor.{ DataRecord, DataRecords }
+import it.dtk.DataRecordExtractor.DataRecord
 import java.util.Date
 import org.jsoup.Jsoup
 import scala.collection.JavaConversions._

@@ -4,7 +4,6 @@ import akka.actor.{ Props, Actor, ActorLogging }
 import akka.actor.ActorSystem
 import it.dtk.db.DBManager
 import akka.actor.ActorRef
-import it.dtk.controller.BariTodayWebSiteController
 import it.dtk.controller.GoBariWebSiteController
 
 

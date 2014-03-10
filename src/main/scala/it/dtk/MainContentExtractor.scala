@@ -6,7 +6,6 @@ import com.gravity.goose.Configuration
 import it.dtk.db.News
 import akka.actor.actorRef2Scala
 import scala.util.Success
-import akka.actor.ActorLogging
 import akka.actor.OneForOneStrategy
 import akka.actor.SupervisorStrategy
 
@@ -44,7 +43,7 @@ class MainContentExtractor(news: News) extends Actor {
       val article = goose.extractContent(url, html)
 
       if (article.cleanedArticleText.isEmpty()) {
-        //TODO call boilerpipe to extract to text issue #24
+        // TODO: Call BoilerPipe to extract the text (Issue #24)
         article.cleanedArticleText = ""
       }
 

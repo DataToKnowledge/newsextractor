@@ -43,7 +43,7 @@ class URLUtil$Test extends FlatSpec with Matchers {
         result.get should be ("http://www.baritoday.it/pages/4/")
     }
 
-    // FIXME: Valid URL regexp does not accept filename with extension
+    // FIXME: Valid URL regexp does not accept filename with extension (Issue #23)
     //val result = URLUtil normalize "http://www.baritoday.it/cronaca/ciccio-cappuCCio.html"
     //result should be a 'success
     //result.get should be ("http://www.baritoday.it/cronaca/ciccio-cappuccio.html")
@@ -58,7 +58,7 @@ class URLUtil$Test extends FlatSpec with Matchers {
   it should "compose base URL and relative path and normalize it" in {
     val baseUrl = "http://www.baritoday.it"
     val relativePath = "cronaca/ciccio-cappuccio"
-    // FIXME: Valid URL regexp does not accept filename with extension
+    // FIXME: Valid URL regexp does not accept filename with extension (Issue #23)
     //val relativePath = "cronaca/ciccio-cappuccio.html"
 
     val result = URLUtil normalize (baseUrl, relativePath)
@@ -100,6 +100,7 @@ class URLUtil$Test extends FlatSpec with Matchers {
     "https://baritoday.it/notizia-a-caso/",
     "baritoday.it/notizia-a-caso",
     "baritoday.it/notizia-a-caso/")
+
   val absUrls = List(
     "http://www.baritoday.it",
     "http://www.baritoday.it/",
@@ -129,12 +130,14 @@ class URLUtil$Test extends FlatSpec with Matchers {
     "../notizia-a-caso/",
     "../notizie/notizia-a-caso",
     "../notizie/notizia-a-caso/")
+
   val normUrls1 = List(
     "http://www.baritoday.it",
     "hTtp://Www.BARITodaY.iT",
     "http://www.baritoday.it/#events",
     "www.baritoday.it",
     "www.baritoday.it/")
+
   val normUrls2 = List(
     "http://www.baritoday.it/pages/4",
     "hTtp://Www.BARITodaY.iT/paGes/4",

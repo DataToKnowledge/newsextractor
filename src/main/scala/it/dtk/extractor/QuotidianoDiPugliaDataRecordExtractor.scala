@@ -1,13 +1,8 @@
 package it.dtk.extractor
 
 import it.dtk.DataRecordExtractor
-import it.dtk.DataRecordExtractor.{ DataRecord, DataRecords }
-import java.util.Date
-import org.jsoup.Jsoup
-import scala.collection.JavaConversions._
+import it.dtk.DataRecordExtractor.DataRecord
 import org.jsoup.nodes.Element
-import it.dtk.DataRecordExtractor._
-import org.joda.time.DateTime
 
 /**
  * @author Andrea Scarpino <andrea@datatoknowledge.it>

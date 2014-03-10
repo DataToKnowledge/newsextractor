@@ -34,7 +34,7 @@ object URLUtil {
 
     /*
      * FIXME: If match fails, find and remove filename with extension
-     * and try again, then reappend and return it
+     * and try again, then reappend and return it (Issue #23)
      * I.E.: http://www.baritoday.it/cronaca/ciccio-cappuccio.html does not pass but it have to.
      */
     // Check if composed URL is still valid

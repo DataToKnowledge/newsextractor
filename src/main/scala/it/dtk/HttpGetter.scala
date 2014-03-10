@@ -9,8 +9,7 @@ import scala.concurrent.ExecutionContext
 import it.dtk.HttpGetter.{ DispatchException, GetException, Result }
 import scala.util.{ Success, Failure }
 import com.ning.http.client.providers.netty.NettyResponse
-import org.jsoup.safety.{ Whitelist, Cleaner }
-import org.jsoup.nodes.Document
+import org.jsoup.safety.Cleaner
 import org.jsoup.Jsoup
 
 object HttpGetter {

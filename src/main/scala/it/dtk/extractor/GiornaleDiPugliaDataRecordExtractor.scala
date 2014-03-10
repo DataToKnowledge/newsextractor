@@ -1,12 +1,10 @@
 package it.dtk.extractor
 
 import it.dtk.DataRecordExtractor
-import scala.xml.{ XML, NodeSeq, Node }
-import it.dtk.DataRecordExtractor.{ DataRecord, DataRecords }
+import scala.xml.NodeSeq
+import it.dtk.DataRecordExtractor.DataRecord
 import java.util.Date
-import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
-import org.jsoup.select.Elements
 import org.jsoup.nodes.Element
 import scala.collection.JavaConversions._
 import org.joda.time.DateTime

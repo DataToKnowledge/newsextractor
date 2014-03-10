@@ -2,8 +2,7 @@ package it.dtk.extractor
 
 import it.dtk.DataRecordExtractor
 import scala.xml.{ XML, NodeSeq, Node }
-import it.dtk.DataRecordExtractor.{ DataRecord, DataRecords }
-import java.util.Date
+import it.dtk.DataRecordExtractor.DataRecords
 import org.jsoup.Jsoup
 import scala.collection.JavaConversions._
 import org.jsoup.nodes.Element

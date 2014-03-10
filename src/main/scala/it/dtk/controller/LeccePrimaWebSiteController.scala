@@ -2,10 +2,7 @@ package it.dtk.controller
 
 import it.dtk.WebSiteController
 import akka.actor.Props
-import it.dtk.WebSiteController.Job
 import it.dtk.extractor.LeccePrimaDataRecordExtractor
-import java.util.Date
-import org.joda.time.DateTime
 import akka.actor.ActorRef
 
 /**

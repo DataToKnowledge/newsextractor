@@ -8,13 +8,12 @@ import akka.actor.ActorLogging
 import akka.actor.Terminated
 import akka.actor.ReceiveTimeout
 import it.dtk.db.{ DBManager, News }
-import scala.util.{ Failure, Success }
+import scala.util.Failure
 import org.joda.time.DateTime
 import it.dtk.db.DBManager
 import akka.actor.ActorRef
 import akka.actor.actorRef2Scala
 import it.dtk.util.URLUtil
-import scala.util.Success
 
 object WebSiteController {
 
@@ -92,7 +91,7 @@ trait WebSiteController extends Actor with ActorLogging {
           baseUrl + r.newsUrl
         else
           r.newsUrl
-        //FIXME 
+        // FIXME: Issue #21
         //        val recordNews: News = URLUtil.normalize(baseUrl, r.newsUrl) match {
         //          case Success(url) =>
         //            News(None, Some(baseUrl), Some(url), Some(r.title), Some(r.summary), Some(date))
