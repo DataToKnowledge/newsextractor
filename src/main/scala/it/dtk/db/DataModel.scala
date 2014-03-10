@@ -14,7 +14,7 @@ object DataModel {
 
 }
 
-case class WebControllerData(id: Option[BSONObjectID] = None, controllerName: Option[String], stopsUrl: Vector[String], enabled: Boolean)
+case class WebControllerData(id: Option[BSONObjectID] = None, controllerName: Option[String], stopUrls: Option[Set[String]], enabled: Option[Boolean] = false)
 
 /**
  * @author fabiofumarola
@@ -66,6 +66,30 @@ object News {
       "topImage" -> news.topImage
     )
 
+  }
+
+}
+
+object WebControllerData {
+
+  implicit object WebControllerDataBSONReader extends BSONDocumentReader[WebControllerData] {
+    def read(doc: BSONDocument): WebControllerData = {
+      WebControllerData(
+        doc.getAs[BSONObjectID]("_id"),
+        doc.getAs[String]("controllerName"),
+        doc.getAs[Set[String]]("stopUrls"),
+        doc.getAs[Boolean]("enabled")
+      )
+    }
+  }
+
+  implicit object WebControllerDataBSONWriter extends BSONDocumentWriter[WebControllerData] {
+    def write(webController: WebControllerData): BSONDocument = BSONDocument(
+      "_id" -> BSONObjectID.generate,
+      "controllerName" -> webController.controllerName,
+      "stopUrls" -> webController.stopUrls,
+      "enabled" -> webController.enabled
+    )
   }
 
 }

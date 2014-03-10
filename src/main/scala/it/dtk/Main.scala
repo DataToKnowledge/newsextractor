@@ -5,6 +5,7 @@ import akka.actor.ActorSystem
 import it.dtk.db.DBManager._
 import akka.actor.ActorRef
 import it.dtk.db.DBManager
+import it.dtk.controller._
 
 /**
  * Author: Michele Damiano Torelli

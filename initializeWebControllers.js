@@ -4,7 +4,7 @@
 
 db = connect("192.168.0.62:27017/dbNews");
 
-var controllers = new Array(
+var controllers = [
   'BariToday',
   'BrindisiLibera',
   'BrindisiReport',
@@ -16,8 +16,7 @@ var controllers = new Array(
   'Puglia24News',
   'QuotidianoDiPuglia',
   'Repubblica',
-  'SenzaColonne'
-);
+  'SenzaColonne'];
 
 // delete current controllers
 db.webControllers.drop();
@@ -25,7 +24,8 @@ db.webControllers.drop();
 // add all controllers but disable them
 for (var w in controllers) {
   var controller = {
-    props: controllers[w] + 'WebSiteController',
+    controllerName: controllers[w] + 'WebSiteController',
+    stopUrls: [],
     enabled: 0
   };
 
@@ -33,4 +33,4 @@ for (var w in controllers) {
 }
 
 // enable controllers
-db.webControllers.update({ props: 'BariTodayWebSiteController' }, { $set: { enabled: 1 } })
+db.webControllers.update({ controllerName: 'BariTodayWebSiteController' }, { $set: { enabled: 1 } })
