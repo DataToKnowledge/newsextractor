@@ -25,7 +25,8 @@ libraryDependencies ++= Seq(
   "org.scalacheck" %% "scalacheck" % "1.11.3" % "test",
   "org.jsoup" % "jsoup" % "1.7.3",
   "ch.qos.logback" % "logback-classic" % "1.1.1",
-  "org.reactivemongo" %% "reactivemongo" % "0.10.0"
+  "org.reactivemongo" %% "reactivemongo" % "0.10.0",
+  "com.syncthemall" % "boilerpipe" % "1.2.2"
 )
 
 /* Required by com.gravity.Goose */
