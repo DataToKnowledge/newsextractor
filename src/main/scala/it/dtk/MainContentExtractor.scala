@@ -27,9 +27,9 @@ class MainContentExtractor(news: News) extends Actor {
   import MainContentExtractor._
 
   val configuration = new Configuration()
-  configuration.setImagemagickConvertPath("convert")
-  configuration.setImagemagickIdentifyPath("identify")
-//    configuration.setImagemagickConvertPath("/usr/local/bin/convert")
+    configuration.setImagemagickConvertPath("convert")
+    configuration.setImagemagickIdentifyPath("identify")
+//  configuration.setImagemagickConvertPath("/usr/local/bin/convert")
 //  configuration.setImagemagickIdentifyPath("/usr/local/bin/identify")
 
   val goose = new Goose(configuration)

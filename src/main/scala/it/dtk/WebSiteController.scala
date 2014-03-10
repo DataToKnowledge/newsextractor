@@ -21,7 +21,7 @@ object WebSiteController {
 
   case class Job(url: String, index: Int, running: Boolean = false)
 
-  case class Done(url: String)
+  case class Done(extractedUrls: Vector[String])
 
   case class Fail(url: String)
 
@@ -60,13 +60,14 @@ trait WebSiteController extends Actor with ActorLogging {
   val waiting: Receive = {
 
     case Start(stopUrls) =>
-      context.become(runNext(stopUrls, 1))
+      context.become(runNext(stopUrls, 1, Vector[String](),sender))
   }
 
-  def runNext(stopUrls: Vector[String], currentIndex: Int): Receive = {
+  def runNext(stopUrls: Vector[String], currentIndex: Int, extractedUrls: Vector[String], jobSender: ActorRef): Receive = {
 
     if (currentIndex > maxIndex) {
       log.info("all done waiting for new jobs")
+      jobSender ! Done(extractedUrls)
       waiting
     } else {
       val url = composeUrl(currentIndex)
@@ -74,23 +75,22 @@ trait WebSiteController extends Actor with ActorLogging {
 
       drActor ! DataRecordExtractor.Extract(url)
 
-      running(stopUrls, currentIndex)
+      running(stopUrls, currentIndex, extractedUrls,jobSender)
     }
   }
 
-  def running(stopUrls: Vector[String], currentIndex: Int): Receive = {
+  def running(stopUrls: Vector[String], currentIndex: Int, extractedUrls: Vector[String],jobSender: ActorRef): Receive = {
 
     case DataRecordExtractor.DataRecords(url, date, records) =>
 
       val filteredRecords = records.takeWhile(r => !stopUrls.contains(r.newsUrl))
 
-      filteredRecords.foreach(r => {
-        log.info("Getting main article content for URL {}", r.newsUrl)
-
-        val url = if (URLUtil.isRelative(r.newsUrl))
+      val normalizedRecords = records.map(r => {
+        val normalizedUrl = if (URLUtil.isRelative(r.newsUrl))
           baseUrl + r.newsUrl
         else
           r.newsUrl
+
         // FIXME: Issue #21
         //        val recordNews: News = URLUtil.normalize(baseUrl, r.newsUrl) match {
         //          case Success(url) =>
@@ -99,14 +99,24 @@ trait WebSiteController extends Actor with ActorLogging {
         //          case Failure(ex) =>
         //            News(None, Some(baseUrl), Some(r.newsUrl), Some(r.title), Some(r.summary), Some(date))
         //        }
-
-        val recordNews = News(None, Some(baseUrl), Some(url), Some(r.title), Some(r.summary), Some(date))
-        context.watch(context.actorOf(mainContentExtractorProps(recordNews)))
-        
-        
-       if (filteredRecords.size < records.size)
-         context.become(running(stopUrls,maxIndex+1))
+        r.copy(newsUrl = normalizedUrl)
       })
+
+      normalizedRecords.foreach(r => {
+        log.info("Getting main article content for URL {}", r.newsUrl)
+
+        val recordNews = News(None, Some(baseUrl), Some(r.newsUrl), Some(r.title), Some(r.summary), Some(date))
+        context.watch(context.actorOf(mainContentExtractorProps(recordNews)))
+      })
+
+      val urls = extractedUrls ++ normalizedRecords.map(_.newsUrl).toVector
+
+      val nextStatus = if (normalizedRecords.size < records.size)
+        running(stopUrls, maxIndex + 1, urls,jobSender: ActorRef)
+      else
+        running(stopUrls, currentIndex, urls,jobSender: ActorRef)
+
+      context.become(nextStatus)
 
     case MainContentExtractor.Result(news) =>
       log.info("Got main article content for URL {}", news.urlNews)
@@ -118,8 +128,9 @@ trait WebSiteController extends Actor with ActorLogging {
     case Terminated(ref) =>
       log.info("number of children {}", context.children.size)
       
-      //TODO add run next and stop which return the result
-      
+      if (context.children.size == 1)
+        context.become(runNext(stopUrls, currentIndex + 1, extractedUrls,jobSender: ActorRef))
+
     case ReceiveTimeout =>
       log.info("Failure in the extraction of the website {}", baseUrl)
       context.children foreach context.stop
