@@ -10,7 +10,7 @@ import scala.util.{ Try, Success, Failure }
  */
 object URLUtil {
 
-  val URL_REGEX = "^(http(?:s)?\\:\\/\\/[a-zA-Z0-9\\-]+(?:\\.[a-zA-Z0-9\\-]+)*\\.[a-zA-Z]{2,6}(?:\\/?|(?:\\/[\\w\\-]+)*)(?:\\/?|\\/\\w+\\.[a-zA-Z]{2,4}(?:\\?[\\w]+\\=[\\w\\-]+)?)?(?:\\&[\\w]+\\=[\\w\\-]+)*)$"
+  val URL_REGEX = "^http(s{0,1})://[a-zA-Z0-9_/\\-\\.]+\\.([A-Za-z/]{2,5})[a-zA-Z0-9_/\\&\\?\\=\\-\\.\\~\\%]*"
 
   /**
    * Normalize a given URL to http(s)://domain.tld/(whatever/) format.
@@ -29,14 +29,9 @@ object URLUtil {
       parsedUrl = "http://" + parsedUrl
 
     // Add trailing slash if missing
-    if (!parsedUrl.endsWith("/"))
+    if (!parsedUrl.endsWith("/") && getRequestedResource(parsedUrl) == None)
       parsedUrl = parsedUrl + "/"
 
-    /*
-     * FIXME: If match fails, find and remove filename with extension
-     * and try again, then reappend and return it (Issue #23)
-     * I.E.: http://www.baritoday.it/cronaca/ciccio-cappuccio.html does not pass but it have to.
-     */
     // Check if composed URL is still valid
     if (parsedUrl.matches(URL_REGEX)) Success(parsedUrl)
     else Failure(new MalformedURLException(s"URL is malformed: $url"))
@@ -62,6 +57,24 @@ object URLUtil {
       normalize(lowerBaseUrl + "/" + lowerRelativePath)
     else
       normalize(lowerBaseUrl + lowerRelativePath)
+  }
+
+  /**
+   * Returns requested resource from URL
+   * @param url URL to analyze
+   * @return Resource name if resource is specified; None otherwise
+   */
+  def getRequestedResource(url: String): Option[String] = {
+    val loweredUrl = url.trim.toLowerCase
+    val parsedUrl = loweredUrl.split("/")
+
+    if (loweredUrl.startsWith("http") && parsedUrl.size >= 4) {
+      if (parsedUrl.last.matches("(.+)\\.(.{2,4})")) Some(parsedUrl.last) else None
+    } else if (isRelative(loweredUrl)) {
+      if (parsedUrl.last.matches("(.+)\\.(.{2,4})")) Some(parsedUrl.last) else None
+    } else if (loweredUrl.startsWith("/")) {
+      if (parsedUrl.last.matches("(.+)\\.(.{2,4})")) Some(parsedUrl.last) else None
+    } else None
   }
 
   /**
@@ -125,10 +138,6 @@ object URLUtil {
       && !lowerCaseUrl.startsWith("//")
       && !lowerCaseUrl.startsWith("http")
       && !lowerCaseUrl.startsWith("https"))
-  }
-
-  def compose(baseUrl: String, relativeUrl: String): Try[String] = {
-    normalize(baseUrl).flatMap(b => normalize(b + relativeUrl))
   }
 
 }

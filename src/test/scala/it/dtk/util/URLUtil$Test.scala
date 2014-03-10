@@ -2,8 +2,6 @@ package it.dtk.util
 
 import org.scalatest.{ Matchers, FlatSpec }
 import java.net.MalformedURLException
-import scala.util.Success
-import it.dtk.util.URLUtil
 
 
 /**
@@ -43,10 +41,9 @@ class URLUtil$Test extends FlatSpec with Matchers {
         result.get should be ("http://www.baritoday.it/pages/4/")
     }
 
-    // FIXME: Valid URL regexp does not accept filename with extension (Issue #23)
-    //val result = URLUtil normalize "http://www.baritoday.it/cronaca/ciccio-cappuCCio.html"
-    //result should be a 'success
-    //result.get should be ("http://www.baritoday.it/cronaca/ciccio-cappuccio.html")
+    val result = URLUtil normalize "http://www.baritoday.it/cronaca/ciccio-cappuCCio.html"
+    result should be a 'success
+    result.get should be ("http://www.baritoday.it/cronaca/ciccio-cappuccio.html")
   }
 
   it should "throw MalformedURLException if malformed URL is passed to normalize" in {
@@ -55,15 +52,28 @@ class URLUtil$Test extends FlatSpec with Matchers {
     a [MalformedURLException] should be thrownBy result.get
   }
 
+  it should "return requested resource" in {
+    URLUtil getRequestedResource "http://www.baritoday.it" should be (None)
+    URLUtil getRequestedResource "http://www.baritoday.it/" should be (None)
+    URLUtil getRequestedResource "http://www.baritoday.it/cronaca/4" should be (None)
+    URLUtil getRequestedResource "http://www.baritoday.it/cronaca/4/" should be (None)
+
+    URLUtil getRequestedResource "http://www.baritoday.it/index.html" should be (Some("index.html"))
+    URLUtil getRequestedResource "http://www.baritoday.it/cronaca/4.php" should be (Some("4.php"))
+    URLUtil getRequestedResource "http://www.baritoday.it/img/test.png" should be (Some("test.png"))
+    URLUtil getRequestedResource "/index.html" should be (Some("index.html"))
+    URLUtil getRequestedResource "index.html" should be (Some("index.html"))
+    URLUtil getRequestedResource "/img/test.png" should be (Some("test.png"))
+    URLUtil getRequestedResource "img/test.png" should be (Some("test.png"))
+  }
+
   it should "compose base URL and relative path and normalize it" in {
     val baseUrl = "http://www.baritoday.it"
-    val relativePath = "cronaca/ciccio-cappuccio"
-    // FIXME: Valid URL regexp does not accept filename with extension (Issue #23)
-    //val relativePath = "cronaca/ciccio-cappuccio.html"
+    val relativePath = "cronaca/ciccio-cappuccio.html"
 
     val result = URLUtil normalize (baseUrl, relativePath)
     result should be a 'success
-    result.get should be ("http://www.baritoday.it/cronaca/ciccio-cappuccio/")
+    result.get should be ("http://www.baritoday.it/cronaca/ciccio-cappuccio.html")
   }
 
   it should "check if a URL is absolute" in {
