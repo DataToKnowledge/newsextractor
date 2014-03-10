@@ -5,10 +5,7 @@ import org.joda.time.DateTime
 import reactivemongo.bson.BSONDocumentReader
 import reactivemongo.bson.BSONDocument
 import reactivemongo.bson.BSONObjectID
-import reactivemongo.bson.BSONArray
-import reactivemongo.bson.BSONDateTime
 import reactivemongo.bson.BSONDocumentWriter
-import reactivemongo.bson.BSONDateTime
 import reactivemongo.bson.BSONDateTime
 
 object DataModel {
@@ -21,14 +18,17 @@ object DataModel {
  * @author fabiofumarola
  * @param id it is the progressive counter of the news extracted by the actor. the counter is reset to 0 every day
  */
-case class News(id: Option[BSONObjectID] = None, urlWebSite: Option[String], urlNews: Option[String], title: Option[String], summary: Option[String],
-  newsDate: Option[DateTime], text: Option[String] = None, tags: Option[Set[String]] = None, metaDescription: Option[String] = None,
-  metaKeyword: Option[String] = None, canonicalUrl: Option[String] = None, topImage: Option[String] = None) {
+case class News(id: Option[BSONObjectID] = None, urlWebSite: Option[String], urlNews: Option[String],
+                title: Option[String], summary: Option[String], newsDate: Option[DateTime],
+                text: Option[String] = None, tags: Option[Set[String]] = None,
+                metaDescription: Option[String] = None, metaKeyword: Option[String] = None,
+                canonicalUrl: Option[String] = None, topImage: Option[String] = None) {
 
   val extractionDate: Date = (new DateTime).toDate
 }
 
 object News {
+
   implicit object NewsBSONReader extends BSONDocumentReader[News] {
 
     def read(doc: BSONDocument): News = {
@@ -50,19 +50,20 @@ object News {
 
   implicit object NewsBSONWriter extends BSONDocumentWriter[News] {
     def write(news: News): BSONDocument = BSONDocument(
-    	"_id" -> BSONObjectID.generate,
-    	"urlWebSite" -> news.urlWebSite,
-    	"urlNews" -> news.urlNews,
-    	"title" -> news.title,
-    	"summary" -> news.summary,
-    	"newsDate" -> news.newsDate.map(t => BSONDateTime(t.getMillis())),
-    	"text" -> news.text,
-    	"tags" -> news.tags,
-    	"metadescription" -> news.metaDescription,
-    	"metakeyword" -> news.metaKeyword,
-    	"canonicalUrl" -> news.canonicalUrl,
-    	"topImage" -> news.topImage
+      "_id" -> BSONObjectID.generate,
+      "urlWebSite" -> news.urlWebSite,
+      "urlNews" -> news.urlNews,
+      "title" -> news.title,
+      "summary" -> news.summary,
+      "newsDate" -> news.newsDate.map(t => BSONDateTime(t.getMillis())),
+      "text" -> news.text,
+      "tags" -> news.tags,
+      "metadescription" -> news.metaDescription,
+      "metakeyword" -> news.metaKeyword,
+      "canonicalUrl" -> news.canonicalUrl,
+      "topImage" -> news.topImage
     )
 
   }
+
 }

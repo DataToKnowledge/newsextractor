@@ -1,15 +1,26 @@
 package it.dtk.db
 
 import akka.actor.Actor
-import reactivemongo.api.MongoDriver
+import reactivemongo.api._
+import reactivemongo.bson._
+import reactivemongo.bson.BSONDocument
 import scala.concurrent.ExecutionContext.Implicits.global
-import scala.util.Success
-import scala.util.Failure
+import scala.concurrent.Future
+import scala.util.{Failure, Success}
+import scala.collection.mutable.ListBuffer
 
 object DBManager {
+
   case class Insert(record: News)
+
   case object Done
+
   case class Fail(record: News)
+
+  case object Load
+
+  case class WebControllers(props: List[Option[String]])
+
 }
 
 class DBManager(host: String, database: String) extends Actor {
@@ -27,20 +38,35 @@ class DBManager(host: String, database: String) extends Actor {
 
   def receive = {
     case Insert(datarecord) =>
-      val send = sender
       val future = geoNews.insert(datarecord)
-      future onComplete {
+      future.onComplete {
         case Failure(e) =>
-          send ! Fail(datarecord)
+          sender ! Fail(datarecord)
 
         case Success(lastError) =>
           println("successfully inserted document: " + lastError)
-          send ! Done
+          sender ! Done
       }
+
+    case Load =>
+      val webControllers = db("webControllers")
+      val query = BSONDocument("enabled" -> 1)
+      val filter = BSONDocument("props" -> 1)
+
+      val futureList: Future[List[BSONDocument]] = webControllers.find(query, filter).cursor.collect[List]()
+
+      var res = new ListBuffer[Option[String]]()
+      futureList.map {
+        list => list.foreach {
+          x => res += x.getAs[String]("props")
+        }
+      }
+
+      sender ! WebControllers(res.toList)
   }
 
   override def postStop(): Unit = {
-    driver.close
+    driver.close()
   }
 
 }
