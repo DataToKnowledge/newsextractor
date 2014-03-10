@@ -12,7 +12,7 @@ object GiornaleDiPugliaRecordExtractorSpec {
 
   val url = "http://www.giornaledipuglia.com/search/label/CRONACA/1"
 
-  val date = DateTime.now().toDate
+  val date = DateTime.now()
 
 }
 

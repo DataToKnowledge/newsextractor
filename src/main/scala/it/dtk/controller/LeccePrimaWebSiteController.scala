@@ -6,11 +6,14 @@ import it.dtk.WebSiteController.Job
 import it.dtk.extractor.LeccePrimaDataRecordExtractor
 import java.util.Date
 import org.joda.time.DateTime
+import akka.actor.ActorRef
 
 /**
  * @author Andrea Scarpino <andrea@datatoknowledge.it>
  */
-class LeccePrimaWebSiteController extends WebSiteController {
+class LeccePrimaWebSiteController(dbManager: ActorRef) extends WebSiteController {
+
+  override val dbActor = dbManager
 
   //override val maxIncrement: Int = 843
   override val maxIncrement: Int = 5

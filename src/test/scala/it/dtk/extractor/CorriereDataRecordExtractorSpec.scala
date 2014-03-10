@@ -12,7 +12,7 @@ object CorriereDataRecordExtractorSpec {
 
   val url = "http://corrieredelmezzogiorno.corriere.it/bari/notizie/archivio/cronaca/index.shtml"
 
-  val date = DateTime.now().toDate
+  val date = DateTime.now()
 
 }
 

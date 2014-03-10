@@ -22,10 +22,13 @@ class BariTodayDataRecordExtractor(url: String, html: String, date: DateTime) ex
     
   context.parent ! DataRecords(url,date,records)
     
-  def title(node: Element) = node.select("header > figure > a > img[alt]").attr("alt")
+  def title(node: Element) = 
+    node.select("header > figure > a > img[alt]").attr("alt")
   
-  def summary(node: Element) = node.select("p").text
+  def summary(node: Element) = 
+    node.select("p").text
   
-  def newsUrl(node: Element) = node.select("header > h1 > a").attr("href")
+  def newsUrl(node: Element) = 
+    node.select("header > h1 > a").attr("href")
 
 }

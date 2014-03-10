@@ -13,7 +13,7 @@ object BrindisiReportDataRecordExtractorSpec {
 
   val url = "http://www.baritoday.it/cronaca/"
 
-  val date = DateTime.now().toDate
+  val date = DateTime.now()
 
 }
 

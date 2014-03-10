@@ -6,11 +6,14 @@ import it.dtk.WebSiteController.Job
 import java.util.Date
 import it.dtk.extractor.BariTodayDataRecordExtractor
 import org.joda.time.DateTime
+import akka.actor.ActorRef
 
 /**
  * @author Andrea Scarpino <andrea@datatoknowledge.it>
  */
-class BariTodayWebSiteController extends WebSiteController {
+class BariTodayWebSiteController(dbManager: ActorRef) extends WebSiteController {
+  
+  override val dbActor = dbManager
 
   //override val maxIncrement: Int = 294
   override val maxIncrement: Int = 5

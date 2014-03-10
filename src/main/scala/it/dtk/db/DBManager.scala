@@ -13,12 +13,6 @@ object DBManager {
   case class Fail(record: News)
 }
 
-/**
- * persist data in the db MongoDB indexed based on url
- * we should use Casbah http://mongodb.github.io/casbah/
- *
- * @author Michele Damiano Torelli <daniele@datatoknowledge.it>
- */
 class DBManager(host: String, database: String) extends Actor {
 
   import DBManager._
@@ -44,7 +38,6 @@ class DBManager(host: String, database: String) extends Actor {
         case Success(lastError) => {
           println("successfully inserted document: " + lastError)
           send ! Done
-          println(sender.path)
         }
       }
   }
@@ -54,8 +47,6 @@ class DBManager(host: String, database: String) extends Actor {
   }
 
 }
-
-
 
 
 

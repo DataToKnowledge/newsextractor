@@ -99,5 +99,9 @@ object URLUtil {
       && !lowerCaseUrl.startsWith("http")
       && !lowerCaseUrl.startsWith("https"))
   }
+  
+  def compose(baseUrl: String, relativeUrl: String): Try[String]= {
+    normalize(baseUrl).flatMap(b => normalize(b + relativeUrl))
+  }
 
 }

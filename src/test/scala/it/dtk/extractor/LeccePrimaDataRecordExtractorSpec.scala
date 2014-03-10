@@ -12,8 +12,7 @@ object LeccePrimaDataRecordExtractorSpec {
 
   val url = "http://www.lecceprima.it/cronaca/"
 
-  val date = DateTime.now().toDate
-
+  val date = DateTime.now()
 }
 
 class LeccePrimaDataRecordExtractorSpec extends MySpec("LeccePrimaRecordExtactorSpec") {

@@ -13,7 +13,7 @@ object Puglia24DataRecordExtractorSpec {
 
   val url = "http://www.puglia24news.it/category/cronaca/"
 
-  val date = DateTime.now().toDate()
+  val date = DateTime.now()
 
 }
 

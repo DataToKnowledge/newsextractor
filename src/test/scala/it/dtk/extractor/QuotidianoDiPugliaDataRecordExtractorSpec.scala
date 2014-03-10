@@ -13,7 +13,7 @@ object QuotidianoDiPugliaDataRecordExtractorSpec {
 
   val url = "http://www.quotidianodipuglia.it/leggitutte.php?sez=HOME"
 
-  val date = DateTime.now().toDate
+  val date = DateTime.now()
 
 }
 

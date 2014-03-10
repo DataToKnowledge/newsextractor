@@ -2,7 +2,6 @@ package it.dtk
 
 import akka.actor.Actor
 import akka.actor.ActorLogging
-import java.util.Date
 import org.jsoup.select.Elements
 import org.jsoup.nodes.Document
 import org.jsoup.nodes.Element
@@ -17,8 +16,9 @@ object DataRecordExtractor {
 }
 
 trait DataRecordExtractor extends Actor with ActorLogging {
-    
-  def dataRecordXPath(cssSelector: String)(implicit doc: Document): Elements = doc.select(cssSelector)
+
+  def dataRecordXPath(cssSelector: String)(implicit doc: Document): Elements =
+    doc.select(cssSelector)
 
   def title(node: Element): String
 

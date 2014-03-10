@@ -13,7 +13,7 @@ object SenzaColonneDataRecordExtractorSpec{
   
   val url = "http://www.senzacolonnenews.it/cronaca.html?start=5"
 
-  val date = DateTime.now().toDate
+  val date = DateTime.now()
 }
 
 class SenzaColonneDataRecordExtractorSpec extends MySpec("SenzaColonneDataRecordExtractorSpec") {

@@ -13,7 +13,7 @@ object GoBariDataRecordExtractorSpec {
 
   val url = "http://go-bari.it/notizie/cronaca/"
 
-  val date = DateTime.now().toDate
+  val date = DateTime.now()
 
 }
 

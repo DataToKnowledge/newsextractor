@@ -16,7 +16,11 @@ class RepubblicaWebSiteControllerSpec extends TestKit(ActorSystem("MainContentEx
 
   import RepubblicaWebSiteControllerSpec._
   
+  //val repubblicaController = system.actorOf(props)
+  
   "The Repubblica Controller" must {
-    
+    "start when the start message is send" in {
+      
+    }
   }
 }

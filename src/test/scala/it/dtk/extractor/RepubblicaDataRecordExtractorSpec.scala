@@ -14,7 +14,7 @@ object RepubblicaDataRecordExtractorSpec {
 
   val url = "http://bari.repubblica.it/cronaca/"
 
-  val date = DateTime.now().toDate
+  val date = DateTime.now()
 
 }
 

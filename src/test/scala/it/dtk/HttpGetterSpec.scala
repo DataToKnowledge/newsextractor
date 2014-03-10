@@ -7,6 +7,7 @@ import java.util.Date
 import scala.util.{Failure, Success}
 import it.dtk.util.StepParent
 import scala.concurrent.duration._
+import it.dtk.HttpGetter
 
 /**
  * @author Andrea Scarpino <andrea@datatoknowledge.it>
