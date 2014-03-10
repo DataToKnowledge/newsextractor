@@ -27,7 +27,8 @@ class WebSiteReceptionist extends Actor with ActorLogging {
   //controller ! WebSiteController.Start()
 
   override def receive: Actor.Receive = {
-    case WebSiteController.Done(baseUrl) => print(baseUrl)
+    case WebSiteController.Done(extractedUrls) => print(extractedUrls)
+    
   }
 }
 

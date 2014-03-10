@@ -19,7 +19,7 @@ object DBManager {
 
   case object Load
 
-  case class WebControllers(props: List[Option[String]])
+  case class WebControllers(controllers: List[WebControllerData])
 
 }
 
@@ -53,16 +53,10 @@ class DBManager(host: String, database: String) extends Actor {
       val query = BSONDocument("enabled" -> 1)
       val filter = BSONDocument("props" -> 1)
 
-      val futureList: Future[List[BSONDocument]] = webControllers.find(query, filter).cursor.collect[List]()
-
-      var res = new ListBuffer[Option[String]]()
-      futureList.map {
-        list => list.foreach {
-          x => res += x.getAs[String]("props")
-        }
-      }
-
-      sender ! WebControllers(res.toList)
+      val controllers = webControllers.find(query, filter).cursor[WebControllerData].collect[List]() 
+      
+      controllers.map(results => sender ! WebControllers(results))
+      
   }
 
   override def postStop(): Unit = {

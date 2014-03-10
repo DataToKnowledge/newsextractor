@@ -14,7 +14,8 @@ object DataModel {
 
 }
 
-case class WebControllerData(id: Option[BSONObjectID] = None, controllerName: Option[String], stopUrls: Option[Set[String]], enabled: Option[Boolean] = false)
+case class WebControllerData(id: Option[BSONObjectID] = None, controllerName: Option[String], 
+    stopUrls: Option[List[String]], enabled: Option[Boolean] = Some(false))
 
 /**
  * @author fabiofumarola
@@ -77,7 +78,7 @@ object WebControllerData {
       WebControllerData(
         doc.getAs[BSONObjectID]("_id"),
         doc.getAs[String]("controllerName"),
-        doc.getAs[Set[String]]("stopUrls"),
+        doc.getAs[List[String]]("stopUrls"),
         doc.getAs[Boolean]("enabled")
       )
     }
