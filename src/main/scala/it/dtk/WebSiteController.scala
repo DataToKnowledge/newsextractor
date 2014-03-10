@@ -87,11 +87,8 @@ trait WebSiteController extends Actor with ActorLogging {
 
       val normalizedRecords = records.map(r => {
           URLUtil.normalize(baseUrl, r.newsUrl) match {
-            case Success(normalizedUrl) =>
-              News(None, Some(baseUrl), Some(normalizedUrl), Some(r.title), Some(r.summary), Some(date))
-
-            case Failure(_) =>
-              News(None, Some(baseUrl), Some(r.newsUrl), Some(r.title), Some(r.summary), Some(date))
+            case Success(nUrl) => r.copy(newsUrl = nUrl)
+            case Failure(_) => r
           }
       })
 
