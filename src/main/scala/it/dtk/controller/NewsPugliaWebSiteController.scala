@@ -15,15 +15,15 @@ class NewsPugliaWebSiteController(dbManager: ActorRef) extends WebSiteController
 
   override val dbActor = dbManager
 
-  //override val maxIncrement: Int = 285
-  override val maxIncrement: Int = 5
+  //override val maxIndex: Int = 285
+  override val maxIndex: Int = 5
 
   override val baseUrl: String = "http://www.newspuglia.it/"
 
-  override def dataRecordExtractorProps(url: String, html: String, date: DateTime): Props = Props(classOf[NewsPugliaDataRecordExtractor], url, html, date)
+  override def dataRecordExtractorProps(): Props = 
+    Props(classOf[NewsPugliaDataRecordExtractor])
 
-  override def logicalListUrlGenerator(start: Int, stop: Int): Seq[Job] = {
-    start to stop map (v => Job(baseUrl + "index.php?option=com_flexicontent&view=category&cid=186&Itemid=3&limitstart=" +
-      String.valueOf((v - 1) * 20), v))
-  }
+  override def composeUrl(currentIndex: Int): String = 
+    baseUrl + "index.php?option=com_flexicontent&view=category&cid=186&Itemid=3&limitstart=" +
+      String.valueOf((currentIndex - 1) * 20)
 }

@@ -15,14 +15,15 @@ class BrindisiReportWebSiteController(dbManager: ActorRef) extends WebSiteContro
 
   override val dbActor = dbManager
 
-  //override val maxIncrement: Int = 717
-  override val maxIncrement: Int = 5
+  //override val maxIndex: Int = 717
+  override val maxIndex: Int = 5
 
-  override val baseUrl: String = "http://www.brindisireport.it/cronaca/page/"
+  override val baseUrl: String = "http://www.brindisireport.it/"
 
-  override def dataRecordExtractorProps(url: String, html: String, date: DateTime): Props = Props(classOf[BrindisiReportDataRecordExtractor], url, html, date)
+  override def dataRecordExtractorProps(): Props = 
+    Props(classOf[BrindisiReportDataRecordExtractor])
 
-  override def logicalListUrlGenerator(start: Int, stop: Int): Seq[Job] = {
-    start to stop map (v => Job(baseUrl + v, v))
-  }
+  override def composeUrl(currentIndex: Int): String = 
+    baseUrl + "cronaca/page/" + currentIndex
+  
 }

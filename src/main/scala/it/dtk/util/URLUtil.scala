@@ -1,7 +1,7 @@
 package it.dtk.util
 
 import java.net.MalformedURLException
-import scala.util.{Try, Success, Failure}
+import scala.util.{ Try, Success, Failure }
 
 /**
  * URL utilities class.
@@ -95,7 +95,7 @@ object URLUtil {
 
     (lowerCaseUrl.endsWith("/")
       && (lowerCaseUrl.startsWith("http")
-      || lowerCaseUrl.startsWith("https")))
+        || lowerCaseUrl.startsWith("https")))
   }
 
   /**
@@ -126,8 +126,8 @@ object URLUtil {
       && !lowerCaseUrl.startsWith("http")
       && !lowerCaseUrl.startsWith("https"))
   }
-  
-  def compose(baseUrl: String, relativeUrl: String): Try[String]= {
+
+  def compose(baseUrl: String, relativeUrl: String): Try[String] = {
     normalize(baseUrl).flatMap(b => normalize(b + relativeUrl))
   }
 

@@ -15,14 +15,15 @@ class GiornaleDiPugliaWebSiteController(dbManager: ActorRef) extends WebSiteCont
 
   override val dbActor = dbManager
 
-  //override val maxIncrement: Int = 590
-  override val maxIncrement: Int = 5
+  //override val maxIndex: Int = 590
+  override val maxIndex: Int = 5
 
   override val baseUrl: String = "http://www.giornaledipuglia.com/"
 
-  override def dataRecordExtractorProps(url: String, html: String, date: DateTime): Props = Props(classOf[GiornaleDiPugliaDataRecordExtractor], url, html, date)
+  override def dataRecordExtractorProps(): Props = 
+    Props(classOf[GiornaleDiPugliaDataRecordExtractor])
 
-  override def logicalListUrlGenerator(start: Int, stop: Int): Seq[Job] = {
-    start to stop map (v => Job(baseUrl + "search/label/CRONACA#pgn=" + v, v))
-  }
+  override def composeUrl(currentIndex: Int): String= 
+    baseUrl + "search/label/CRONACA#pgn=" + currentIndex
+  
 }

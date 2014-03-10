@@ -24,7 +24,7 @@ class WebSiteReceptionist extends Actor with ActorLogging {
   val controller: ActorRef = context.actorOf(Props(classOf[GoBariWebSiteController], dbActor), "GoBariWebSiteController")
   //val controller = context.actorOf(Props(classOf[LeccePrimaWebSiteController],dbActor))
   
-  controller ! WebSiteController.Start(None)
+  controller ! WebSiteController.Start()
 
   override def receive: Actor.Receive = {
     case WebSiteController.Done(baseUrl) => print(baseUrl)

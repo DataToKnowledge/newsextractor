@@ -6,6 +6,7 @@ import it.dtk.WebSiteController.Job
 import java.util.Date
 import org.joda.time.DateTime
 import akka.actor.ActorRef
+import it.dtk.extractor.CorriereDataRecordExtractor
 
 /**
  * @author Andrea Scarpino <andrea@datatoknowledge.it>
@@ -14,14 +15,14 @@ class CorriereWebSiteController(dbManager: ActorRef) extends WebSiteController {
 
   override val dbActor = dbManager
 
-  //override val maxIncrement: Int = 40
-  override val maxIncrement: Int = 5
+  //override val maxIndex: Int = 40
+  override val maxIndex: Int = 5
 
   override val baseUrl: String = "http://corrieredelmezzogiorno.corriere.it/"
 
-  override def dataRecordExtractorProps(url: String, html: String, date: DateTime): Props = ??? //Props(classOf[],url,html,date)
+  override def dataRecordExtractorProps(): Props = 
+    Props(classOf[CorriereDataRecordExtractor])
 
-  override def logicalListUrlGenerator(start: Int, stop: Int): Seq[Job] = {
-    start to stop map (v => Job(baseUrl + "bari/notizie/archivio/cronaca/index.shtml?id=" + String.valueOf(v), v))
-  }
+  override def composeUrl(currentIndex: Int):  String = 
+    baseUrl + "bari/notizie/archivio/cronaca/index.shtml?id=" + currentIndex
 }

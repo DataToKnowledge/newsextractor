@@ -12,20 +12,14 @@ import org.joda.time.DateTime
 /**
  * @author Andrea Scarpino <andrea@datatoknowledge.it>
  */
-class BrindisiReportDataRecordExtractor(url: String, html: String, date: DateTime) extends DataRecordExtractor {
+class BrindisiReportDataRecordExtractor extends DataRecordExtractor {
 
-  implicit val doc = Jsoup.parse(html, url)
+  override val cssRecordsSelector: String = "div.postm > div.postm"
 
-  //get the data records
-  val records = dataRecordXPath("div.postm > div.postm") map (
-    r => DataRecord(title(r), summary(r), newsUrl(r)))
-    
-  context.parent ! DataRecords(url,date,records)
-    
   def title(node: Element) = node.select("div.ptitle > a").text
-  
+
   def summary(node: Element) = node.select("div.entry > p").text
-  
+
   def newsUrl(node: Element) = node.select("div.ptitle > a").attr("href")
 
 }

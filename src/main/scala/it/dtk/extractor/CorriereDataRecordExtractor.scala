@@ -11,15 +11,9 @@ import org.joda.time.DateTime
 /**
  * @author Andrea Scarpino <andrea@datatoknowledge.it>
  */
-class CorriereDataRecordExtractor(url: String, html: String, date: DateTime) extends DataRecordExtractor {
+class CorriereDataRecordExtractor extends DataRecordExtractor {
 
-  implicit val doc = Jsoup.parse(html, url)
-
-  //get the data records
-  val records = dataRecordXPath("li[class=clearfix]") map (
-    r => DataRecord(title(r), summary(r), newsUrl(r)))
-
-  context.parent ! DataRecords(url, date, records)
+  override val cssRecordsSelector: String = "li[class=clearfix]"
 
   def title(node: Element) = node.select("h2").text
 

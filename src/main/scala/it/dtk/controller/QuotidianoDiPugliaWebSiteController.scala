@@ -15,13 +15,14 @@ class QuotidianoDiPugliaWebSiteController(dbManager: ActorRef) extends WebSiteCo
 
   override val dbActor = dbManager
 
-  override val maxIncrement: Int = 1
+  override val maxIndex: Int = 1
 
   override val baseUrl: String = "http://www.quotidianodipuglia.it/"
 
-  override def dataRecordExtractorProps(url: String, html: String, date: DateTime): Props = Props(classOf[QuotidianoDiPugliaDataRecordExtractor], url, html, date)
+  override def dataRecordExtractorProps(): Props = 
+    Props(classOf[QuotidianoDiPugliaDataRecordExtractor])
 
-  override def logicalListUrlGenerator(start: Int, stop: Int): Seq[Job] = {
-    start to stop map (v => Job(baseUrl + "leggitutte.php?sez=HOME", v))
-  }
+  override def composeUrl(currentIndex: Int):String = 
+    baseUrl + "leggitutte.php?sez=HOME"
+  
 }

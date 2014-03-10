@@ -7,6 +7,8 @@ import it.dtk.db.News
 import akka.actor.actorRef2Scala
 import scala.util.Success
 import akka.actor.ActorLogging
+import akka.actor.OneForOneStrategy
+import akka.actor.SupervisorStrategy
 
 object MainContentExtractor {
   case class Result(news: News)
@@ -19,11 +21,17 @@ object MainContentExtractor {
  */
 class MainContentExtractor(news: News) extends Actor {
 
+  override val supervisorStrategy = OneForOneStrategy(maxNrOfRetries = 5) {
+    case _: Exception => SupervisorStrategy.Restart
+  }
+
   import MainContentExtractor._
 
   val configuration = new Configuration()
   configuration.setImagemagickConvertPath("convert")
   configuration.setImagemagickIdentifyPath("identify")
+//    configuration.setImagemagickConvertPath("/usr/local/bin/convert")
+//  configuration.setImagemagickIdentifyPath("/usr/local/bin/identify")
 
   val goose = new Goose(configuration)
 

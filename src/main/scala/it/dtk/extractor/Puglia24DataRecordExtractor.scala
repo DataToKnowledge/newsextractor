@@ -15,18 +15,12 @@ import org.joda.time.DateTime
  */
 class Puglia24DataRecordExtractor(url: String, html: String, date: DateTime) extends DataRecordExtractor {
 
-  implicit val doc = Jsoup.parse(html, url)
+  override val cssRecordsSelector: String = "div[class= grid_7]"
 
-  //get the data records
-  val records = dataRecordXPath("div[class= grid_7]") map (
-    r => DataRecord(title(r), summary(r), newsUrl(r)))
-    
-  context.parent ! DataRecords(url,date,records)
-    
   def title(node: Element) = node.select("a > h2").text
-  
+
   def summary(node: Element) = node.select("div > p:last-child").text
-  
+
   def newsUrl(node: Element) = node.select("a[href]").attr("href")
 
 }
