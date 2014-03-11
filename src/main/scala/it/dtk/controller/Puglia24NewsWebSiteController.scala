@@ -8,7 +8,7 @@ import akka.actor.ActorRef
 /**
  * @author Andrea Scarpino <andrea@datatoknowledge.it>
  */
-class Puglia24NewsWebSiteController(id: String,dbActor: ActorRef) extends WebSiteController(id,dbActor) {
+class Puglia24NewsWebSiteController(id: String, dbActor: ActorRef) extends WebSiteController(id,dbActor) {
 
   override val maxIndex: Int = 95
   //override val maxIndex: Int = 5

@@ -11,7 +11,7 @@ import org.joda.time.DateTime
 /**
  * @author Andrea Scarpino <andrea@datatoknowledge.it>
  */
-class Puglia24DataRecordExtractor(url: String, html: String, date: DateTime) extends DataRecordExtractor {
+class Puglia24DataRecordExtractor extends DataRecordExtractor {
 
   override val cssRecordsSelector: String = "div[class= grid_7]"
 
