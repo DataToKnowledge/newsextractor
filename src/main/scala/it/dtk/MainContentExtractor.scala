@@ -9,7 +9,7 @@ import scala.util.Success
 import akka.actor.OneForOneStrategy
 import akka.actor.SupervisorStrategy
 import de.l3s.boilerpipe.extractors
-import de.l3s.boilerpipe.extractors.DefaultExtractor
+import de.l3s.boilerpipe.extractors.ArticleExtractor
 
 object MainContentExtractor {
   case class Result(news: News)
@@ -45,8 +45,7 @@ class MainContentExtractor(news: News) extends Actor {
       val article = goose.extractContent(url, html)
 
       if (article.cleanedArticleText.isEmpty()) {
-        // TODO: Call BoilerPipe to extract the text (Issue #24)
-        val extractor = DefaultExtractor.getInstance()
+        val extractor = ArticleExtractor.getInstance()
         article.cleanedArticleText = extractor.getText(html)
       }
 
