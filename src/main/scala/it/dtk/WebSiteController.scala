@@ -85,9 +85,9 @@ trait WebSiteController extends Actor with ActorLogging {
 
       val filteredRecords = records.takeWhile(r => !stopUrls.contains(r.newsUrl))
 
-      val normalizedRecords = records.map(r => {
+      val normalizedRecords = filteredRecords.map(r => {
           URLUtil.normalize(baseUrl, r.newsUrl) match {
-            case Success(nUrl) => r.copy(newsUrl = nUrl)
+            case Success(normUrl) => r.copy(newsUrl = normUrl)
             case Failure(_) => r
           }
       })
