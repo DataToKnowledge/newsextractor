@@ -26,11 +26,11 @@ for (var w in controllers) {
   var controller = {
     controllerName: controllers[w] + 'WebSiteController',
     stopUrls: [],
-    enabled: 0
+    enabled: false
   };
 
   db.webControllers.insert(controller);
 }
 
 // enable controllers
-db.webControllers.update({ controllerName: 'BariTodayWebSiteController' }, { $set: { enabled: 1 } })
+db.webControllers.update({ controllerName: 'BariTodayWebSiteController' }, { $set: { enabled: true } })

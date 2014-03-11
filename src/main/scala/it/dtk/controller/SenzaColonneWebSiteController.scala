@@ -8,9 +8,7 @@ import it.dtk.extractor.SenzaColonneDataRecordExtractor
 /**
  * @author Andrea Scarpino <andrea@datatoknowledge.it>
  */
-class SenzaColonneWebSiteController(dbManager: ActorRef) extends WebSiteController {
-
-  override val dbActor = dbManager
+class SenzaColonneWebSiteController(id: String,dbActor: ActorRef) extends WebSiteController(id,dbActor) {
 
   //override val maxIndex: Int = 400
   override val maxIndex: Int = 5

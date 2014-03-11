@@ -8,7 +8,7 @@ import akka.actor.ActorLogging
 import akka.actor.Terminated
 import akka.actor.ReceiveTimeout
 import it.dtk.db.{ DBManager, News }
-import scala.util.{Success, Failure}
+import scala.util.{ Success, Failure }
 import org.joda.time.DateTime
 import it.dtk.db.DBManager
 import akka.actor.ActorRef
@@ -21,9 +21,15 @@ object WebSiteController {
 
   case class Job(url: String, index: Int, running: Boolean = false)
 
-  case class Done(extractedUrls: Vector[String])
+  case class Done(id: String, extractedUrls: Vector[String])
 
   case class Fail(url: String)
+
+  case object Status
+
+  case object Waiting
+  
+  case object Running
 
 }
 
@@ -31,7 +37,7 @@ object WebSiteController {
  * @author Fabio
  *
  */
-trait WebSiteController extends Actor with ActorLogging {
+abstract class WebSiteController(val id: String, val dbActor: ActorRef) extends Actor with ActorLogging {
 
   import WebSiteController._
 
@@ -44,8 +50,6 @@ trait WebSiteController extends Actor with ActorLogging {
 
   val baseUrl: String
   val maxIndex: Int
-
-  protected val dbActor: ActorRef
 
   def dataRecordExtractorProps(): Props
 
@@ -60,14 +64,17 @@ trait WebSiteController extends Actor with ActorLogging {
   val waiting: Receive = {
 
     case Start(stopUrls) =>
-      context.become(runNext(stopUrls, 1, Vector[String](),sender))
+      context.become(runNext(stopUrls, 1, Vector[String](), sender))
+
+    case Status =>
+      Waiting
   }
 
   def runNext(stopUrls: Vector[String], currentIndex: Int, extractedUrls: Vector[String], jobSender: ActorRef): Receive = {
 
     if (currentIndex > maxIndex) {
       log.info("all done waiting for new jobs")
-      jobSender ! Done(extractedUrls)
+      jobSender ! Done(id, extractedUrls)
       waiting
     } else {
       val url = composeUrl(currentIndex)
@@ -75,51 +82,54 @@ trait WebSiteController extends Actor with ActorLogging {
 
       drActor ! DataRecordExtractor.Extract(url)
 
-      running(stopUrls, currentIndex, extractedUrls,jobSender)
+      running(stopUrls, currentIndex, extractedUrls, jobSender)
     }
   }
 
-  def running(stopUrls: Vector[String], currentIndex: Int, extractedUrls: Vector[String],jobSender: ActorRef): Receive = {
+  def running(stopUrls: Vector[String], currentIndex: Int, extractedUrls: Vector[String], jobSender: ActorRef): Receive = {
+
+    case Status =>
+      Running
 
     case DataRecordExtractor.DataRecords(url, date, records) =>
 
-      val filteredRecords = records.takeWhile(r => !stopUrls.contains(r.newsUrl))
-
-      val normalizedRecords = filteredRecords.map(r => {
+      val normalizedRecords = records.map(r => {
           URLUtil.normalize(baseUrl, r.newsUrl) match {
             case Success(normUrl) => r.copy(newsUrl = normUrl)
             case Failure(_) => r
           }
       })
+      
+      val filteredRecords = normalizedRecords.takeWhile(r => !stopUrls.contains(r.newsUrl))
 
-      normalizedRecords.foreach(r => {
+      filteredRecords.foreach(r => {
         log.info("Getting main article content for URL {}", r.newsUrl)
 
         val recordNews = News(None, Some(baseUrl), Some(r.newsUrl), Some(r.title), Some(r.summary), Some(date))
         context.watch(context.actorOf(mainContentExtractorProps(recordNews)))
       })
 
-      val urls = extractedUrls ++ normalizedRecords.map(_.newsUrl).toVector
+      val urls = extractedUrls ++ filteredRecords.map(_.newsUrl).toVector
 
-      val nextStatus = if (normalizedRecords.size < records.size)
-        running(stopUrls, maxIndex + 1, urls,jobSender: ActorRef)
+      val nextStatus = if (filteredRecords.size < records.size)
+        runNext(stopUrls, maxIndex + 1, urls, jobSender: ActorRef)
       else
-        running(stopUrls, currentIndex, urls,jobSender: ActorRef)
+        running(stopUrls, currentIndex, urls, jobSender: ActorRef)
 
       context.become(nextStatus)
 
     case MainContentExtractor.Result(news) =>
       log.info("Got main article content for URL {}", news.urlNews)
-      dbActor ! DBManager.Insert(news)
+      dbActor ! DBManager.InsertNews(news)
 
-    case DBManager.Fail(news) =>
-      log.info("error inserting the new in the db {}", news.urlNews)
+    case DBManager.FailHandlingNews(news, ex) =>
+      log.error("error inserting the new in the db {} with ex", news.urlNews, ex)
 
     case Terminated(ref) =>
       log.info("number of children {}", context.children.size)
-      
+
       if (context.children.size == 1)
-        context.become(runNext(stopUrls, currentIndex + 1, extractedUrls,jobSender: ActorRef))
+        context.become(runNext(stopUrls, currentIndex + 1, extractedUrls, jobSender: ActorRef))
 
     case ReceiveTimeout =>
       log.info("Failure in the extraction of the website {}", baseUrl)

@@ -8,10 +8,8 @@ import akka.actor.ActorRef
 /**
  * @author Andrea Scarpino <andrea@datatoknowledge.it>
  */
-class BariTodayWebSiteController(dbManager: ActorRef) extends WebSiteController {
+class BariTodayWebSiteController(id: String, dbActor: ActorRef) extends WebSiteController(id,dbActor) {
   
-  override val dbActor = dbManager
-
   //override val maxIndex: Int = 294
   override val maxIndex: Int = 5
 

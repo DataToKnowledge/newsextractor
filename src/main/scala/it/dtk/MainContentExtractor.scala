@@ -10,6 +10,11 @@ import akka.actor.OneForOneStrategy
 import akka.actor.SupervisorStrategy
 import de.l3s.boilerpipe.extractors
 import de.l3s.boilerpipe.extractors.ArticleExtractor
+import com.gravity.goose.Article
+import scala.util.Try
+import com.gravity.goose.network.ImageFetchException
+import scala.util.Failure
+import scala.util.Failure
 
 object MainContentExtractor {
   case class Result(news: News)
@@ -29,30 +34,43 @@ class MainContentExtractor(news: News) extends Actor {
   import MainContentExtractor._
 
   val configuration = new Configuration()
-    configuration.setImagemagickConvertPath("convert")
-    configuration.setImagemagickIdentifyPath("identify")
-//  configuration.setImagemagickConvertPath("/usr/local/bin/convert")
-//  configuration.setImagemagickIdentifyPath("/usr/local/bin/identify")
-
+  configuration.setImagemagickConvertPath("convert")
+  configuration.setImagemagickIdentifyPath("identify")
   val goose = new Goose(configuration)
 
   context.watch(context.actorOf(Props(classOf[HttpGetter], news.urlNews.get)))
 
-  val boilerPipe = None
-
   def receive = {
     case Success(HttpGetter.Result(url, html, date)) =>
-      val article = goose.extractContent(url, html)
 
-      if (article.cleanedArticleText.isEmpty()) {
-        val extractor = ArticleExtractor.getInstance()
-        article.cleanedArticleText = extractor.getText(html)
+
+      val tryArticle = Try[Article] {
+        goose.extractContent(url, html)
+      } recover {
+        case ex: ImageFetchException => {
+          val conf = new Configuration()
+          conf.setEnableImageFetching(false)
+          val gooseWithoutImage = new Goose(conf)
+          gooseWithoutImage.extractContent(url, html)
+        }
       }
 
-      context.parent ! Result(news.copy(text = Some(article.cleanedArticleText), tags = Some(article.tags.toSet),
-        metaDescription = Some(article.metaDescription), metaKeyword = Some(article.metaKeywords),
-        canonicalUrl = Some(article.canonicalLink), topImage = Some(article.topImage.getImageSrc)))
-      context.stop(self)
+      tryArticle match {
+        case Success(article) =>
+          if (article.cleanedArticleText.isEmpty()) {
+            val extractor = ArticleExtractor.getInstance()
+            article.cleanedArticleText = extractor.getText(html)
+          }
+
+          context.parent ! Result(news.copy(text = Some(article.cleanedArticleText), tags = Some(article.tags.toSet),
+            metaDescription = Some(article.metaDescription), metaKeyword = Some(article.metaKeywords),
+            canonicalUrl = Some(article.canonicalLink), topImage = Some(article.topImage.getImageSrc)))
+          context.stop(self)
+
+        case Failure(ex) =>
+          throw ex
+      }
+
   }
 
 }

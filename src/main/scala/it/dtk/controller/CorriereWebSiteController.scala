@@ -8,9 +8,7 @@ import it.dtk.extractor.CorriereDataRecordExtractor
 /**
  * @author Andrea Scarpino <andrea@datatoknowledge.it>
  */
-class CorriereWebSiteController(dbManager: ActorRef) extends WebSiteController {
-
-  override val dbActor = dbManager
+class CorriereWebSiteController(id: String,dbActor: ActorRef) extends WebSiteController(id,dbActor) {
 
   //override val maxIndex: Int = 40
   override val maxIndex: Int = 5

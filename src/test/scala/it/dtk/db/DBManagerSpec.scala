@@ -32,7 +32,7 @@ class DBManagerSpec extends TestKit(ActorSystem("DBManagerSpec")) with ImplicitS
     val dbActor = system.actorOf(Props(classOf[DBManager], "localhost", "testNews"))
 
     "persist data successfully" in {
-      dbActor ! Insert(newsTest)
+      dbActor ! InsertNews(newsTest)
       expectMsg(10 minutes, Done)
     }
 

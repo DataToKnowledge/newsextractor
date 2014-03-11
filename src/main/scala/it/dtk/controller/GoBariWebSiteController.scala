@@ -9,8 +9,7 @@ import akka.actor.ActorRef
  * @author Michele Damiano Torelli <daniele@datatoknowledge.it>
  */
 
-class GoBariWebSiteController(dbManager: ActorRef) extends WebSiteController {
-  override val dbActor = dbManager
+class GoBariWebSiteController(id: String,dbActor: ActorRef) extends WebSiteController(id,dbActor) {
 
   //override val maxIndex: Int = 162
   override val maxIndex: Int = 5
