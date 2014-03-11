@@ -14,6 +14,7 @@ import it.dtk.db.DBManager
 import akka.actor.ActorRef
 import akka.actor.actorRef2Scala
 import it.dtk.util.URLUtil
+import scala.concurrent.duration._
 
 object WebSiteController {
 
@@ -46,7 +47,7 @@ abstract class WebSiteController(val id: String, val dbActor: ActorRef) extends 
   }
 
   // Max call duration
-  // context.setReceiveTimeout(10.seconds)
+  context.setReceiveTimeout(10.seconds)
 
   val baseUrl: String
   val maxIndex: Int
