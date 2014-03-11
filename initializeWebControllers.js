@@ -8,6 +8,7 @@ var controllers = [
   'BariToday',
   'BrindisiLibera',
   'BrindisiReport',
+  'CorriereSalentino',
   'Corriere',
   'GiornaleDiPuglia',
   'GoBari',
