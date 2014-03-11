@@ -40,6 +40,7 @@ class HttpGetter(url: String) extends Actor with ActorLogging {
 
   implicit val exec = context.dispatcher.asInstanceOf[Executor with ExecutionContext]
 
+
   private val sdf = DateTimeFormat.forPattern("EEE, dd MMM yyyy HH:mm:ss z").withLocale(Locale.ENGLISH)
 
   Http.configure(_ setFollowRedirects true)(dispatch.url(url)).either pipeTo self

@@ -10,8 +10,8 @@ import akka.actor.ActorRef
  */
 class RepubblicaWebSiteController(id: String,dbActor: ActorRef) extends WebSiteController(id,dbActor) {
 
-  //override val maxIndex: Int = 12
-  override val maxIndex: Int = 5
+  override val maxIndex: Int = 23
+  //override val maxIndex: Int = 5
 
   override val baseUrl: String = "http://bari.repubblica.it/"
 

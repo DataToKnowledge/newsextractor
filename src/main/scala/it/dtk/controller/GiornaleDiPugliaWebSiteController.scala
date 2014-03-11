@@ -10,8 +10,8 @@ import akka.actor.ActorRef
  */
 class GiornaleDiPugliaWebSiteController(id: String,dbActor: ActorRef) extends WebSiteController(id,dbActor) {
 
-  //override val maxIndex: Int = 590
-  override val maxIndex: Int = 5
+  override val maxIndex: Int = 597
+  //override val maxIndex: Int = 5
 
   override val baseUrl: String = "http://www.giornaledipuglia.com/"
 

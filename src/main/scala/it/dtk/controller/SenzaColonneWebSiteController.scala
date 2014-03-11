@@ -10,8 +10,8 @@ import it.dtk.extractor.SenzaColonneDataRecordExtractor
  */
 class SenzaColonneWebSiteController(id: String,dbActor: ActorRef) extends WebSiteController(id,dbActor) {
 
-  //override val maxIndex: Int = 400
-  override val maxIndex: Int = 5
+  override val maxIndex: Int = 428
+  //override val maxIndex: Int = 5
 
   override val baseUrl: String = "http://www.senzacolonnenews.it/"
 

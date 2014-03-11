@@ -10,8 +10,8 @@ import it.dtk.extractor.CorriereDataRecordExtractor
  */
 class CorriereWebSiteController(id: String,dbActor: ActorRef) extends WebSiteController(id,dbActor) {
 
-  //override val maxIndex: Int = 40
-  override val maxIndex: Int = 5
+  override val maxIndex: Int = 40
+  //override val maxIndex: Int = 5
 
   override val baseUrl: String = "http://corrieredelmezzogiorno.corriere.it/"
 
