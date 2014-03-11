@@ -34,4 +34,8 @@ for (var w in controllers) {
 }
 
 // enable controllers
-db.webControllers.update({ controllerName: 'BariTodayWebSiteController' }, { $set: { enabled: true } })
+db.webControllers.update(
+    {},
+    { $set: { enabled: true } },
+    { upsert: false, multi: true }
+)
