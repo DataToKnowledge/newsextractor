@@ -11,6 +11,7 @@ import scala.util.{ Success, Failure }
 import com.ning.http.client.providers.netty.NettyResponse
 import org.jsoup.safety.Cleaner
 import org.jsoup.Jsoup
+import ExecutionContext.Implicits.global
 
 object HttpGetter {
 
@@ -38,8 +39,7 @@ class HttpGetter(url: String) extends Actor with ActorLogging {
 
   import dispatch._
 
-  implicit val exec = context.dispatcher.asInstanceOf[Executor with ExecutionContext]
-
+  //implicit val exec = context.dispatcher.asInstanceOf[Executor with ExecutionContext]
 
   private val sdf = DateTimeFormat.forPattern("EEE, dd MMM yyyy HH:mm:ss z").withLocale(Locale.ENGLISH)
 
