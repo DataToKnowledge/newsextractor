@@ -9,6 +9,7 @@ import it.dtk.db.WebControllerData
 import scala.collection.mutable.Map
 import scala.concurrent.duration._
 import scala.language.postfixOps
+import akka.routing.RoundRobinRouter
 
 /**
  * Author: Michele Damiano Torelli
@@ -26,10 +27,12 @@ class WebSiteReceptionist extends Actor with ActorLogging {
 
   import WebSiteReceptionist._
 
-  def host = "192.168.0.62"
+  def host = "10.1.0.62" //"192.168.0.62"
   def db = "dbNews"
 
   val dbActor: ActorRef = context.actorOf(Props(classOf[DBManager], host, db))
+  
+  val httpGetterRouter = context.actorOf(Props[HttpGetter].withRouter(RoundRobinRouter(nrOfInstances = 5)))
 
   val controllersMap: Map[String, WebControllerData] = Map()
 
@@ -45,7 +48,7 @@ class WebSiteReceptionist extends Actor with ActorLogging {
 
         for (id <- c.id; contrName <- c.controllerName) {
           val contrClass = Class.forName(s"it.dtk.controller.$contrName")
-          val controllerActor = context.child(contrName).getOrElse(context.actorOf(Props(contrClass, id.toString, dbActor), contrName))
+          val controllerActor = context.child(contrName).getOrElse(context.actorOf(Props(contrClass, id.toString, dbActor, httpGetterRouter), contrName))
 
           val stopUrls = c.stopUrls.getOrElse(List()).toVector
           controllerActor ! WebSiteController.Start(stopUrls)
@@ -89,7 +92,7 @@ object Main {
 
     val system = ActorSystem("newsExtractor")
     val receptionist = system.actorOf(Props[WebSiteReceptionist],"WebSiteReceptionist")
-    system.scheduler.schedule(5 seconds, 60 minutes, receptionist, WebSiteReceptionist.Start)
+    system.scheduler.schedule(1 second, 60 minutes, receptionist, WebSiteReceptionist.Start)
     //receptionist ! WebSiteReceptionist.Start
   }
 }

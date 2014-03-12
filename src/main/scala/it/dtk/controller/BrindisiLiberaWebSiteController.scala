@@ -8,16 +8,17 @@ import akka.actor.ActorRef
 /**
  * @author Andrea Scarpino <andrea@datatoknowledge.it>
  */
-class BrindisiLiberaWebSiteController(id: String,dbActor: ActorRef) extends WebSiteController(id,dbActor) {
+class BrindisiLiberaWebSiteController(id: String, dbActor: ActorRef, routerHttpGetter: ActorRef)
+  extends WebSiteController(id, dbActor, routerHttpGetter) {
 
   override val maxIndex: Int = 36
   //override val maxIndex: Int = 5
 
   override val baseUrl: String = "http://www.brindisilibera.it/"
 
-  override def dataRecordExtractorProps(): Props = 
-    Props(classOf[BrindisiLiberaDataRecordExtractor])
+  override def dataRecordExtractorProps(): Props =
+    Props(classOf[BrindisiLiberaDataRecordExtractor],routerHttpGetter)
 
-  override def composeUrl(currentIndex: Int): String = 
+  override def composeUrl(currentIndex: Int): String =
     baseUrl + "new/index.php?limitstart=" + String.valueOf((currentIndex - 1) * 35)
 }

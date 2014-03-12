@@ -2,11 +2,12 @@ package it.dtk.extractor
 
 import it.dtk.DataRecordExtractor
 import org.jsoup.nodes.Element
+import akka.actor.ActorRef
 
 /**
  * @author Andrea Scarpino <andrea@datatoknowledge.it>
  */
-class CorriereDataRecordExtractor extends DataRecordExtractor {
+class CorriereDataRecordExtractor(routerHttpGetter: ActorRef) extends DataRecordExtractor(routerHttpGetter) {
 
   override val cssRecordsSelector: String = "li[class=clearfix]"
 

@@ -7,11 +7,12 @@ import org.jsoup.Jsoup
 import org.jsoup.nodes.Element
 import it.dtk.DataRecordExtractor._
 import org.joda.time.DateTime
+import akka.actor.ActorRef
 
 /**
  * @author Andrea Scarpino <andrea@datatoknowledge.it>
  */
-class Puglia24DataRecordExtractor extends DataRecordExtractor {
+class Puglia24DataRecordExtractor(routerHttpGetter: ActorRef) extends DataRecordExtractor(routerHttpGetter) {
 
   override val cssRecordsSelector: String = "div[class= grid_7]"
 

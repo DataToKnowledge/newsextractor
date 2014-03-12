@@ -8,8 +8,9 @@ import org.jsoup.nodes.Document
 import org.jsoup.nodes.Element
 import scala.collection.JavaConversions._
 import org.joda.time.DateTime
+import akka.actor.ActorRef
 
-class GiornaleDiPugliaDataRecordExtractor extends DataRecordExtractor {
+class GiornaleDiPugliaDataRecordExtractor(routerHttpGetter: ActorRef) extends DataRecordExtractor(routerHttpGetter) {
 
   override val cssRecordsSelector: String = "post-wrapper"
 

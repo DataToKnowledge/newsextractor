@@ -2,11 +2,12 @@ package it.dtk.extractor
 
 import it.dtk.DataRecordExtractor
 import org.jsoup.nodes.Element
+import akka.actor.ActorRef
 
 /**
  * @author Michele Damiano Torelli <daniele@datatoknowledge.it>
  */
-class CorriereSalentinoDataRecordExtractor extends DataRecordExtractor {
+class CorriereSalentinoDataRecordExtractor(routerHttpGetter: ActorRef) extends DataRecordExtractor(routerHttpGetter) {
 
   override val cssRecordsSelector: String = "#posts-list > div.right"
 

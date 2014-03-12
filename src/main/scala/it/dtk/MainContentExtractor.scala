@@ -15,6 +15,8 @@ import scala.util.Try
 import com.gravity.goose.network.ImageFetchException
 import scala.util.Failure
 import scala.util.Failure
+import akka.actor.ActorRef
+import akka.actor.ActorLogging
 
 object MainContentExtractor {
   case class Result(news: News)
@@ -25,7 +27,7 @@ object MainContentExtractor {
  * @author fabiana
  *
  */
-class MainContentExtractor(news: News) extends Actor {
+class MainContentExtractor(news: News, routerHttpGetter: ActorRef) extends Actor with ActorLogging{
 
   override val supervisorStrategy = OneForOneStrategy(maxNrOfRetries = 5) {
     case _: Exception => SupervisorStrategy.Restart
@@ -36,13 +38,13 @@ class MainContentExtractor(news: News) extends Actor {
   val configuration = new Configuration()
   configuration.setImagemagickConvertPath("convert")
   configuration.setImagemagickIdentifyPath("identify")
+  configuration.enableImageFetching = false
   val goose = new Goose(configuration)
 
-  context.watch(context.actorOf(Props(classOf[HttpGetter], news.urlNews.get)))
+  routerHttpGetter ! HttpGetter.Get(news.urlNews.get)
 
   def receive = {
-    case Success(HttpGetter.Result(url, html, date)) =>
-
+    case HttpGetter.Result(url, html, date) =>
 
       val tryArticle = Try[Article] {
         goose.extractContent(url, html)
@@ -70,6 +72,9 @@ class MainContentExtractor(news: News) extends Actor {
         case Failure(ex) =>
           throw ex
       }
+
+    case HttpGetter.GetException(url, statusCode) =>
+      log.error("Failed to get the HTML for URL {} with status code {}", url, statusCode)
 
   }
 

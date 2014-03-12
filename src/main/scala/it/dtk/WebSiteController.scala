@@ -38,7 +38,7 @@ object WebSiteController {
  * @author Fabio
  *
  */
-abstract class WebSiteController(val id: String, val dbActor: ActorRef) extends Actor with ActorLogging {
+abstract class WebSiteController(val id: String, val dbActor: ActorRef, val routerHttpGetter: ActorRef) extends Actor with ActorLogging {
 
   import WebSiteController._
 
@@ -56,7 +56,7 @@ abstract class WebSiteController(val id: String, val dbActor: ActorRef) extends 
 
   def composeUrl(currentIndex: Int): String
 
-  def mainContentExtractorProps(news: News): Props = Props(classOf[MainContentExtractor], news)
+  def mainContentExtractorProps(news: News): Props = Props(classOf[MainContentExtractor], news, routerHttpGetter)
 
   val drActor = context.actorOf(dataRecordExtractorProps)
 

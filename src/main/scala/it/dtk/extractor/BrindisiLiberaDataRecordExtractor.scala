@@ -3,11 +3,12 @@ package it.dtk.extractor
 import it.dtk.DataRecordExtractor
 import it.dtk.DataRecordExtractor.DataRecords
 import org.jsoup.nodes.Element
+import akka.actor.ActorRef
 
 /**
  * @author Andrea Scarpino <andrea@datatoknowledge.it>
  */
-class BrindisiLiberaDataRecordExtractor extends DataRecordExtractor {
+class BrindisiLiberaDataRecordExtractor(routerHttpGetter: ActorRef) extends DataRecordExtractor(routerHttpGetter) {
 
   override val cssRecordsSelector: String = "td.contentheading"
 

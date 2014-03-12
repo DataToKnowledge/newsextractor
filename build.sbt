@@ -19,7 +19,7 @@ libraryDependencies ++= Seq(
   "com.typesafe.akka" %% "akka-actor" % "2.2.4",
   "com.typesafe.akka" %% "akka-testkit" % "2.2.4",
   "com.typesafe.akka" %% "akka-cluster" % "2.2.4",
-  "net.databinder.dispatch" %% "dispatch-core" % "0.11.0",
+  "com.ning" % "async-http-client" % "1.7.23",
   "com.github.nscala-time" %% "nscala-time" % "0.8.0",
   "org.scalatest" % "scalatest_2.10" % "2.0" % "test",
   "org.scalacheck" %% "scalacheck" % "1.11.3" % "test",

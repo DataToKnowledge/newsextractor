@@ -13,6 +13,7 @@ import akka.actor.SupervisorStrategy
 import scala.util.Success
 import org.jsoup.Jsoup
 import scala.util.Failure
+import akka.actor.ActorRef
 
 object DataRecordExtractor {
   case class Extract(url: String)
@@ -21,7 +22,7 @@ object DataRecordExtractor {
 
 }
 
-trait DataRecordExtractor extends Actor with ActorLogging {
+abstract class DataRecordExtractor(val routerHttpGetter: ActorRef) extends Actor with ActorLogging {
 
   import DataRecordExtractor._
 
@@ -29,8 +30,8 @@ trait DataRecordExtractor extends Actor with ActorLogging {
     case _: Exception => SupervisorStrategy.Restart
   }
 
-  def httpGetterProps(url: String): Props =
-    Props(classOf[HttpGetter], url)
+  //  def httpGetterProps(url: String): Props =
+  //    Props(classOf[HttpGetter], url)
 
   val cssRecordsSelector: String
 
@@ -69,10 +70,9 @@ trait DataRecordExtractor extends Actor with ActorLogging {
   def receive = {
 
     case Extract(url) =>
-      val httpActor = context.actorOf(httpGetterProps(url))
-    //context.watch(httpActor)
+      routerHttpGetter ! HttpGetter.Get(url)
 
-    case Success(HttpGetter.Result(url, html, date)) =>
+    case HttpGetter.Result(url, html, date) =>
       log.info("Got the HTML for URL {} having size of {} bytes", url, html.size)
 
       val doc = Jsoup.parse(html)
@@ -82,7 +82,8 @@ trait DataRecordExtractor extends Actor with ActorLogging {
 
       context.parent ! DataRecords(url, new DateTime(date), records.filter(d => d.title.length() > 0))
 
-    case Failure(HttpGetter.GetException(url, statusCode)) =>
-      log.info("Failed to get the HTML for URL {} with status code {}", url, statusCode)
+    case HttpGetter.GetException(url, statusCode) =>
+      log.error("Failed to get the HTML for URL {} with status code {}", url, statusCode)
+
   }
 }

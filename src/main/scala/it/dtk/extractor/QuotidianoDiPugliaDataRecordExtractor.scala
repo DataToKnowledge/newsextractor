@@ -3,11 +3,12 @@ package it.dtk.extractor
 import it.dtk.DataRecordExtractor
 import it.dtk.DataRecordExtractor.DataRecord
 import org.jsoup.nodes.Element
+import akka.actor.ActorRef
 
 /**
  * @author Andrea Scarpino <andrea@datatoknowledge.it>
  */
-class QuotidianoDiPugliaDataRecordExtractor extends DataRecordExtractor {
+class QuotidianoDiPugliaDataRecordExtractor(routerHttpGetter: ActorRef) extends DataRecordExtractor(routerHttpGetter) {
 
   override val cssRecordsSelector: String =
     "html > body > table > tbody > tr > td > table[bgcolor=#ffffff] > tbody > tr > td[valign=top] > table"

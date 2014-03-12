@@ -8,16 +8,17 @@ import akka.actor.ActorRef
 /**
  * @author Andrea Scarpino <andrea@datatoknowledge.it>
  */
-class LeccePrimaWebSiteController(id: String,dbActor: ActorRef) extends WebSiteController(id,dbActor) {
+class LeccePrimaWebSiteController(id: String, dbActor: ActorRef, routerHttpGetter: ActorRef)
+  extends WebSiteController(id, dbActor, routerHttpGetter) {
 
   override val maxIndex: Int = 851
   //override val maxIndex: Int = 5
 
   override val baseUrl: String = "http://www.lecceprima.it/"
 
-  override def dataRecordExtractorProps(): Props = 
-    Props(classOf[LeccePrimaDataRecordExtractor])
+  override def dataRecordExtractorProps(): Props =
+    Props(classOf[LeccePrimaDataRecordExtractor],routerHttpGetter)
 
-  override def composeUrl(currentIndex: Int): String = 
+  override def composeUrl(currentIndex: Int): String =
     baseUrl + "cronaca/pag/" + currentIndex
 }

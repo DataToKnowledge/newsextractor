@@ -8,11 +8,12 @@ import scala.collection.JavaConversions._
 import org.jsoup.nodes.Element
 import it.dtk.DataRecordExtractor._
 import org.joda.time.DateTime
+import akka.actor.ActorRef
 
 /**
  * @author Andrea Scarpino <andrea@datatoknowledge.it>
  */
-class NewsPugliaDataRecordExtractor(url: String, html: String, date: DateTime) extends DataRecordExtractor {
+class NewsPugliaDataRecordExtractor(routerHttpGetter: ActorRef) extends DataRecordExtractor(routerHttpGetter) {
 
   override val cssRecordsSelector: String = "ul[class~=leadingblock|introblock] > li"
 

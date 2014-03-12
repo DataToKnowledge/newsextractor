@@ -8,11 +8,12 @@ import scala.collection.JavaConversions._
 import org.jsoup.nodes.Element
 import it.dtk.DataRecordExtractor._
 import org.joda.time.DateTime
+import akka.actor.ActorRef
 
 /**
  * @author Andrea Scarpino <andrea@datatoknowledge.it>
  */
-class GoBariDataRecordExtractor extends DataRecordExtractor {
+class GoBariDataRecordExtractor(routerHttpGetter: ActorRef) extends DataRecordExtractor(routerHttpGetter) {
 
   override val cssRecordsSelector: String = "div.centro_sx_home_news"
 

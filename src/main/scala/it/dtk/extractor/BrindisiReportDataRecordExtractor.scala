@@ -5,11 +5,12 @@ import it.dtk.DataRecordExtractor.DataRecord
 import scala.collection.JavaConversions._
 import org.jsoup.nodes.Element
 import it.dtk.DataRecordExtractor._
+import akka.actor.ActorRef
 
 /**
  * @author Andrea Scarpino <andrea@datatoknowledge.it>
  */
-class BrindisiReportDataRecordExtractor extends DataRecordExtractor {
+class BrindisiReportDataRecordExtractor(routerHttpGetter: ActorRef) extends DataRecordExtractor(routerHttpGetter) {
 
   override val cssRecordsSelector: String = "div.postm > div.postm"
 

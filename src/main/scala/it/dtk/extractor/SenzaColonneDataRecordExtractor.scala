@@ -9,8 +9,9 @@ import org.jsoup.nodes.Document
 import org.jsoup.select.Elements
 import org.jsoup.nodes.Element
 import scala.collection.JavaConversions._
+import akka.actor.ActorRef
 
-class SenzaColonneDataRecordExtractor extends DataRecordExtractor {
+class SenzaColonneDataRecordExtractor(routerHttpGetter: ActorRef) extends DataRecordExtractor(routerHttpGetter) {
 
   override val cssRecordsSelector: String = "div.itemContainer"
 

@@ -8,17 +8,18 @@ import akka.actor.ActorRef
 /**
  * @author Andrea Scarpino <andrea@datatoknowledge.it>
  */
-class GiornaleDiPugliaWebSiteController(id: String,dbActor: ActorRef) extends WebSiteController(id,dbActor) {
+class GiornaleDiPugliaWebSiteController(id: String, dbActor: ActorRef, routerHttpGetter: ActorRef)
+  extends WebSiteController(id, dbActor, routerHttpGetter) {
 
   override val maxIndex: Int = 597
   //override val maxIndex: Int = 5
 
   override val baseUrl: String = "http://www.giornaledipuglia.com/"
 
-  override def dataRecordExtractorProps(): Props = 
-    Props(classOf[GiornaleDiPugliaDataRecordExtractor])
+  override def dataRecordExtractorProps(): Props =
+    Props(classOf[GiornaleDiPugliaDataRecordExtractor],routerHttpGetter)
 
-  override def composeUrl(currentIndex: Int): String= 
+  override def composeUrl(currentIndex: Int): String =
     baseUrl + "search/label/CRONACA#pgn=" + currentIndex
-  
+
 }

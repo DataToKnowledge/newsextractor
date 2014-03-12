@@ -6,12 +6,15 @@ import java.util.{ Locale, Date }
 import java.util.concurrent.Executor
 import org.joda.time.format.DateTimeFormat
 import scala.concurrent.ExecutionContext
-import it.dtk.HttpGetter.{ DispatchException, GetException, Result }
 import scala.util.{ Success, Failure }
 import com.ning.http.client.providers.netty.NettyResponse
 import org.jsoup.safety.Cleaner
 import org.jsoup.Jsoup
 import ExecutionContext.Implicits.global
+import scala.concurrent.Promise
+import com.ning.http.client.Response
+import com.ning.http.client.AsyncHttpClient
+import scala.concurrent.Future
 
 object HttpGetter {
 
@@ -26,7 +29,7 @@ object HttpGetter {
 
   case class GetException(url: String, statusCode: Int) extends Throwable
 
-  case class DispatchException(url: String, error: Throwable) extends Throwable
+  case class Get(url: String)
 
 }
 
@@ -35,33 +38,50 @@ object HttpGetter {
  *
  * @author Andrea Scarpino <andrea@datatoknowledge.it>
  */
-class HttpGetter(url: String) extends Actor with ActorLogging {
+class HttpGetter extends Actor with ActorLogging {
 
-  import dispatch._
+  import HttpGetter._
 
-  //implicit val exec = context.dispatcher.asInstanceOf[Executor with ExecutionContext]
+  implicit val exec = context.dispatcher.asInstanceOf[Executor with ExecutionContext]
 
   private val sdf = DateTimeFormat.forPattern("EEE, dd MMM yyyy HH:mm:ss z").withLocale(Locale.ENGLISH)
-
-  Http.configure(_ setFollowRedirects true)(dispatch.url(url)).either pipeTo self
 
   /**
    * When receives any message it replies with the HTML of the given Web page
    */
   override def receive: Actor.Receive = {
-    case Right(res: NettyResponse) =>
-      val statusCode = res.getStatusCode
-      if (statusCode < 400) {
-        //val html = new Cleaner(Whitelist.relaxed()).clean(Jsoup.parse(res.getResponseBody)).html
-        context.parent ! Success(new Result(url, res.getResponseBody, sdf.parseDateTime(res.getHeader("Date")).toDate))
-        //context.parent ! Success(new Result(url, Jsoup.parseBodyFragment(html).body().html, sdf.parseDateTime(res.getHeader("Date")).toDate))
-        context.stop(self)
-      } else {
-        context.parent ! Failure(new GetException(url, statusCode))
-        context.stop(self)
+
+    case Get(url) =>
+      val send = sender
+
+      AsyncWebClient.get(url) map { res =>
+        send ! new Result(url, res.getResponseBody, sdf.parseDateTime(res.getHeader("Date")).toDate)
+      } recover {
+        case ex: GetException =>
+          send ! ex
       }
-    case Left(error: Throwable) =>
-      context.parent ! Failure(new DispatchException(url, error))
-      context.stop(self)
   }
 }
+
+case class BadStatus(status: Int) extends RuntimeException
+
+object AsyncWebClient {
+  private val client = new AsyncHttpClient
+
+  def get(url: String)(implicit exec: Executor): Future[Response] = {
+    val f = client.prepareGet(url).execute()
+    val p = Promise[Response]()
+    f.addListener(new Runnable {
+      def run = {
+        val response = f.get()
+        if (response.getStatusCode() < 400)
+          p.success(response)
+        else p.failure(BadStatus(response.getStatusCode()))
+      }
+    }, exec)
+    p.future
+  }
+
+  def shutdown(): Unit = client.close()
+}
+

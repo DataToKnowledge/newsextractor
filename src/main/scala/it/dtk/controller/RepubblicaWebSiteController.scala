@@ -8,7 +8,8 @@ import akka.actor.ActorRef
 /**
  * @author Andrea Scarpino <andrea@datatoknowledge.it>
  */
-class RepubblicaWebSiteController(id: String,dbActor: ActorRef) extends WebSiteController(id,dbActor) {
+class RepubblicaWebSiteController(id: String, dbActor: ActorRef, routerHttpGetter: ActorRef)
+  extends WebSiteController(id, dbActor, routerHttpGetter) {
 
   override val maxIndex: Int = 23
   //override val maxIndex: Int = 5
@@ -16,7 +17,7 @@ class RepubblicaWebSiteController(id: String,dbActor: ActorRef) extends WebSiteC
   override val baseUrl: String = "http://bari.repubblica.it/"
 
   override def dataRecordExtractorProps(): Props =
-    Props(classOf[RepubblicaDataRecordExtractor])
+    Props(classOf[RepubblicaDataRecordExtractor],routerHttpGetter)
 
   override def composeUrl(currentIndex: Int): String = {
     baseUrl + "cronaca/" + currentIndex
