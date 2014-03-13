@@ -12,6 +12,7 @@ import scala.concurrent.duration._
 import com.ning.http.client.AsyncCompletionHandler
 import scala.util.Success
 import scala.util.Failure
+import java.net.URLEncoder
 
 object HttpGetter {
 
@@ -75,6 +76,7 @@ object AsyncWebClient {
 
     val builder = new AsyncHttpClientConfig.Builder()
     builder.setFollowRedirects(true)
+    builder.setCompressionEnabled(true)
     builder.setMaximumConnectionsPerHost(2)
     builder.setAllowPoolingConnection(false)
     new AsyncHttpClient(builder.build())

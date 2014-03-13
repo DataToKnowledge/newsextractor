@@ -14,11 +14,16 @@ class GiornaleDiPugliaDataRecordExtractor(routerHttpGetter: ActorRef) extends Da
 
   override val cssRecordsSelector: String = "post-wrapper"
 
-  def title(node: Element) = node.getElementsByClass("post-title").text()
+  def title(node: Element) = 
+    node.getElementsByClass("post-title").text()
 
-  def summary(node: Element) = node.getElementsByClass("post-body-snippet").text()
+  def summary(node: Element) = 
+    node.getElementsByClass("post-body-snippet").text()
 
-  def newsUrl(node: Element) = node.getElementsByClass("post-title").select("a").attr("href")
-  def data(node: Element) = node.getElementsByClass("timestamp").text
+  def newsUrl(node: Element) = 
+    node.getElementsByClass("post-title").select("a").attr("href")
+    
+  def data(node: Element) = 
+    node.getElementsByClass("timestamp").text
 
 }

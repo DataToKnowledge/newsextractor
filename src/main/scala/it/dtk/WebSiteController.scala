@@ -103,8 +103,10 @@ abstract class WebSiteController(val id: String, val dbActor: ActorRef, val rout
 
       val normalizedRecords = records.map(r => {
           URLUtil.normalize(baseUrl, r.newsUrl) match {
-            case Success(normUrl) => r.copy(newsUrl = normUrl)
-            case Failure(_) => r
+            case Success(normUrl) => 
+              r.copy(newsUrl = normUrl)
+            case Failure(_) => 
+              r
           }
       })
       
