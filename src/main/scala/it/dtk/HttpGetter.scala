@@ -1,19 +1,12 @@
 package it.dtk
 
 import akka.actor.{ ActorLogging, Actor }
-import akka.pattern.pipe
 import java.util.{ Locale, Date }
 import java.util.concurrent.Executor
 import org.joda.time.format.DateTimeFormat
 import scala.concurrent.ExecutionContext
-import scala.util.{ Success, Failure }
-import com.ning.http.client.providers.netty.NettyResponse
-import org.jsoup.safety.Cleaner
-import org.jsoup.Jsoup
-import ExecutionContext.Implicits.global
 import scala.concurrent.Promise
-import com.ning.http.client.Response
-import com.ning.http.client.AsyncHttpClient
+import com.ning.http.client.{AsyncHttpClientConfig, Response, AsyncHttpClient}
 import scala.concurrent.Future
 
 object HttpGetter {
@@ -66,22 +59,25 @@ class HttpGetter extends Actor with ActorLogging {
 case class BadStatus(status: Int) extends RuntimeException
 
 object AsyncWebClient {
-  private val client = new AsyncHttpClient
+  private val config = new AsyncHttpClientConfig.Builder();
+  config.setFollowRedirects(true);
+  private val client = new AsyncHttpClient(config.build())
 
   def get(url: String)(implicit exec: Executor): Future[Response] = {
     val f = client.prepareGet(url).execute()
     val p = Promise[Response]()
     f.addListener(new Runnable {
-      def run = {
+      def run() = {
         val response = f.get()
-        if (response.getStatusCode() < 400)
+        if (response.getStatusCode < 400)
           p.success(response)
-        else p.failure(BadStatus(response.getStatusCode()))
+        else
+          p.failure(BadStatus(response.getStatusCode))
       }
     }, exec)
     p.future
   }
 
-  def shutdown(): Unit = client.close()
+  def shutdown() = client.close()
 }
 
