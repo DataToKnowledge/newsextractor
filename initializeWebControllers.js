@@ -2,7 +2,7 @@
  * Loads the WebSiteControllers props in the mongoDB
  */
 
-db = connect("192.168.0.62:27017/dbNews");
+db = connect("10.1.0.62:27017/dbNews");
 
 var controllers = [
   'BariToday',
@@ -35,7 +35,7 @@ for (var w in controllers) {
 
 // enable controllers
 db.webControllers.update(
-    {},
+    { controllerName: "BariTodayWebSiteController" },
     { $set: { enabled: true } },
     { upsert: false, multi: true }
 )
