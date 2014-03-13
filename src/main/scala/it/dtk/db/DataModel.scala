@@ -58,7 +58,7 @@ object News {
       "urlNews" -> news.urlNews,
       "title" -> news.title,
       "summary" -> news.summary,
-      "newsDate" -> news.newsDate.map(t => BSONDateTime(t.getMillis())),
+      "newsDate" -> news.newsDate.map(t => BSONDateTime(t.getMillis)),
       "text" -> news.text,
       "tags" -> news.tags,
       "metadescription" -> news.metaDescription,

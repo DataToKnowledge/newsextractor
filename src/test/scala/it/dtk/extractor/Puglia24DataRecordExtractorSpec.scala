@@ -22,7 +22,7 @@ class Puglia24DataRecordExtractorSpec extends MySpec("Puglia24DataRecordExtracto
   import Puglia24DataRecordExtractorSpec._
   import DataRecordExtractor._
 
-  val html = Source.fromFile("./src/test/resources/Puglia24CronacaList.html", "UTF-8").getLines.mkString
+  val html = Source.fromFile("./src/test/resources/Puglia24CronacaList.html", "UTF-8").getLines().mkString
   
   "the puglia 24 record extractor" should {
     "extract records 25 data records" in {

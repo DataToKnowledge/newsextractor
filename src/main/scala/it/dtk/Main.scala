@@ -4,7 +4,6 @@ import akka.actor.{ Props, Actor, ActorLogging }
 import akka.actor.ActorSystem
 import akka.actor.ActorRef
 import it.dtk.db.DBManager
-import it.dtk.controller._
 import it.dtk.db.WebControllerData
 import scala.collection.mutable.Map
 import scala.concurrent.duration._

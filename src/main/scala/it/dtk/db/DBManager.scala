@@ -70,9 +70,8 @@ class DBManager(host: String, database: String) extends Actor with ActorLogging 
       futureUpdate.onComplete {
         case Failure(e) => 
           send ! FailQueryWebControllers(e)
-        case Success(lasterror) => {
+        case Success(lasterror) =>
           log.info("successfully update document")
-        }
       }
   }
 

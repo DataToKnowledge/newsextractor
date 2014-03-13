@@ -49,12 +49,11 @@ class MainContentExtractor(news: News, routerHttpGetter: ActorRef) extends Actor
       val tryArticle = Try[Article] {
         goose.extractContent(url, html)
       } recover {
-        case ex: ImageFetchException => {
+        case ex: ImageFetchException =>
           val conf = new Configuration()
-          conf.setEnableImageFetching(false)
+          conf.setEnableImageFetching(x$1 = false)
           val gooseWithoutImage = new Goose(conf)
           gooseWithoutImage.extractContent(url, html)
-        }
       }
 
       tryArticle match {
