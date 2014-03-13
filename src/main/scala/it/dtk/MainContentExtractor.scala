@@ -26,10 +26,10 @@ object MainContentExtractor {
  * @author fabiana
  *
  */
-class MainContentExtractor(news: News, routerHttpGetter: ActorRef) extends Actor with ActorLogging{
+class MainContentExtractor(news: News, routerHttpGetter: ActorRef) extends Actor with ActorLogging {
 
   override val supervisorStrategy = OneForOneStrategy(maxNrOfRetries = -1, loggingEnabled = true) {
-    case _: Exception => 
+    case _: Exception =>
       SupervisorStrategy.Restart
   }
 
@@ -72,8 +72,8 @@ class MainContentExtractor(news: News, routerHttpGetter: ActorRef) extends Actor
           throw ex
       }
 
-    case GetException(url, statusCode) =>
-      log.error("Failed to get the HTML for URL {} with status code {}", url, statusCode)
+    case HttpGetter.Fail(url, ex) =>
+      log.error("Failed to get the HTML for URL {} with exception {}", url, ex.getMessage())
 
   }
 

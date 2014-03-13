@@ -6,8 +6,12 @@ import java.util.concurrent.Executor
 import org.joda.time.format.DateTimeFormat
 import scala.concurrent.ExecutionContext
 import scala.concurrent.Promise
-import com.ning.http.client.{AsyncHttpClientConfig, Response, AsyncHttpClient}
+import com.ning.http.client.{ AsyncHttpClientConfig, Response, AsyncHttpClient }
 import scala.concurrent.Future
+import scala.concurrent.duration._
+import com.ning.http.client.AsyncCompletionHandler
+import scala.util.Success
+import scala.util.Failure
 
 object HttpGetter {
 
@@ -21,6 +25,8 @@ object HttpGetter {
   case class Result(url: String, html: String, headerDate: Date)
 
   case class Get(url: String)
+  
+  case class Fail(url: String, ex: Throwable)
 
 }
 
@@ -40,41 +46,54 @@ class HttpGetter extends Actor with ActorLogging {
   /**
    * When receives any message it replies with the HTML of the given Web page
    */
-  override def receive: Actor.Receive = {
+  override def receive = {
 
     case Get(url) =>
       val send = sender
-      log.info("getting the html for the url {}",url)
-      AsyncWebClient.get(url) map { res =>
-        send ! new Result(url, res.getResponseBody, sdf.parseDateTime(res.getHeader("Date")).toDate)
-      } recover {
-        case ex: GetException =>
-          send ! ex
+      val u = url
+      log.info("getting the html for the url {}", url)
+      context.system.scheduler.scheduleOnce(1.second) {
+        val future = AsyncWebClient.get(url)
+        future.onComplete {
+          case Success(res) =>
+            send ! new Result(url, res.getResponseBody, sdf.parseDateTime(res.getHeader("Date")).toDate)
+          case Failure(ex) =>
+            send ! Fail(u,ex)
+        }
       }
+  }
+  override def postStop = {
+    AsyncWebClient.shutdown
   }
 }
 
-case class GetException(url: String, statusCode: Int) extends Throwable
-
 object AsyncWebClient {
-  private val config = new AsyncHttpClientConfig.Builder()
-  config.setFollowRedirects(true)
-  config.setMaximumConnectionsPerHost(3)
-  config.setMaxRequestRetry(10)
-  private val client = new AsyncHttpClient(config.build())
 
-  def get(url: String)(implicit exec: Executor): Future[Response] = {
-    val f = client.prepareGet(url).execute()
+  private val client = init
+
+  def init(): AsyncHttpClient = {
+
+    val builder = new AsyncHttpClientConfig.Builder()
+    builder.setFollowRedirects(true)
+    builder.setMaximumConnectionsPerHost(2)
+    builder.setAllowPoolingConnection(false)
+    new AsyncHttpClient(builder.build())
+  }
+
+  def get(url: String): Future[Response] = {
     val p = Promise[Response]()
-    f.addListener(new Runnable {
-      def run() = {
-        val response = f.get()
-        if (response.getStatusCode < 400)
-          p.success(response)
-        else
-          p.failure(GetException(url, response.getStatusCode))
+    
+    val f = client.prepareGet(url).execute(new AsyncCompletionHandler[Response] {
+
+      override def onCompleted(response: Response): Response = {
+        p.success(response)
+        response
       }
-    }, exec)
+
+      override def onThrowable(t: Throwable) = {
+        p.failure(t)
+      }
+    })
     p.future
   }
 

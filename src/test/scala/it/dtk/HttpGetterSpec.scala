@@ -38,7 +38,7 @@ with WordSpecLike with Matchers with BeforeAndAfterAll {
       system.actorOf(Props(new StepParent(Props(classOf[HttpGetter], "http://www.google.it/asd"), testActor)))
 
       val res = expectMsgClass(10.seconds, classOf[Failure[Throwable]])
-      a [GetException] should be thrownBy res.get
+      a [Fail] should be thrownBy res.get
     }
 
     "returns an empty result when it goes in timeout" in {

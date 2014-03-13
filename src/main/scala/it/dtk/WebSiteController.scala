@@ -18,13 +18,13 @@ import scala.concurrent.duration._
 
 object WebSiteController {
 
-  case class Start(vectorUrl: Vector[String] = Vector())
+  case class Start(vectorUrl: Vector[String] = Vector(), currentIndex: Int = 1)
 
   case class Job(url: String, index: Int, running: Boolean = false)
 
   case class Done(id: String, extractedUrls: Vector[String])
 
-  case class Fail(url: String)
+  case class Fail(id: String, currentIndex: Int, extractedUrls: Vector[String])
 
   case object Status
 
@@ -54,7 +54,7 @@ abstract class WebSiteController(val id: String, val dbActor: ActorRef, val rout
   }
 
   // Max call duration
-  context.setReceiveTimeout(120.seconds)
+  context.setReceiveTimeout(60.seconds)
 
   val baseUrl: String
   val maxIndex: Int
@@ -71,8 +71,8 @@ abstract class WebSiteController(val id: String, val dbActor: ActorRef, val rout
 
   val waiting: Receive = {
 
-    case Start(stopUrls) =>
-      context.become(runNext(stopUrls, 1, Vector[String](), sender))
+    case Start(stopUrls, currentIndex) =>
+      context.become(runNext(stopUrls, currentIndex, Vector[String](), sender))
 
     case Status =>
       Waiting
@@ -141,10 +141,9 @@ abstract class WebSiteController(val id: String, val dbActor: ActorRef, val rout
         
 
     case timeout: ReceiveTimeout =>
-      log.info("Failure in the extraction of the website {}", baseUrl)
-      log.info("timeout {}",timeout)
+      log.info("Failure in the extraction of the website controller with id {}", id)
       //context.children foreach context.stop
-      //context.parent ! Fail(baseUrl)
+      context.parent ! Fail(id, currentIndex, extractedUrls)
   }
 
 }
