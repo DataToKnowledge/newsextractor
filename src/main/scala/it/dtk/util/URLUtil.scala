@@ -133,11 +133,8 @@ object URLUtil {
    */
   def isRelative(url: String): Boolean = {
     val lowerCaseUrl = url.trim.toLowerCase
-
-    (!lowerCaseUrl.startsWith("/")
-      && !lowerCaseUrl.startsWith("//")
-      && !lowerCaseUrl.startsWith("http")
-      && !lowerCaseUrl.startsWith("https"))
+    !lowerCaseUrl.startsWith("http") && !lowerCaseUrl.startsWith("https")
+    //TODO check if it should check for / and //
   }
 
 }
