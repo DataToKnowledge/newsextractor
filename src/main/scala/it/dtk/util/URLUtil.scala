@@ -53,8 +53,10 @@ object URLUtil {
     if (!isRelative(lowerRelativePath))
       Failure(new MalformedURLException(s"Path is not relative: $lowerRelativePath"))
 
-    if (!lowerBaseUrl.endsWith("/"))
+    if (!lowerBaseUrl.endsWith("/") && !lowerRelativePath.startsWith("/"))
       normalize(lowerBaseUrl + "/" + lowerRelativePath)
+    else if (lowerBaseUrl.endsWith("/") && lowerRelativePath.startsWith("/"))
+      normalize(lowerBaseUrl + lowerRelativePath.substring(1))
     else
       normalize(lowerBaseUrl + lowerRelativePath)
   }
@@ -107,23 +109,20 @@ object URLUtil {
     val lowerCaseUrl = url.trim.toLowerCase
 
     (lowerCaseUrl.endsWith("/")
-      && (lowerCaseUrl.startsWith("http")
-        || lowerCaseUrl.startsWith("https")))
+      && (lowerCaseUrl.startsWith("https")
+        || lowerCaseUrl.startsWith("http")))
   }
 
   /**
-   * Check if given URL is absolute (http(s)://domain.tld/(whatever) or /path-to-whatever).
+   * Check if given URL is absolute (http(s)://domain.tld/(whatever).
    * @param url URL to check
    * @return true if is absolute; false otherwise
    */
   def isAbsolute(url: String): Boolean = {
     val lowerCaseUrl = url.trim.toLowerCase
 
-    if (lowerCaseUrl.startsWith("/"))
-      return true
-
-    (lowerCaseUrl.startsWith("http")
-      || lowerCaseUrl.startsWith("https"))
+    (lowerCaseUrl.startsWith("https")
+      || lowerCaseUrl.startsWith("http"))
   }
 
   /**
@@ -133,8 +132,9 @@ object URLUtil {
    */
   def isRelative(url: String): Boolean = {
     val lowerCaseUrl = url.trim.toLowerCase
-    !lowerCaseUrl.startsWith("http") && !lowerCaseUrl.startsWith("https")
-    //TODO check if it should check for / and //
+
+    (!lowerCaseUrl.startsWith("https")
+      && !lowerCaseUrl.startsWith("http"))
   }
 
 }
