@@ -47,7 +47,7 @@ abstract class WebSiteController(val id: String, val dbActor: ActorRef, val rout
   }
 
   // Max call duration
-  context.setReceiveTimeout(10.seconds)
+  //context.setReceiveTimeout(10.seconds)
 
   val baseUrl: String
   val maxIndex: Int

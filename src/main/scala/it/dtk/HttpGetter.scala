@@ -20,8 +20,6 @@ object HttpGetter {
    */
   case class Result(url: String, html: String, headerDate: Date)
 
-  case class GetException(url: String, statusCode: Int) extends Throwable
-
   case class Get(url: String)
 
 }
@@ -56,11 +54,13 @@ class HttpGetter extends Actor with ActorLogging {
   }
 }
 
-case class BadStatus(status: Int) extends RuntimeException
+case class GetException(url: String, statusCode: Int) extends Throwable
 
 object AsyncWebClient {
-  private val config = new AsyncHttpClientConfig.Builder();
-  config.setFollowRedirects(true);
+  private val config = new AsyncHttpClientConfig.Builder()
+  config.setFollowRedirects(true)
+  config.setMaximumConnectionsPerHost(3)
+  config.setMaxRequestRetry(10)
   private val client = new AsyncHttpClient(config.build())
 
   def get(url: String)(implicit exec: Executor): Future[Response] = {
@@ -72,7 +72,7 @@ object AsyncWebClient {
         if (response.getStatusCode < 400)
           p.success(response)
         else
-          p.failure(BadStatus(response.getStatusCode))
+          p.failure(GetException(url, response.getStatusCode))
       }
     }, exec)
     p.future

@@ -73,7 +73,7 @@ class MainContentExtractor(news: News, routerHttpGetter: ActorRef) extends Actor
           throw ex
       }
 
-    case HttpGetter.GetException(url, statusCode) =>
+    case GetException(url, statusCode) =>
       log.error("Failed to get the HTML for URL {} with status code {}", url, statusCode)
 
   }

@@ -82,7 +82,7 @@ abstract class DataRecordExtractor(val routerHttpGetter: ActorRef) extends Actor
 
       context.parent ! DataRecords(url, new DateTime(date), records.filter(d => d.title.length() > 0))
 
-    case HttpGetter.GetException(url, statusCode) =>
+    case GetException(url, statusCode) =>
       log.error("Failed to get the HTML for URL {} with status code {}", url, statusCode)
 
   }
