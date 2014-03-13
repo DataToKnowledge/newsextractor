@@ -11,7 +11,6 @@ import reactivemongo.bson.BSONDateTime
 object DataModel {
   type Url = String
   type TagName = String
-
 }
 
 case class WebControllerData(id: Option[BSONObjectID] = None, controllerName: Option[String], 
@@ -53,7 +52,6 @@ object News {
 
   implicit object NewsBSONWriter extends BSONDocumentWriter[News] {
     def write(news: News): BSONDocument = BSONDocument(
-      "_id" -> BSONObjectID.generate,
       "urlWebSite" -> news.urlWebSite,
       "urlNews" -> news.urlNews,
       "title" -> news.title,
@@ -86,7 +84,6 @@ object WebControllerData {
 
   implicit object WebControllerDataBSONWriter extends BSONDocumentWriter[WebControllerData] {
     def write(webController: WebControllerData): BSONDocument = BSONDocument(
-      "_id" -> BSONObjectID.generate,
       "controllerName" -> webController.controllerName,
       "stopUrls" -> webController.stopUrls,
       "enabled" -> webController.enabled

@@ -131,10 +131,10 @@ abstract class WebSiteController(val id: String, val dbActor: ActorRef, val rout
       dbActor ! DBManager.InsertNews(news)
 
     case DBManager.FailHandlingNews(news, ex) =>
-      log.error("error inserting the new in the db {} with ex", news.urlNews, ex)
+      log.error("Error inserting the new in the db {} with ex", news.urlNews, ex)
 
     case Terminated(ref) =>
-      log.info("number of children {}", context.children.size)
+      log.info("Number of children {}", context.children.size)
 
       if (context.children.size == 1)
         context.become(runNext(stopUrls, currentIndex + 1, extractedUrls, jobSender: ActorRef))

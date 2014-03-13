@@ -9,11 +9,13 @@ import scala.concurrent.ExecutionContext.Implicits.global
 
 object DBManager {
 
-  case object Done
+  case object DoneInsertNews
 
   case class InsertNews(news: News)
 
   case class FailHandlingNews(news: News, ex: Throwable)
+
+  case object DoneUpdateWebController
 
   case object ListWebControllers
 
@@ -42,16 +44,18 @@ class DBManager(host: String, database: String) extends Actor with ActorLogging 
 
   def receive = {
     case InsertNews(datarecord) =>
-      val future = geoNews.insert(datarecord)
+      val selector = BSONDocument("urlNews" -> datarecord.urlNews)
+      val future = geoNews.update(selector, datarecord, upsert = true)
       val dr = datarecord
       val send = sender
       future.onComplete {
         case Failure(e) =>
+          log.error("Failed to insert news with URL {}", dr.urlNews.getOrElse("<UNDEFINED>"))
           send ! FailHandlingNews(dr, e)
 
         case Success(lastError) =>
-          log.info("successfully inserted document the news")
-          send ! Done
+          log.info("Successfully inserted news with URL {}", dr.urlNews.getOrElse("<UNDEFINED>"))
+          send ! DoneInsertNews
       }
 
     case ListWebControllers =>
@@ -64,15 +68,18 @@ class DBManager(host: String, database: String) extends Actor with ActorLogging 
         }
 
     case UpdateWebController(c) =>
-      val selector = BSONDocument("_id" -> c.id)
+      val selector = BSONDocument("controllerName" -> c.controllerName)
       val update = BSONDocument("$set" -> BSONDocument("stopUrls" -> c.stopUrls))
       val send = sender
       val futureUpdate = webControllers.update(selector, update)
       futureUpdate.onComplete {
-        case Failure(e) => 
+        case Failure(e) =>
+          log.error("Failed to update WebController {}", c.controllerName.getOrElse("<UNDEFINED>"))
           send ! FailQueryWebControllers(e)
-        case Success(lasterror) =>
-          log.info("successfully update document")
+
+        case Success(lastError) =>
+          log.info("Successfully updated WebController {}", c.controllerName.getOrElse("<UNDEFINED>"))
+          send ! DoneUpdateWebController
       }
   }
 

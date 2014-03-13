@@ -10,8 +10,22 @@ import scala.language.postfixOps
 
 object DBManagerSpec {
 
-  val newsTest = News(None, Some("http://baritoday.it"), Some("http://baritoday.it/cronaca"), Some("title"), Some("summary"),
-    Some(DateTime.now()), Some("text"), Some(Set("pippo", "pluto")))
+  val newsTest = News(
+    id = None,
+    urlWebSite = Some("http://baritoday.it"),
+    urlNews = Some("http://baritoday.it/cronaca"),
+    title = Some("title"),
+    summary = Some("summary"),
+    newsDate = Some(DateTime.now()),
+    text = Some("text"),
+    tags = Some(Set("pippo", "pluto"))
+  )
+
+  val controllerTest = WebControllerData(
+    controllerName = Some("BariTodayWebSiteController"),
+    stopUrls = Some(List()),
+    enabled = Some(true)
+  )
 }
 
 class DBManagerSpec extends TestKit(ActorSystem("DBManagerSpec")) with ImplicitSender
@@ -25,12 +39,21 @@ class DBManagerSpec extends TestKit(ActorSystem("DBManagerSpec")) with ImplicitS
 
   "An DBManager actor" must {
 
-    val dbActor = system.actorOf(Props(classOf[DBManager], "localhost", "testNews"))
+    val dbActor = system.actorOf(Props(classOf[DBManager], "10.1.0.62", "testNews"))
 
-    "persist data successfully" in {
+    "insert a news" in {
       dbActor ! InsertNews(newsTest)
-      expectMsg(10 minutes, Done)
+      expectMsg(10 seconds, DoneInsertNews)
     }
 
+    "list web controllers" in {
+      dbActor ! ListWebControllers
+      expectMsgClass(10 seconds, classOf[WebControllers])
+    }
+
+    "update web controllers" in {
+      dbActor ! UpdateWebController(controllerTest)
+      expectMsg(10 seconds, DoneUpdateWebController)
+    }
   }
 }
