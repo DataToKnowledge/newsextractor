@@ -1,15 +1,10 @@
 package it.dtk.db
 
-import akka.actor.Actor
-import reactivemongo.api._
-import reactivemongo.bson._
+import akka.actor.{ActorLogging, Actor}
+import reactivemongo.api.MongoDriver
+import reactivemongo.api.collections.default.BSONCollection
+import scala.util.{Success, Failure}
 import reactivemongo.bson.BSONDocument
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
-import scala.util.{ Failure, Success }
-import scala.collection.mutable.ListBuffer
-import scala.util.Failure
-import akka.actor.ActorLogging
 
 object DBManager {
 
@@ -40,9 +35,9 @@ class DBManager(host: String, database: String) extends Actor with ActorLogging 
   //get a connection to the db
   val db = connection(database)
   //retrieve the collection
-  val geoNews = db("geoNews")
+  val geoNews = db[BSONCollection]("geoNews")
 
-  val webControllers = db("webControllers")
+  val webControllers = db[BSONCollection]("webControllers")
 
   def receive = {
     case InsertNews(datarecord) =>
@@ -59,29 +54,19 @@ class DBManager(host: String, database: String) extends Actor with ActorLogging 
       }
 
     case ListWebControllers =>
-
       val query = BSONDocument("enabled" -> true)
-
       val controllers = webControllers.find(query).cursor[WebControllerData].collect[List]()
-
       val send = sender
-
       controllers.map(
         result => send ! WebControllers(result)) recover {
           case ex => send ! FailQueryWebControllers(ex)
         }
 
     case UpdateWebController(c) =>
-
-      import WebControllerData._
-
       val selector = BSONDocument("_id" -> c.id)
       val update = BSONDocument("$set" -> BSONDocument("stopUrls" -> c.stopUrls))
-
       val send = sender
-
       val futureUpdate = webControllers.update(selector, update)
-
       futureUpdate.onComplete {
         case Failure(e) => 
           send ! FailQueryWebControllers(e)
@@ -96,7 +81,3 @@ class DBManager(host: String, database: String) extends Actor with ActorLogging 
   }
 
 }
-
-
-
-
