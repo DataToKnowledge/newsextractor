@@ -76,6 +76,9 @@ class WebSiteReceptionist extends Actor with ActorLogging {
         }
         
       }
+      
+    case WebSiteController.Fail(idController, currentIndes,extractedUrls) =>
+      
 
     case DBManager.FailQueryWebControllers(ex) =>
       println(ex)
