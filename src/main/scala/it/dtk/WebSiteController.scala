@@ -42,12 +42,19 @@ abstract class WebSiteController(val id: String, val dbActor: ActorRef, val rout
 
   import WebSiteController._
 
-  override val supervisorStrategy = OneForOneStrategy(maxNrOfRetries = 5) {
-    case _: Exception => SupervisorStrategy.Restart
+  override val supervisorStrategy = OneForOneStrategy(maxNrOfRetries = -1, loggingEnabled = true) {
+
+    case e: Exception =>
+      log.error("got exception in DataRecordExtractor {}",e.getMessage())
+      SupervisorStrategy.Restart
+
+    case e: Throwable =>
+      log.error("got exception in DataRecordExtractor {}",e.getMessage())
+      SupervisorStrategy.Restart
   }
 
   // Max call duration
-  //context.setReceiveTimeout(10.seconds)
+  context.setReceiveTimeout(120.seconds)
 
   val baseUrl: String
   val maxIndex: Int
@@ -131,11 +138,13 @@ abstract class WebSiteController(val id: String, val dbActor: ActorRef, val rout
 
       if (context.children.size == 1)
         context.become(runNext(stopUrls, currentIndex + 1, extractedUrls, jobSender: ActorRef))
+        
 
-    case ReceiveTimeout =>
+    case timeout: ReceiveTimeout =>
       log.info("Failure in the extraction of the website {}", baseUrl)
-      context.children foreach context.stop
-      context.parent ! Fail(baseUrl)
+      log.info("timeout {}",timeout)
+      //context.children foreach context.stop
+      //context.parent ! Fail(baseUrl)
   }
 
 }

@@ -14,7 +14,6 @@ import com.gravity.goose.Article
 import scala.util.Try
 import com.gravity.goose.network.ImageFetchException
 import scala.util.Failure
-import scala.util.Failure
 import akka.actor.ActorRef
 import akka.actor.ActorLogging
 
@@ -29,8 +28,9 @@ object MainContentExtractor {
  */
 class MainContentExtractor(news: News, routerHttpGetter: ActorRef) extends Actor with ActorLogging{
 
-  override val supervisorStrategy = OneForOneStrategy(maxNrOfRetries = 5) {
-    case _: Exception => SupervisorStrategy.Restart
+  override val supervisorStrategy = OneForOneStrategy(maxNrOfRetries = -1, loggingEnabled = true) {
+    case _: Exception => 
+      SupervisorStrategy.Restart
   }
 
   import MainContentExtractor._
@@ -51,7 +51,7 @@ class MainContentExtractor(news: News, routerHttpGetter: ActorRef) extends Actor
       } recover {
         case ex: ImageFetchException =>
           val conf = new Configuration()
-          conf.setEnableImageFetching(x$1 = false)
+          conf.setEnableImageFetching(false)
           val gooseWithoutImage = new Goose(conf)
           gooseWithoutImage.extractContent(url, html)
       }

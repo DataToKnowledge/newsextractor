@@ -26,8 +26,15 @@ abstract class DataRecordExtractor(val routerHttpGetter: ActorRef) extends Actor
 
   import DataRecordExtractor._
 
-  override val supervisorStrategy = OneForOneStrategy(maxNrOfRetries = 5) {
-    case _: Exception => SupervisorStrategy.Restart
+  override val supervisorStrategy = OneForOneStrategy(maxNrOfRetries = -1, loggingEnabled = true) {
+
+    case e: Exception =>
+      log.error("got exception in DataRecordExtractor {}",e.getMessage())
+      SupervisorStrategy.Restart
+
+    case e: Throwable =>
+      log.error("got exception in DataRecordExtractor {}",e.getMessage())
+      SupervisorStrategy.Restart
   }
 
   //  def httpGetterProps(url: String): Props =

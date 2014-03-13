@@ -44,7 +44,7 @@ class HttpGetter extends Actor with ActorLogging {
 
     case Get(url) =>
       val send = sender
-
+      log.info("getting the html for the url {}",url)
       AsyncWebClient.get(url) map { res =>
         send ! new Result(url, res.getResponseBody, sdf.parseDateTime(res.getHeader("Date")).toDate)
       } recover {

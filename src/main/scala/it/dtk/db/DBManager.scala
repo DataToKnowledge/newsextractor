@@ -5,6 +5,7 @@ import reactivemongo.api.MongoDriver
 import reactivemongo.api.collections.default.BSONCollection
 import scala.util.{Success, Failure}
 import reactivemongo.bson.BSONDocument
+import scala.concurrent.ExecutionContext.Implicits.global
 
 object DBManager {
 
@@ -49,7 +50,7 @@ class DBManager(host: String, database: String) extends Actor with ActorLogging 
           send ! FailHandlingNews(dr, e)
 
         case Success(lastError) =>
-          log.info("successfully inserted document: " + lastError)
+          log.info("successfully inserted document the news")
           send ! Done
       }
 
