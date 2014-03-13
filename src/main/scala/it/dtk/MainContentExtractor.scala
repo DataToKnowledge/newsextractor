@@ -59,7 +59,7 @@ class MainContentExtractor(news: News, routerHttpGetter: ActorRef) extends Actor
 
       tryArticle match {
         case Success(article) =>
-          if (article.cleanedArticleText.isEmpty()) {
+          if (article.cleanedArticleText.isEmpty) {
             val extractor = ArticleExtractor.getInstance()
             article.cleanedArticleText = extractor.getText(html)
           }

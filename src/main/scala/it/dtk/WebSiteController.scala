@@ -58,7 +58,7 @@ abstract class WebSiteController(val id: String, val dbActor: ActorRef, val rout
 
   def mainContentExtractorProps(news: News): Props = Props(classOf[MainContentExtractor], news, routerHttpGetter)
 
-  val drActor = context.actorOf(dataRecordExtractorProps)
+  val drActor = context.actorOf(dataRecordExtractorProps())
 
   def receive = waiting
 

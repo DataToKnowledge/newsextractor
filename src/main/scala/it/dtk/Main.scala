@@ -48,7 +48,7 @@ class WebSiteReceptionist extends Actor with ActorLogging {
 
         for (id <- c.id; contrName <- c.controllerName) {
           val contrClass = Class.forName(s"it.dtk.controller.$contrName")
-          val controllerActor = context.child(contrName).getOrElse(context.actorOf(Props(contrClass, id.toString, dbActor, httpGetterRouter), contrName))
+          val controllerActor = context.child(contrName).getOrElse(context.actorOf(Props(contrClass, id.toString(), dbActor, httpGetterRouter), contrName))
 
           val stopUrls = c.stopUrls.getOrElse(List()).toVector
           controllerActor ! WebSiteController.Start(stopUrls)
