@@ -29,14 +29,16 @@ class HttpGetterSpec extends MySpec("HttpGetterSpec") {
 
       getter ! Get("http://www.google.it/asd")
 
-      expectMsgClass(10.seconds, classOf[Fail])
+      val res = expectMsgClass(10.seconds, classOf[Fail])
+      res.ex.getClass should be(classOf[GetException])
     }
 
     "returns an empty result when it goes in timeout" in {
 
       getter ! Get("http://www.go.it/")
 
-      expectMsgClass(classOf[Fail])
+      val res = expectMsgClass(classOf[Fail])
+      res.ex.getClass should be(classOf[ConnectException])
     }
 
     "returns the body from the destination page when it fetches a 301 on the first page" in {
