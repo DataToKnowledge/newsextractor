@@ -34,12 +34,12 @@ class Puglia24DataRecordExtractorSpec extends MySpec("Puglia24DataRecordExtracto
 
   "the Puglia24 record extractor" should {
 
-    "extract 7 data records" in {
+    "extract 6 data records" in {
 
       parent ! Result(url, html, date)
       val results = expectMsgClass(15.seconds, classOf[DataRecords])
 
-      assert(results.dataRecords.size == 7)
+      assert(results.dataRecords.size == 6)
       results.dataRecords.foreach(dr =>
         assert(!dr.title.isEmpty)
       )

@@ -7,18 +7,15 @@ import org.jsoup.nodes.Document
 import org.jsoup.nodes.Element
 import scala.collection.JavaConversions._
 import org.joda.time.DateTime
-import akka.actor.Props
 import akka.actor.OneForOneStrategy
 import akka.actor.SupervisorStrategy
-import scala.util.Success
 import org.jsoup.Jsoup
-import scala.util.Failure
 import akka.actor.ActorRef
 
 object DataRecordExtractor {
   case class Extract(url: String)
-  case class DataRecord(title: String, summary: String, newsUrl: String)
-  case class DataRecords(url: String, date: DateTime, dataRecords: Seq[DataRecord])
+  case class DataRecord(title: String, summary: String, newsUrl: String, newsDate: DateTime)
+  case class DataRecords(url: String, dataRecords: Seq[DataRecord])
 
 }
 
@@ -28,12 +25,12 @@ abstract class DataRecordExtractor(val routerHttpGetter: ActorRef) extends Actor
 
   override val supervisorStrategy = OneForOneStrategy(maxNrOfRetries = -1, loggingEnabled = true) {
 
-    case e: Exception =>
-      log.error("got exception in DataRecordExtractor {}",e.getMessage())
+    case ex: Exception =>
+      log.error("got exception in DataRecordExtractor {}", ex.getMessage)
       SupervisorStrategy.Restart
 
-    case e: Throwable =>
-      log.error("got exception in DataRecordExtractor {}",e.getMessage())
+    case ex: Throwable =>
+      log.error("got exception in DataRecordExtractor {}", ex.getMessage)
       SupervisorStrategy.Restart
   }
 
@@ -47,6 +44,8 @@ abstract class DataRecordExtractor(val routerHttpGetter: ActorRef) extends Actor
   def summary(node: Element): String
 
   def newsUrl(node: Element): String
+
+  def newsDate(node: Element, date: DateTime): DateTime
 
   /**
    * @param node
@@ -82,12 +81,12 @@ abstract class DataRecordExtractor(val routerHttpGetter: ActorRef) extends Actor
       val doc = Jsoup.parse(html)
       //get the data records
       val records = extractRecords(doc) map (
-        r => DataRecord(title(r), summary(r), newsUrl(r)))
+        r => DataRecord(title(r), summary(r), newsUrl(r), newsDate(r, date)))
 
-      context.parent ! DataRecords(url, new DateTime(date), records.filter(d => d.title.length() > 0))
+      context.parent ! DataRecords(url, records.filter(d => d.title.length() > 0))
 
     case HttpGetter.Fail(url, ex) =>
-      log.error("Failed to get the HTML for URL {} with exception {}", url, ex.getMessage())
+      log.error("Failed to get the HTML for URL {} with exception {}", url, ex.getMessage)
 
   }
 }

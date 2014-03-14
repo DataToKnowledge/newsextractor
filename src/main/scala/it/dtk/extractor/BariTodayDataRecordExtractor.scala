@@ -1,9 +1,9 @@
 package it.dtk.extractor
 
 import it.dtk.DataRecordExtractor
-import it.dtk.DataRecordExtractor.DataRecord
 import org.jsoup.nodes.Element
 import akka.actor.ActorRef
+import org.joda.time.DateTime
 
 /**
  * @author Andrea Scarpino <andrea@datatoknowledge.it>
@@ -20,5 +20,7 @@ class BariTodayDataRecordExtractor(routerHttpGetter: ActorRef) extends DataRecor
 
   def newsUrl(node: Element) =
     node.select("header > h1 > a").attr("href")
+
+  def newsDate(node: Element, date: DateTime) = date
 
 }

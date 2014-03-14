@@ -1,9 +1,9 @@
 package it.dtk.extractor
 
 import it.dtk.DataRecordExtractor
-import it.dtk.DataRecordExtractor.DataRecords
 import org.jsoup.nodes.Element
 import akka.actor.ActorRef
+import org.joda.time.DateTime
 
 /**
  * @author Andrea Scarpino <andrea@datatoknowledge.it>
@@ -17,5 +17,7 @@ class BrindisiLiberaDataRecordExtractor(routerHttpGetter: ActorRef) extends Data
   def summary(node: Element) = node.select("a").text
 
   def newsUrl(node: Element) = node.select("a").attr("href")
+
+  def newsDate(node: Element, date: DateTime) = date
 
 }

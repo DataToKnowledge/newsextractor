@@ -44,12 +44,12 @@ abstract class WebSiteController(val id: String, val dbActor: ActorRef, val rout
 
   override val supervisorStrategy = OneForOneStrategy(maxNrOfRetries = -1, loggingEnabled = true) {
 
-    case e: Exception =>
-      log.error("got exception in DataRecordExtractor {}",e.getMessage())
+    case ex: Exception =>
+      log.error("got exception in DataRecordExtractor {}", ex.getMessage)
       SupervisorStrategy.Restart
 
-    case e: Throwable =>
-      log.error("got exception in DataRecordExtractor {}",e.getMessage())
+    case ex: Throwable =>
+      log.error("got exception in DataRecordExtractor {}", ex.getMessage)
       SupervisorStrategy.Restart
   }
 
@@ -99,7 +99,7 @@ abstract class WebSiteController(val id: String, val dbActor: ActorRef, val rout
     case Status =>
       Running
 
-    case DataRecordExtractor.DataRecords(url, date, records) =>
+    case DataRecordExtractor.DataRecords(url, records) =>
 
       val normalizedRecords = records.map(r => {
           URLUtil.normalize(baseUrl, r.newsUrl) match {
@@ -113,7 +113,7 @@ abstract class WebSiteController(val id: String, val dbActor: ActorRef, val rout
       filteredRecords.foreach(r => {
         log.info("Getting main article content for URL {}", r.newsUrl)
 
-        val recordNews = News(None, Some(baseUrl), Some(r.newsUrl), Some(r.title), Some(r.summary), Some(date))
+        val recordNews = News(None, Some(baseUrl), Some(r.newsUrl), Some(r.title), Some(r.summary), Some(r.newsDate))
         context.watch(context.actorOf(mainContentExtractorProps(recordNews)))
       })
 

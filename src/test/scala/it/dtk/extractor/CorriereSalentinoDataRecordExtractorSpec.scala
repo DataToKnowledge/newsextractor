@@ -12,7 +12,7 @@ object CorriereSalentinoDataRecordExtractorSpec {
 
   val url = "http://www.corrieresalentino.it/"
 
-  val html = Source.fromFile("./src/test/resources/CorriereSalentinoList.html", "ISO-8859-1").getLines().mkString
+  val html = Source.fromFile("./src/test/resources/CorriereSalentinoCronacaList.html", "ISO-8859-1").getLines().mkString
 
   val date = DateTime.now()
 

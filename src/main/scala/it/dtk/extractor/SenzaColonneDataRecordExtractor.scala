@@ -1,15 +1,11 @@
 package it.dtk.extractor
 
 import it.dtk.DataRecordExtractor
-import scala.xml.NodeSeq
-import it.dtk.DataRecordExtractor.{ DataRecord, DataRecords }
-import java.util.Date
-import org.jsoup.Jsoup
-import org.jsoup.nodes.Document
-import org.jsoup.select.Elements
 import org.jsoup.nodes.Element
-import scala.collection.JavaConversions._
 import akka.actor.ActorRef
+import org.joda.time.DateTime
+import org.joda.time.format.DateTimeFormat
+import java.util.Locale
 
 class SenzaColonneDataRecordExtractor(routerHttpGetter: ActorRef) extends DataRecordExtractor(routerHttpGetter) {
 
@@ -21,6 +17,9 @@ class SenzaColonneDataRecordExtractor(routerHttpGetter: ActorRef) extends DataRe
 
   def newsUrl(node: Element) = node.getElementsByClass("catItemTitle").select("a").attr("href")
 
-  def data(node: Element) = node.getElementsByClass("catItemDateCreated").text
+  def newsDate(node: Element, date: DateTime) = {
+    val sdf = DateTimeFormat.forPattern("'Scritto' EEE',' dd MMMM yyyy HH:mm").withLocale(Locale.ITALIAN)
+    sdf.parseDateTime(node.select("catItemDateCreated").text())
+  }
 }
 
