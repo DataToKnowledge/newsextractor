@@ -19,7 +19,7 @@ class NewsPugliaDataRecordExtractor(routerHttpGetter: ActorRef) extends DataReco
 
   def title(node: Element) = node.select("div > h2 > a").text
 
-  def summary(node: Element) = node.select("div > div[class= lineinfo line1").text
+  def summary(node: Element) = node.select("div > div[class=lineinfo line1]").text
 
   def newsUrl(node: Element) = node.select("div > h2 > a[href]").attr("href")
 
