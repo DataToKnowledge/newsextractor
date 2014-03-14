@@ -1,6 +1,6 @@
 package it.dtk
 
-import akka.actor.{ Props, Actor }
+import akka.actor.Actor
 import com.gravity.goose.Goose
 import com.gravity.goose.Configuration
 import it.dtk.db.News
@@ -8,7 +8,6 @@ import akka.actor.actorRef2Scala
 import scala.util.Success
 import akka.actor.OneForOneStrategy
 import akka.actor.SupervisorStrategy
-import de.l3s.boilerpipe.extractors
 import de.l3s.boilerpipe.extractors.ArticleExtractor
 import com.gravity.goose.Article
 import scala.util.Try
@@ -18,8 +17,12 @@ import akka.actor.ActorRef
 import akka.actor.ActorLogging
 
 object MainContentExtractor {
+
   case class Result(news: News)
+
   case class Extract(news: News)
+
+  case class Fail(url: String, ex: Throwable)
 }
 
 /**
@@ -69,11 +72,11 @@ class MainContentExtractor(news: News, routerHttpGetter: ActorRef) extends Actor
           context.stop(self)
 
         case Failure(ex) =>
-          throw ex
+          context.parent ! Fail(url, ex)
       }
 
     case HttpGetter.Fail(url, ex) =>
-      log.error("Failed to get the HTML for URL {} with exception {}", url, ex.getMessage())
+      log.error("Failed to get the HTML for URL {} with exception {}", url, ex.getMessage)
 
   }
 

@@ -1,7 +1,7 @@
 package it.dtk
 
 import akka.actor.{ ActorLogging, Actor }
-import java.util.{ Locale, Date }
+import java.util.Locale
 import java.util.concurrent.Executor
 import org.joda.time.format.DateTimeFormat
 import scala.concurrent.ExecutionContext
@@ -12,6 +12,7 @@ import scala.concurrent.duration._
 import com.ning.http.client.AsyncCompletionHandler
 import scala.util.Success
 import scala.util.Failure
+import org.joda.time.DateTime
 
 object HttpGetter {
 
@@ -22,7 +23,7 @@ object HttpGetter {
    * @param html fetched HTML
    * @param headerDate time extracted from response headers
    */
-  case class Result(url: String, html: String, headerDate: Date)
+  case class Result(url: String, html: String, headerDate: DateTime)
 
   case class Get(url: String)
   
@@ -55,7 +56,7 @@ class HttpGetter extends Actor with ActorLogging {
         val future = AsyncWebClient.get(url)
         future.onComplete {
           case Success(res) =>
-            send ! new Result(url, res.getResponseBody, sdf.parseDateTime(res.getHeader("Date")).toDate)
+            send ! new Result(url, res.getResponseBody, sdf.parseDateTime(res.getHeader("Date")))
           case Failure(ex) =>
             send ! Fail(url, ex)
         }

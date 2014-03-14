@@ -130,8 +130,11 @@ abstract class WebSiteController(val id: String, val dbActor: ActorRef, val rout
       log.info("Got main article content for URL {}", news.urlNews)
       dbActor ! DBManager.InsertNews(news)
 
+    case MainContentExtractor.Fail(url, ex) =>
+      log.error("Error when fetching main content text form URL {} with ex", url, ex.getMessage)
+
     case DBManager.FailHandlingNews(news, ex) =>
-      log.error("Error inserting the new in the db {} with ex", news.urlNews, ex)
+      log.error("Error inserting the new in the db {} with ex", news.urlNews, ex.getMessage)
 
     case Terminated(ref) =>
       log.info("Number of children {}", context.children.size)

@@ -26,7 +26,7 @@ class WebSiteReceptionist extends Actor with ActorLogging {
 
   import WebSiteReceptionist._
 
-  def host = "10.1.0.62" //"192.168.0.62"
+  def host = "10.1.0.62"
   def db = "dbNews"
 
   val dbActor: ActorRef = context.actorOf(Props(classOf[DBManager], host, db))
@@ -77,11 +77,11 @@ class WebSiteReceptionist extends Actor with ActorLogging {
         
       }
       
-    case WebSiteController.Fail(idController, currentIndex,extractedUrls) =>
-      
+    case WebSiteController.Fail(idController, currentIndex, extractedUrls) =>
+      log.error("WebSiteController Fail {} {}", idController, currentIndex)
 
     case DBManager.FailQueryWebControllers(ex) =>
-      println(ex)
+      log.error("DBManager FailQueryWebControllers {}", ex.getMessage)
   }
 }
 
