@@ -1,10 +1,10 @@
 package it.dtk
 
-import java.util.Date
 import scala.concurrent.duration._
 import akka.actor.Props
 import it.dtk.util.MySpec
 import java.net.ConnectException
+import org.joda.time.DateTime
 
 /**
  * @author Andrea Scarpino <andrea@datatoknowledge.it>
@@ -23,7 +23,7 @@ class HttpGetterSpec extends MySpec("HttpGetterSpec") {
 
       val res = expectMsgClass(10.seconds, classOf[Result])
       res.html.getClass should be(classOf[String])
-      res.headerDate.getClass should be(classOf[Date])
+      res.headerDate.getClass should be(classOf[DateTime])
     }
 
     "returns an empty result when it fetches a 404" in {
@@ -49,7 +49,7 @@ class HttpGetterSpec extends MySpec("HttpGetterSpec") {
       val res = expectMsgClass(10.seconds, classOf[Result])
       res.html.getClass should be(classOf[String])
       assert(!res.html.isEmpty)
-      res.headerDate.getClass should be(classOf[Date])
+      res.headerDate.getClass should be(classOf[DateTime])
     }
 
   }
