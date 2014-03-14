@@ -13,7 +13,7 @@ class SenzaColonneDataRecordExtractor(routerHttpGetter: ActorRef) extends DataRe
 
   def title(node: Element) = node.getElementsByClass("catItemTitle").text()
 
-  def summary(node: Element) = null
+  def summary(node: Element) = new String()
 
   def newsUrl(node: Element) = node.getElementsByClass("catItemTitle").select("a").attr("href")
 
