@@ -50,7 +50,6 @@ class HttpGetter extends Actor with ActorLogging {
 
     case Get(url) =>
       val send = sender
-      val u = url
       log.info("getting the html for the url {}", url)
       context.system.scheduler.scheduleOnce(1.second) {
         val future = AsyncWebClient.get(url)
@@ -58,21 +57,23 @@ class HttpGetter extends Actor with ActorLogging {
           case Success(res) =>
             send ! new Result(url, res.getResponseBody, sdf.parseDateTime(res.getHeader("Date")).toDate)
           case Failure(ex) =>
-            send ! Fail(u,ex)
+            send ! Fail(url, ex)
         }
       }
   }
-  override def postStop = {
-    AsyncWebClient.shutdown
+
+  override def postStop() = {
+    AsyncWebClient.shutdown()
   }
 }
 
+case class GetException(url: String, status: Int) extends Throwable
+
 object AsyncWebClient {
 
-  private val client = init
+  private val client = init()
 
   def init(): AsyncHttpClient = {
-
     val builder = new AsyncHttpClientConfig.Builder()
     builder.setFollowRedirects(true)
     builder.setMaximumConnectionsPerHost(2)
@@ -83,10 +84,13 @@ object AsyncWebClient {
   def get(url: String): Future[Response] = {
     val p = Promise[Response]()
     
-    val f = client.prepareGet(url).execute(new AsyncCompletionHandler[Response] {
+    client.prepareGet(url).execute(new AsyncCompletionHandler[Response] {
 
       override def onCompleted(response: Response): Response = {
-        p.success(response)
+        if (response.getStatusCode < 400)
+          p.success(response)
+        else
+          p.failure(GetException(url, response.getStatusCode))
         response
       }
 
