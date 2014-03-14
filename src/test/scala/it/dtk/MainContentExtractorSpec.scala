@@ -1,23 +1,11 @@
 package it.dtk
 
-import akka.testkit.TestKit
-import akka.actor.ActorSystem
-import akka.testkit.ImplicitSender
-import akka.actor.Props
-import org.scalatest.{ BeforeAndAfterAll, Matchers, WordSpecLike }
-import it.dtk.util.StepParent
-import scala.concurrent.duration._
+import it.dtk.util.{StepParent, MySpec}
 
-class MainContentExtractorSpec(_system: ActorSystem) extends TestKit(_system) with ImplicitSender
-  with WordSpecLike with Matchers with BeforeAndAfterAll {
+class MainContentExtractorSpec extends MySpec("MainContentExtractorSpec") {
 
   import MainContentExtractor._
 
-  def this() = this(ActorSystem("MainContentExtractorSpec"))
-
-  override def afterAll() {
-    TestKit.shutdownActorSystem(system)
-  }
   /*
   "A MainContentExtractor Actor" must {
 

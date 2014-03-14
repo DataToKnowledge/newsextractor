@@ -1,61 +1,53 @@
 package it.dtk
 
-import org.scalatest.{BeforeAndAfterAll, Matchers, WordSpecLike}
-import akka.actor.{Props, ActorSystem}
-import akka.testkit.{ImplicitSender, TestKit}
 import java.util.Date
-import scala.util.{Failure, Success}
-import it.dtk.util.StepParent
 import scala.concurrent.duration._
+import akka.actor.Props
+import it.dtk.util.MySpec
 
 /**
  * @author Andrea Scarpino <andrea@datatoknowledge.it>
  */
-class HttpGetterSpec(_system: ActorSystem) extends TestKit(_system) with ImplicitSender
-with WordSpecLike with Matchers with BeforeAndAfterAll {
+class HttpGetterSpec extends MySpec("HttpGetterSpec") {
 
   import HttpGetter._
 
-  def this() = this(ActorSystem("HttpGetterSpec"))
-
-  override def afterAll() {
-    TestKit.shutdownActorSystem(system)
-  }
-
   "An HttpGetter actor" must {
+
+    val getter = system.actorOf(Props[HttpGetter])
 
     "returns the body in a page" in {
 
-      system.actorOf(Props(new StepParent(Props(classOf[HttpGetter], "http://www.google.it/"), testActor)))
+      getter ! Get("http://www.google.it/")
 
-      val res = expectMsgClass(10.seconds, classOf[Success[Result]])
-      res.get.html.getClass should be(classOf[String])
-      res.get.headerDate.getClass should be(classOf[Date])
+      val res = expectMsgClass(10.seconds, classOf[Result])
+      res.html.getClass should be(classOf[String])
+      res.headerDate.getClass should be(classOf[Date])
     }
 
     "returns an empty result when it fetches a 404" in {
 
-      system.actorOf(Props(new StepParent(Props(classOf[HttpGetter], "http://www.google.it/asd"), testActor)))
+      getter ! Get("http://www.google.it/asd")
 
-      val res = expectMsgClass(10.seconds, classOf[Failure[Throwable]])
-      a [Fail] should be thrownBy res.get
+      val res = expectMsgClass(10.seconds, classOf[Throwable])
+      a [Fail] should be thrownBy res
     }
 
     "returns an empty result when it goes in timeout" in {
 
-      system.actorOf(Props(new StepParent(Props(classOf[HttpGetter], "http://www.go.it/"), testActor)))
+      getter ! Get("http://www.go.it/")
 
-      expectMsgClass(classOf[Failure[Throwable]])
+      expectMsgClass(classOf[Throwable])
     }
 
     "returns the body from the destination page when it fetches a 301 on the first page" in {
 
-      system.actorOf(Props(new StepParent(Props(classOf[HttpGetter], "http://www.lecceprima.it/cronaca/pag/1/"), testActor)))
+      getter ! Get("http://www.lecceprima.it/cronaca/pag/1/")
 
-      val res = expectMsgClass(10.seconds, classOf[Success[Result]])
-      res.get.html.getClass should be(classOf[String])
-      assert(!res.get.html.isEmpty)
-      res.get.headerDate.getClass should be(classOf[Date])
+      val res = expectMsgClass(10.seconds, classOf[Result])
+      res.html.getClass should be(classOf[String])
+      assert(!res.html.isEmpty)
+      res.headerDate.getClass should be(classOf[Date])
     }
 
   }

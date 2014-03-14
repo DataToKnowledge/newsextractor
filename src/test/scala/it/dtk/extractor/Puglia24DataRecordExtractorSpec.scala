@@ -4,7 +4,6 @@ import it.dtk.util.MySpec
 import java.util.Date
 import org.joda.time.DateTime
 import akka.actor.Props
-import it.dtk.util.StepParent
 import it.dtk.DataRecordExtractor
 import scala.concurrent.duration._
 import scala.io.Source
@@ -27,7 +26,6 @@ class Puglia24DataRecordExtractorSpec extends MySpec("Puglia24DataRecordExtracto
   "the puglia 24 record extractor" should {
     "extract records 25 data records" in {
       val dataRecordProps = Props(classOf[Puglia24DataRecordExtractor], url, html, date)
-      val dataRecordActor = system.actorOf(Props(classOf[StepParent], dataRecordProps, testActor))
       val results = expectMsgClass(15.seconds,classOf[DataRecords])
       assert(results.dataRecords.size == 7)
       results.dataRecords.foreach(dr =>
