@@ -76,7 +76,7 @@ abstract class DataRecordExtractor(val routerHttpGetter: ActorRef) extends Actor
       routerHttpGetter ! HttpGetter.Get(url)
 
     case HttpGetter.Result(url, html, date) =>
-      log.info("Got the HTML for URL {} having size of {} bytes", url, html.size)
+      log.debug("Got the HTML for URL {} having size of {} bytes", url, html.size)
 
       val doc = Jsoup.parse(html)
       //get the data records
