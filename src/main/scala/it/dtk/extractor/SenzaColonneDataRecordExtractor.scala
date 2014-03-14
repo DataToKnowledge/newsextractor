@@ -18,8 +18,8 @@ class SenzaColonneDataRecordExtractor(routerHttpGetter: ActorRef) extends DataRe
   def newsUrl(node: Element) = node.getElementsByClass("catItemTitle").select("a").attr("href")
 
   def newsDate(node: Element, date: DateTime) = {
-    val sdf = DateTimeFormat.forPattern("'Scritto' EEE',' dd MMMM yyyy HH:mm").withLocale(Locale.ITALIAN)
-    sdf.parseDateTime(node.select("catItemDateCreated").text())
+    val sdf = DateTimeFormat.forPattern("EEEE, dd MMMM yyyy HH:mm").withLocale(Locale.ITALIAN)
+    sdf.parseDateTime(node.select("span[class=catItemDateCreated]").text().toLowerCase)
   }
 }
 
