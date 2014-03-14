@@ -9,17 +9,17 @@ import org.joda.time.format.DateTimeFormat
 
 class GiornaleDiPugliaDataRecordExtractor(routerHttpGetter: ActorRef) extends DataRecordExtractor(routerHttpGetter) {
 
-  override val cssRecordsSelector: String = "div[class=item-other]"
+  override val cssRecordsSelector: String = "div[class=post-archive-body post-body]"
 
-  def title(node: Element) = node.select("h3 > a").text()
+  def title(node: Element) = node.select("h2 > a").text()
 
-  def summary(node: Element) = new String()
+  def summary(node: Element) = node.select("p").text()
 
-  def newsUrl(node: Element) = node.select("h3 > a").attr("href")
+  def newsUrl(node: Element) = node.select("h2 > a").attr("href")
 
   def newsDate(node: Element, date: DateTime) = {
-    val sdf = DateTimeFormat.forPattern("dd-MM-yyyy").withLocale(Locale.ITALIAN)
-    sdf.parseDateTime(node.select("div > a[class=date]").text())
+    val sdf = DateTimeFormat.forPattern("MM/dd/yyyy HH:mm:ss a").withLocale(Locale.ENGLISH)
+    sdf.parseDateTime(node.select("div > div[class=date]").text())
   }
 
 }
