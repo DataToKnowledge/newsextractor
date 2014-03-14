@@ -43,9 +43,9 @@ class BariTodayDataRecordExtractorSpec extends MySpec("BariTodayDataRecordExtrac
       results.dataRecords.foreach(dr =>
         assert(!dr.title.isEmpty)
       )
-      results.dataRecords.foreach(dr =>
+      /*results.dataRecords.foreach(dr =>
         assert(!dr.summary.isEmpty)
-      )
+      )*/
       results.dataRecords.foreach(dr =>
         assert(!dr.newsUrl.isEmpty)
       )
