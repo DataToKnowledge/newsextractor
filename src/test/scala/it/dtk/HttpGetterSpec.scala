@@ -4,6 +4,7 @@ import java.util.Date
 import scala.concurrent.duration._
 import akka.actor.Props
 import it.dtk.util.MySpec
+import java.net.ConnectException
 
 /**
  * @author Andrea Scarpino <andrea@datatoknowledge.it>
