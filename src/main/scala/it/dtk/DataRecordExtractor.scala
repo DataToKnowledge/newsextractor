@@ -37,9 +37,6 @@ abstract class DataRecordExtractor(val routerHttpGetter: ActorRef) extends Actor
       SupervisorStrategy.Restart
   }
 
-  //  def httpGetterProps(url: String): Props =
-  //    Props(classOf[HttpGetter], url)
-
   val cssRecordsSelector: String
 
   def extractRecords(doc: Document): Elements =

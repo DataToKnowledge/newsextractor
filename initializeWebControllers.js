@@ -35,7 +35,7 @@ for (var w in controllers) {
 
 // enable controllers
 db.webControllers.update(
-    { controllerName: "GoBariWebSiteController" },
+    { controllerName: "SenzaColonneWebSiteController" },
     { $set: { enabled: true } },
     { upsert: false, multi: true }
 )

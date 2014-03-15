@@ -1,7 +1,7 @@
 package it.dtk
 
 import akka.actor.{ ActorLogging, Actor }
-import java.util.{ Locale, Date }
+import java.util.Locale
 import java.util.concurrent.Executor
 import org.joda.time.format.DateTimeFormat
 import scala.concurrent.ExecutionContext
@@ -11,8 +11,8 @@ import scala.concurrent.Future
 import scala.concurrent.duration._
 import com.ning.http.client.AsyncCompletionHandler
 import scala.util.Success
+import org.joda.time.DateTime
 import scala.util.Failure
-import java.net.URLEncoder
 
 object HttpGetter {
 
@@ -23,7 +23,7 @@ object HttpGetter {
    * @param html fetched HTML
    * @param headerDate time extracted from response headers
    */
-  case class Result(url: String, html: String, headerDate: Date)
+  case class Result(url: String, html: String, headerDate: DateTime)
 
   case class Get(url: String)
   
@@ -51,29 +51,30 @@ class HttpGetter extends Actor with ActorLogging {
 
     case Get(url) =>
       val send = sender
-      val u = url
       log.info("getting the html for the url {}", url)
       context.system.scheduler.scheduleOnce(1.second) {
         val future = AsyncWebClient.get(url)
         future.onComplete {
           case Success(res) =>
-            send ! new Result(url, res.getResponseBody, sdf.parseDateTime(res.getHeader("Date")).toDate)
+            send ! new Result(url, res.getResponseBody, sdf.parseDateTime(res.getHeader("Date")))
           case Failure(ex) =>
-            send ! Fail(u,ex)
+            send ! Fail(url, ex)
         }
       }
   }
-  override def postStop = {
-    AsyncWebClient.shutdown
+
+  override def postStop() = {
+    AsyncWebClient.shutdown()
   }
 }
 
+case class GetException(url: String, status: Int) extends Throwable
+
 object AsyncWebClient {
 
-  private val client = init
+  private val client = init()
 
   def init(): AsyncHttpClient = {
-
     val builder = new AsyncHttpClientConfig.Builder()
     builder.setFollowRedirects(true)
     builder.setCompressionEnabled(true)
@@ -85,10 +86,13 @@ object AsyncWebClient {
   def get(url: String): Future[Response] = {
     val p = Promise[Response]()
     
-    val f = client.prepareGet(url).execute(new AsyncCompletionHandler[Response] {
+    client.prepareGet(url).execute(new AsyncCompletionHandler[Response] {
 
       override def onCompleted(response: Response): Response = {
-        p.success(response)
+        if (response.getStatusCode < 400)
+          p.success(response)
+        else
+          p.failure(GetException(url, response.getStatusCode))
         response
       }
 

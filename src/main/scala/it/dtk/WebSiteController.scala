@@ -15,6 +15,8 @@ import akka.actor.ActorRef
 import akka.actor.actorRef2Scala
 import it.dtk.util.URLUtil
 import scala.concurrent.duration._
+import it.dtk.util.UrlCAnonicalizer
+import it.dtk.util.UrlResolver
 
 object WebSiteController {
 
@@ -29,7 +31,7 @@ object WebSiteController {
   case object Status
 
   case object Waiting
-  
+
   case object Running
 
 }
@@ -45,11 +47,11 @@ abstract class WebSiteController(val id: String, val dbActor: ActorRef, val rout
   override val supervisorStrategy = OneForOneStrategy(maxNrOfRetries = -1, loggingEnabled = true) {
 
     case e: Exception =>
-      log.error("got exception in DataRecordExtractor {}",e.getMessage())
+      log.error("got exception in DataRecordExtractor {}", e.getMessage())
       SupervisorStrategy.Restart
 
     case e: Throwable =>
-      log.error("got exception in DataRecordExtractor {}",e.getMessage())
+      log.error("got exception in DataRecordExtractor {}", e.getMessage())
       SupervisorStrategy.Restart
   }
 
@@ -102,14 +104,14 @@ abstract class WebSiteController(val id: String, val dbActor: ActorRef, val rout
     case DataRecordExtractor.DataRecords(url, date, records) =>
 
       val normalizedRecords = records.map(r => {
-          URLUtil.normalize(baseUrl, r.newsUrl) match {
-            case Success(normUrl) => 
-              r.copy(newsUrl = normUrl)
-            case Failure(_) => 
-              r
-          }
+        UrlResolver.resolve(baseUrl, r.newsUrl) match {
+          case Success(normUrl) =>
+            r.copy(newsUrl = normUrl)
+          case Failure(_) =>
+            r
+        }
       })
-      
+
       val filteredRecords = normalizedRecords.takeWhile(r => !stopUrls.contains(r.newsUrl))
 
       filteredRecords.foreach(r => {
@@ -132,15 +134,17 @@ abstract class WebSiteController(val id: String, val dbActor: ActorRef, val rout
       log.info("Got main article content for URL {}", news.urlNews)
       dbActor ! DBManager.InsertNews(news)
 
+    case MainContentExtractor.Fail(url, ex) =>
+      log.error("Error when fetching main content text form URL {} with ex", url, ex.getMessage)
+
     case DBManager.FailHandlingNews(news, ex) =>
-      log.error("Error inserting the new in the db {} with ex", news.urlNews, ex)
+      log.error("Error inserting the new in the db {} with ex", news.urlNews, ex.getMessage)
 
     case Terminated(ref) =>
       log.info("Number of children {}", context.children.size)
 
       if (context.children.size == 1)
         context.become(runNext(stopUrls, currentIndex + 1, extractedUrls, jobSender: ActorRef))
-        
 
     case timeout: ReceiveTimeout =>
       log.info("Failure in the extraction of the website controller with id {}", id)
