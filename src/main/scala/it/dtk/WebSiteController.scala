@@ -23,6 +23,8 @@ object WebSiteController {
   case class Start(vectorUrl: Vector[String] = Vector(), currentIndex: Int = 1)
 
   case class Job(url: String, index: Int, running: Boolean = false)
+  
+  case class JobUpdate(idController: String, dataRecordUrl: String, extractedRecords: Int)
 
   case class Done(id: String, extractedUrls: Vector[String])
 
@@ -113,6 +115,9 @@ abstract class WebSiteController(val id: String, val dbActor: ActorRef, val rout
       })
 
       val filteredRecords = normalizedRecords.takeWhile(r => !stopUrls.contains(r.newsUrl))
+      
+      //this message should be used to alert when there aren't extracted any records
+      jobSender ! JobUpdate(id,url,records.size)
 
       filteredRecords.foreach(r => {
         log.info("Getting main article content for URL {}", r.newsUrl)
