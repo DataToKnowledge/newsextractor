@@ -101,7 +101,7 @@ abstract class WebSiteController(val id: String, val dbActor: ActorRef, val rout
     case Status =>
       Running
 
-    case DataRecordExtractor.DataRecords(url, date, records) =>
+    case DataRecordExtractor.DataRecords(url, records) =>
 
       val normalizedRecords = records.map(r => {
         UrlResolver.resolve(baseUrl, r.newsUrl) match {
@@ -117,7 +117,7 @@ abstract class WebSiteController(val id: String, val dbActor: ActorRef, val rout
       filteredRecords.foreach(r => {
         log.info("Getting main article content for URL {}", r.newsUrl)
 
-        val recordNews = News(None, Some(baseUrl), Some(r.newsUrl), Some(r.title), Some(r.summary), Some(date))
+        val recordNews = News(None, Some(baseUrl), Some(r.newsUrl), Some(r.title), Some(r.summary), Some(r.newsDate))
         context.watch(context.actorOf(mainContentExtractorProps(recordNews)))
       })
 

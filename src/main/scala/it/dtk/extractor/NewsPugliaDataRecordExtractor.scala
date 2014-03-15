@@ -1,12 +1,7 @@
 package it.dtk.extractor
 
 import it.dtk.DataRecordExtractor
-import scala.xml.{ XML, NodeSeq, Node }
-import it.dtk.DataRecordExtractor.DataRecords
-import org.jsoup.Jsoup
-import scala.collection.JavaConversions._
 import org.jsoup.nodes.Element
-import it.dtk.DataRecordExtractor._
 import org.joda.time.DateTime
 import akka.actor.ActorRef
 
@@ -19,8 +14,10 @@ class NewsPugliaDataRecordExtractor(routerHttpGetter: ActorRef) extends DataReco
 
   def title(node: Element) = node.select("div > h2 > a").text
 
-  def summary(node: Element) = node.select("div > div[class= lineinfo line1").text
+  def summary(node: Element) = node.select("div > div[class=lineinfo line1]").text
 
   def newsUrl(node: Element) = node.select("div > h2 > a[href]").attr("href")
+
+  def newsDate(node: Element, date: DateTime) = date
 
 }

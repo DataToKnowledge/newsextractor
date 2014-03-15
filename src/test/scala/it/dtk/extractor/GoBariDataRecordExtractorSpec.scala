@@ -1,16 +1,18 @@
 package it.dtk.extractor
 
 import it.dtk.util.MySpec
-import java.util.Date
 import org.joda.time.DateTime
-import akka.actor.Props
-import it.dtk.DataRecordExtractor
+import akka.actor.{Actor, ActorRef, Props}
 import scala.concurrent.duration._
 import scala.io.Source
+import it.dtk.HttpGetter.Result
+import it.dtk.DataRecordExtractor.DataRecords
 
 object GoBariDataRecordExtractorSpec {
 
-  val url = "http://go-bari.it/notizie/cronaca/"
+  val url = "http://go-bari.it/"
+
+  val html = Source.fromFile("./src/test/resources/GoBariCronacaList.html", "iso-8859-1").getLines().mkString
 
   val date = DateTime.now()
 
@@ -19,18 +21,33 @@ object GoBariDataRecordExtractorSpec {
 class GoBariDataRecordExtractorSpec extends MySpec("GoBariDataRecordExtractorSpec") {
 
   import GoBariDataRecordExtractorSpec._
-  import DataRecordExtractor._
 
-  val html = Source.fromFile("./src/test/resources/GoBariCronacaList.html", "iso-8859-1").getLines().mkString
-  
+  val parent = system.actorOf(Props(new Actor {
+    val child = context.actorOf(Props(classOf[GoBariDataRecordExtractor], ActorRef.noSender), "child")
+
+    def receive = {
+      case x if sender == child => testActor forward x
+      case x => child forward x
+    }
+  }
+  ))
+
   "The GoBari record extractor" should {
+
     "extract 20 data records" in {
-      val dataRecordProps = Props(classOf[GoBariDataRecordExtractor], url, html, date)
-      val results = expectMsgClass(15.seconds,classOf[DataRecords])
+
+      parent ! Result(url, html, date)
+      val results = expectMsgClass(15.seconds, classOf[DataRecords])
 
       assert(results.dataRecords.size == 20)
       results.dataRecords.foreach(dr =>
-      	assert(dr.title.length() > 0)
+        assert(!dr.title.isEmpty)
+      )
+      results.dataRecords.foreach(dr =>
+        assert(!dr.summary.isEmpty)
+      )
+      results.dataRecords.foreach(dr =>
+        assert(!dr.newsUrl.isEmpty)
       )
     }
   }

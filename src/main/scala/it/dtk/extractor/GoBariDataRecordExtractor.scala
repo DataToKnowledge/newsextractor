@@ -1,12 +1,7 @@
 package it.dtk.extractor
 
 import it.dtk.DataRecordExtractor
-import it.dtk.DataRecordExtractor.DataRecord
-import java.util.Date
-import org.jsoup.Jsoup
-import scala.collection.JavaConversions._
 import org.jsoup.nodes.Element
-import it.dtk.DataRecordExtractor._
 import org.joda.time.DateTime
 import akka.actor.ActorRef
 
@@ -22,5 +17,7 @@ class GoBariDataRecordExtractor(routerHttpGetter: ActorRef) extends DataRecordEx
   def summary(node: Element) = node.select("span.civetta > p").text
 
   def newsUrl(node: Element) = node.select("div.titolo > a").attr("href")
+
+  def newsDate(node: Element, date: DateTime) = date
 
 }

@@ -1,10 +1,9 @@
 package it.dtk.extractor
 
 import it.dtk.DataRecordExtractor
-import it.dtk.DataRecordExtractor.DataRecord
 import org.jsoup.nodes.Element
-import scala.collection.JavaConversions._
 import akka.actor.ActorRef
+import org.joda.time.DateTime
 
 /**
  * @author Andrea Scarpino <andrea@datatoknowledge.it>
@@ -18,4 +17,7 @@ class LeccePrimaDataRecordExtractor(routerHttpGetter: ActorRef) extends DataReco
   def summary(node: Element) = node.select("p").text
 
   def newsUrl(node: Element) = node.select("header > h1 > a").attr("href")
+
+  def newsDate(node: Element, date: DateTime) = date
+
 }

@@ -1,11 +1,7 @@
 package it.dtk.extractor
 
 import it.dtk.DataRecordExtractor
-import scala.xml.{ XML, NodeSeq, Node }
-import it.dtk.DataRecordExtractor.DataRecord
-import org.jsoup.Jsoup
 import org.jsoup.nodes.Element
-import it.dtk.DataRecordExtractor._
 import org.joda.time.DateTime
 import akka.actor.ActorRef
 
@@ -14,12 +10,14 @@ import akka.actor.ActorRef
  */
 class Puglia24DataRecordExtractor(routerHttpGetter: ActorRef) extends DataRecordExtractor(routerHttpGetter) {
 
-  override val cssRecordsSelector: String = "div[class= grid_7]"
+  override val cssRecordsSelector: String = "div[class=newsTxt]"
 
-  def title(node: Element) = node.select("a > h2").text
+  def title(node: Element) = node.select("h5 > a").text()
 
-  def summary(node: Element) = node.select("div > p:last-child").text
+  def summary(node: Element) = node.select("p").text()
 
-  def newsUrl(node: Element) = node.select("a[href]").attr("href")
+  def newsUrl(node: Element) = node.select("h5 > a").attr("href")
+
+  def newsDate(node: Element, date: DateTime) = date
 
 }

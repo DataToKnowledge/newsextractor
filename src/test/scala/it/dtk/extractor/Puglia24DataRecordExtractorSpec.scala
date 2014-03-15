@@ -1,16 +1,18 @@
 package it.dtk.extractor
 
 import it.dtk.util.MySpec
-import java.util.Date
 import org.joda.time.DateTime
-import akka.actor.Props
-import it.dtk.DataRecordExtractor
+import akka.actor.{Actor, ActorRef, Props}
 import scala.concurrent.duration._
 import scala.io.Source
+import it.dtk.HttpGetter.Result
+import it.dtk.DataRecordExtractor.DataRecords
 
 object Puglia24DataRecordExtractorSpec {
 
-  val url = "http://www.puglia24news.it/category/cronaca/"
+  val url = "http://www.puglia24news.it/"
+
+  val html = Source.fromFile("./src/test/resources/Puglia24CronacaList.html", "UTF-8").getLines().mkString
 
   val date = DateTime.now()
 
@@ -19,17 +21,33 @@ object Puglia24DataRecordExtractorSpec {
 class Puglia24DataRecordExtractorSpec extends MySpec("Puglia24DataRecordExtractorSpec") {
 
   import Puglia24DataRecordExtractorSpec._
-  import DataRecordExtractor._
 
-  val html = Source.fromFile("./src/test/resources/Puglia24CronacaList.html", "UTF-8").getLines().mkString
-  
-  "the puglia 24 record extractor" should {
-    "extract records 25 data records" in {
-      val dataRecordProps = Props(classOf[Puglia24DataRecordExtractor], url, html, date)
-      val results = expectMsgClass(15.seconds,classOf[DataRecords])
-      assert(results.dataRecords.size == 7)
+  val parent = system.actorOf(Props(new Actor {
+    val child = context.actorOf(Props(classOf[Puglia24DataRecordExtractor], ActorRef.noSender), "child")
+
+    def receive = {
+      case x if sender == child => testActor forward x
+      case x => child forward x
+    }
+  }
+  ))
+
+  "the Puglia24 record extractor" should {
+
+    "extract 6 data records" in {
+
+      parent ! Result(url, html, date)
+      val results = expectMsgClass(15.seconds, classOf[DataRecords])
+
+      assert(results.dataRecords.size == 6)
       results.dataRecords.foreach(dr =>
-      	assert(dr.title.length() > 0)
+        assert(!dr.title.isEmpty)
+      )
+      results.dataRecords.foreach(dr =>
+        assert(!dr.summary.isEmpty)
+      )
+      results.dataRecords.foreach(dr =>
+        assert(!dr.newsUrl.isEmpty)
       )
     }
   }

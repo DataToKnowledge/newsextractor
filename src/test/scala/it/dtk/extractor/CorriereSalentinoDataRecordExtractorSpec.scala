@@ -8,21 +8,22 @@ import scala.io.Source
 import it.dtk.HttpGetter.Result
 import it.dtk.DataRecordExtractor.DataRecords
 
-object LeccePrimaDataRecordExtractorSpec {
+object CorriereSalentinoDataRecordExtractorSpec {
 
-  val url = "http://www.lecceprima.it/"
+  val url = "http://www.corrieresalentino.it/"
 
-  val html = Source.fromFile("./src/test/resources/LeccePrimaCronocaList.html", "UTF-8").getLines().mkString
+  val html = Source.fromFile("./src/test/resources/CorriereSalentinoCronacaList.html", "ISO-8859-1").getLines().mkString
 
   val date = DateTime.now()
+
 }
 
-class LeccePrimaDataRecordExtractorSpec extends MySpec("LeccePrimaRecordExtactorSpec") {
+class CorriereSalentinoRecordExtractorSpec extends MySpec("CorriereSalentinoRecordExtractorSpec") {
 
-  import LeccePrimaDataRecordExtractorSpec._
+  import CorriereSalentinoDataRecordExtractorSpec._
 
   val parent = system.actorOf(Props(new Actor {
-    val child = context.actorOf(Props(classOf[LeccePrimaDataRecordExtractor], ActorRef.noSender), "child")
+    val child = context.actorOf(Props(classOf[CorriereSalentinoDataRecordExtractor], ActorRef.noSender), "child")
 
     def receive = {
       case x if sender == child => testActor forward x
@@ -31,14 +32,13 @@ class LeccePrimaDataRecordExtractorSpec extends MySpec("LeccePrimaRecordExtactor
   }
   ))
 
-  "The LeccePrima record extractor" should {
+  "The CorriereSalentino record extractor" should {
 
-    "extract 25 data records" in {
-
+    "extract 14 data records" in {
       parent ! Result(url, html, date)
-      val results = expectMsgClass(15.seconds, classOf[DataRecords])
+      val results = expectMsgClass(15.seconds,classOf[DataRecords])
 
-      assert(results.dataRecords.size == 25)
+      assert(results.dataRecords.size == 14)
       results.dataRecords.foreach(dr =>
         assert(!dr.title.isEmpty)
       )
@@ -51,12 +51,3 @@ class LeccePrimaDataRecordExtractorSpec extends MySpec("LeccePrimaRecordExtactor
     }
   }
 }
-
-
-
-
-
-
-
-
-
