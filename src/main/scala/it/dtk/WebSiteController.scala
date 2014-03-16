@@ -24,7 +24,7 @@ object WebSiteController {
 
   case class Job(url: String, index: Int, running: Boolean = false)
   
-  case class JobUpdate(idController: String, dataRecordUrl: String, extractedRecords: Int)
+  case class JobUpdate(idController: String, dataRecordUrl: String, extractedRecords: Vector[String])
 
   case class Done(id: String, extractedUrls: Vector[String])
 
@@ -117,10 +117,10 @@ abstract class WebSiteController(val id: String, val dbActor: ActorRef, val rout
       val filteredRecords = normalizedRecords.takeWhile(r => !stopUrls.contains(r.newsUrl))
       
       //this message should be used to alert when there aren't extracted any records
-      jobSender ! JobUpdate(id,url,records.size)
+      jobSender ! JobUpdate(id,url,records.map(_.newsUrl).toVector)
 
       filteredRecords.foreach(r => {
-        log.info("Getting main article content for URL {}", r.newsUrl)
+        log.info("star extracting the main article content from URL {}", r.newsUrl)
 
         val recordNews = News(None, Some(baseUrl), Some(r.newsUrl), Some(r.title), Some(r.summary), Some(r.newsDate))
         context.watch(context.actorOf(mainContentExtractorProps(recordNews)))
@@ -136,7 +136,7 @@ abstract class WebSiteController(val id: String, val dbActor: ActorRef, val rout
       context.become(nextStatus)
 
     case MainContentExtractor.Result(news) =>
-      log.info("Got main article content for URL {}", news.urlNews)
+      log.info("Saving news for url {}", news.urlNews)
       dbActor ! DBManager.InsertNews(news)
 
     case MainContentExtractor.Fail(url, ex) =>
@@ -146,8 +146,7 @@ abstract class WebSiteController(val id: String, val dbActor: ActorRef, val rout
       log.error("Error inserting the new in the db {} with ex", news.urlNews, ex.getMessage)
 
     case Terminated(ref) =>
-      log.info("Number of children {}", context.children.size)
-
+      //log.info("Number of children {}", context.children.size)
       if (context.children.size == 1)
         context.become(runNext(stopUrls, currentIndex + 1, extractedUrls, jobSender: ActorRef))
 

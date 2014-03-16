@@ -30,7 +30,7 @@ class WebSiteReceptionist extends Actor with ActorLogging {
   def db = "dbNews"
 
   val dbActor: ActorRef = context.actorOf(Props(classOf[DBManager], host, db))
-  
+
   val httpGetterRouter = context.actorOf(Props[HttpGetter].withRouter(RoundRobinRouter(nrOfInstances = 5)))
 
   val controllersMap: Map[String, WebControllerData] = Map()
@@ -41,7 +41,7 @@ class WebSiteReceptionist extends Actor with ActorLogging {
       dbActor ! DBManager.ListWebControllers
 
     case DBManager.WebControllers(controllers) =>
-      log.info("start doing news extraction for {} controllers", controllers.size)
+      log.info("start news extraction for {} controllers", controllers.size)
 
       controllers.filter(_.enabled.getOrElse(false)).foreach { c =>
 
@@ -60,8 +60,9 @@ class WebSiteReceptionist extends Actor with ActorLogging {
       }
 
     case WebSiteController.Done(idController, extractedUrls) =>
-      log.info("extracted {} urls from the controller with id {}", extractedUrls.size, idController)
       val optController = controllersMap.get(idController)
+      log.info("extracted {} urls from the controller with id {}",
+        extractedUrls.size, optController.get.controllerName)
 
       optController.map { c =>
         val nextStopUrls = extractedUrls.take(3)
@@ -74,15 +75,25 @@ class WebSiteReceptionist extends Actor with ActorLogging {
           //update the pair in the controllersMap
           res.map(controllersMap += _) //vai mo vai!!!
         }
-        
+
       }
-      
+
     case WebSiteController.Fail(idController, currentIndex, extractedUrls) =>
-      log.error("WebSiteController Fail {} {}", idController, currentIndex)
+      val optController = controllersMap.get(idController)
+      log.error("WebSiteController {} fails for index {}", optController.get.controllerName, currentIndex)
 
     case DBManager.FailQueryWebControllers(ex) =>
       log.error("DBManager FailQueryWebControllers {}", ex.getMessage)
+
+    case WebSiteController.JobUpdate(idController, dataRecordUrl, mainContentUrls) =>
+      val optController = controllersMap.get(idController)
+      log.info("from the controller {} and the data record url {} are extract {} urls",
+        optController.get.controllerName, dataRecordUrl, mainContentUrls.length)
+
+      if (mainContentUrls.length == 0)
+        log.error("{} failed extracting data records from the url {}",optController.get.controllerName, dataRecordUrl)
   }
+
 }
 
 object Main {
@@ -93,8 +104,8 @@ object Main {
     import system.dispatcher
 
     val system = ActorSystem("newsExtractor")
-    val receptionist = system.actorOf(Props[WebSiteReceptionist],"WebSiteReceptionist")
-    system.scheduler.schedule(1 second, 60 minutes, receptionist, WebSiteReceptionist.Start)
+    val receptionist = system.actorOf(Props[WebSiteReceptionist], "WebSiteReceptionist")
+    system.scheduler.schedule(1 second, 120 minutes, receptionist, WebSiteReceptionist.Start)
     //receptionist ! WebSiteReceptionist.Start
   }
 }
