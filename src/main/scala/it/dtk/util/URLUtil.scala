@@ -2,7 +2,6 @@ package it.dtk.util
 
 import java.net.MalformedURLException
 import scala.util.{ Try, Success, Failure }
-import java.net.URLEncoder
 
 /**
  * URL utilities class.

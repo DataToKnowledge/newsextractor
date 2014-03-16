@@ -71,9 +71,20 @@ class URLUtil$Test extends FlatSpec with Matchers {
     val baseUrl = "http://www.baritoday.it"
     val relativePath = "cronaca/ciccio-cappuccio.html"
 
-    val result = URLUtil normalize (baseUrl, relativePath)
-    result should be a 'success
-    result.get should be ("http://www.baritoday.it/cronaca/ciccio-cappuccio.html")
+    val res1 = URLUtil normalize (baseUrl + "/", "/" + relativePath)
+    val res2 = URLUtil normalize (baseUrl, "/" + relativePath)
+    val res3 = URLUtil normalize (baseUrl + "/", relativePath)
+    val res4 = URLUtil normalize (baseUrl, relativePath)
+
+    res1 should be a 'success
+    res2 should be a 'success
+    res3 should be a 'success
+    res4 should be a 'success
+
+    res1.get should be ("http://www.baritoday.it/cronaca/ciccio-cappuccio.html")
+    res2.get should be ("http://www.baritoday.it/cronaca/ciccio-cappuccio.html")
+    res3.get should be ("http://www.baritoday.it/cronaca/ciccio-cappuccio.html")
+    res4.get should be ("http://www.baritoday.it/cronaca/ciccio-cappuccio.html")
   }
 
   it should "check if a URL is absolute" in {
@@ -123,11 +134,7 @@ class URLUtil$Test extends FlatSpec with Matchers {
     "http://baritoday.it/notizia-a-caso",
     "http://baritoday.it/notizia-a-caso/",
     "https://baritoday.it/notizia-a-caso",
-    "https://baritoday.it/notizia-a-caso/",
-    "/notizie/notizia-a-caso",
-    "/notizie/notizia-a-caso/",
-    "//notizie/notizia-a-caso",
-    "//notizie/notizia-a-caso")
+    "https://baritoday.it/notizia-a-caso/")
 
   val relUrls = List(
     "baritoday.it/notizia-a-caso",
@@ -139,7 +146,11 @@ class URLUtil$Test extends FlatSpec with Matchers {
     "../notizia-a-caso",
     "../notizia-a-caso/",
     "../notizie/notizia-a-caso",
-    "../notizie/notizia-a-caso/")
+    "../notizie/notizia-a-caso/",
+    "/notizie/notizia-a-caso",
+    "/notizie/notizia-a-caso/",
+    "//notizie/notizia-a-caso",
+    "//notizie/notizia-a-caso")
 
   val normUrls1 = List(
     "http://www.baritoday.it",
