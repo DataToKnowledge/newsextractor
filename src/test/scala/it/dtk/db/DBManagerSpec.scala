@@ -1,12 +1,11 @@
 package it.dtk.db
 
-import akka.actor.{ Props, ActorSystem }
-import akka.testkit.{ ImplicitSender, TestKit }
-import org.scalatest.{ BeforeAndAfterAll, Matchers, WordSpecLike }
+import akka.actor.Props
 import org.joda.time.DateTime
 import it.dtk.db.DBManager._
 import scala.concurrent.duration._
 import scala.language.postfixOps
+import it.dtk.util.MySpec
 
 object DBManagerSpec {
 
@@ -28,16 +27,11 @@ object DBManagerSpec {
   )
 }
 
-class DBManagerSpec extends TestKit(ActorSystem("DBManagerSpec")) with ImplicitSender
-  with WordSpecLike with Matchers with BeforeAndAfterAll {
+class DBManagerSpec extends MySpec("DBManagerSpec") {
 
   import DBManagerSpec._
 
-  override def afterAll() {
-    TestKit.shutdownActorSystem(system)
-  }
-
-  "An DBManager actor" must {
+  "An DBManager actor (hosted on 10.1.0.62)" must {
 
     val dbActor = system.actorOf(Props(classOf[DBManager], "10.1.0.62", "testNews"))
 
@@ -46,12 +40,13 @@ class DBManagerSpec extends TestKit(ActorSystem("DBManagerSpec")) with ImplicitS
       expectMsg(10 seconds, DoneInsertNews)
     }
 
-    "list web controllers" in {
+    "list enabled web controllers" in {
       dbActor ! ListWebControllers
-      expectMsgClass(10 seconds, classOf[WebControllers])
+      val res = expectMsgClass(10 seconds, classOf[WebControllers])
+      assert(res.controllers.nonEmpty)
     }
 
-    "update web controllers" in {
+    "enable a web controller" in {
       dbActor ! UpdateWebController(controllerTest)
       expectMsg(10 seconds, DoneUpdateWebController)
     }

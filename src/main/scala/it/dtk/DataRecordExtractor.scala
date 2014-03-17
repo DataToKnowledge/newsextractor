@@ -72,7 +72,7 @@ abstract class DataRecordExtractor(val routerHttpGetter: ActorRef) extends Actor
       val records = extractRecords(doc) map (
         r => DataRecord(title(r), summary(r), newsUrl(r), newsDate(r, date)))
 
-      context.parent ! DataRecords(url, records.filter(d => d.title.length() > 0))
+      context.parent ! DataRecords(url, records.filter(d => d.title.nonEmpty))
 
     case HttpGetter.Fail(url, ex) =>
       log.error("Failed to get the HTML for URL {} with exception {}", url, ex.getMessage)

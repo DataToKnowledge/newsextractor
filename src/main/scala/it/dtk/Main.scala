@@ -66,7 +66,7 @@ class WebSiteReceptionist extends Actor with ActorLogging {
 
       optController.map { c =>
         val nextStopUrls = extractedUrls.take(3)
-        if (nextStopUrls.size > 0) {
+        if (nextStopUrls.nonEmpty) {
           val toUpdateController = c.copy(stopUrls = Some(nextStopUrls.toList))
           dbActor ! DBManager.UpdateWebController(toUpdateController)
 
@@ -90,7 +90,7 @@ class WebSiteReceptionist extends Actor with ActorLogging {
       log.info("From the controller {} and the data record URL {} are extract {} urls",
         optController.get.controllerName, dataRecordUrl, mainContentUrls.length)
 
-      if (mainContentUrls.length == 0)
+      if (mainContentUrls.isEmpty)
         log.error("{} failed extracting data records from the URL {}",optController.get.controllerName, dataRecordUrl)
   }
 
