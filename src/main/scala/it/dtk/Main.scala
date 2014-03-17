@@ -34,7 +34,7 @@ class WebSiteReceptionist extends Actor with ActorLogging {
    * @return supervisor strategy for dbmanager and for http router
    */
   override def supervisorStrategy = OneForOneStrategy(maxNrOfRetries = 10, withinTimeRange = 10 minutes) {
-    case _: Exception => 
+    case _: Exception =>
       log.error("Yuppi!! error {}", self.path.name)
       Escalate
   }
@@ -60,7 +60,8 @@ class WebSiteReceptionist extends Actor with ActorLogging {
 
         for (id <- c.id; contrName <- c.controllerName) {
           val contrClass = Class.forName(s"it.dtk.controller.$contrName")
-          val controllerActor = context.child(contrName).getOrElse(context.actorOf(Props(contrClass, id.toString(), dbActor, httpGetterRouter), contrName))
+          val controllerActor = context.child(contrName).
+            getOrElse(context.actorOf(Props(contrClass, id.toString(), dbActor, httpGetterRouter), contrName))
 
           val stopUrls = c.stopUrls.getOrElse(List()).toVector
           controllerActor ! WebSiteController.Start(stopUrls)

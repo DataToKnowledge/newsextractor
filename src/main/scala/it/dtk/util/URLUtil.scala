@@ -1,7 +1,7 @@
 package it.dtk.util
 
-import java.net.MalformedURLException
-import scala.util.{ Try, Success, Failure }
+import java.net.{URLEncoder, MalformedURLException}
+import scala.util.{Try, Success, Failure}
 
 /**
  * URL utilities class.
@@ -10,7 +10,10 @@ import scala.util.{ Try, Success, Failure }
  */
 object URLUtil {
 
-  val URL_REGEX = "^http(s{0,1})://[a-zA-Z0-9_/\\-\\.]+\\.([A-Za-z/]{2,5})[a-zA-Z0-9_/\\&\\?\\=\\-\\.\\~\\%]*"
+  val URL_REGEX = "^http(s?)://" +                // Scheme
+    "[a-zA-Z0-9_/\\-\\.]+\\.([A-Za-z/]{2,5})" +   // Domain
+    "(\\:[0-9]{1,5})?" +                          // Port
+    "[a-zA-Z0-9_/\\&\\?\\=\\-\\.\\~\\%]*"         // Resource and Query
 
   /**
    * Normalize a given URL to http(s)://domain.tld/(whatever/) format.
@@ -29,11 +32,12 @@ object URLUtil {
       parsedUrl = "http://" + parsedUrl
 
     // Add trailing slash if missing
-    if (!parsedUrl.endsWith("/") && getRequestedResource(parsedUrl) == None)
+    if (!parsedUrl.endsWith("/") && getRequestedResource(parsedUrl, fullQuery = true) == None)
       parsedUrl = parsedUrl + "/"
 
-    // Check if composed URL is still valid
+    // Check if composed URL is still valid (try also to encode URL if validation fails)
     if (parsedUrl.matches(URL_REGEX)) Success(parsedUrl)
+    else if (encodeURL(parsedUrl).matches(URL_REGEX)) Success(encodeURL(parsedUrl))
     else Failure(new MalformedURLException(s"URL is malformed: $url"))
   }
 
@@ -62,20 +66,62 @@ object URLUtil {
   }
 
   /**
-   * Returns requested resource from URL
+   * Returns requested resource from URL.
    * @param url URL to analyze
+   * @param fullQuery If true, full query will be returned (e.g.: index.php?param1=val1[...])
    * @return Resource name if resource is specified; None otherwise
    */
-  def getRequestedResource(url: String): Option[String] = {
+  def getRequestedResource(url: String, fullQuery: Boolean = false): Option[String] = {
+    val RESOURCE_FRAGMENT_REGEX = "((.+)\\.(.{2,5}))?(\\?.+)?"
     val loweredUrl = url.trim.toLowerCase
     val parsedUrl = loweredUrl.split("/")
 
     if (loweredUrl.startsWith("http") && parsedUrl.size >= 4) {
-      if (parsedUrl.last.matches("(.+)\\.(.{2,4})")) Some(parsedUrl.last) else None
+      if (parsedUrl.last.matches(RESOURCE_FRAGMENT_REGEX)) {
+        val indexQuery = parsedUrl.last.indexOf("?")
+        val res: Option[String] = if (indexQuery != -1) Some(parsedUrl.last.substring(0, indexQuery)) else None
+        if (!fullQuery && res.isDefined) {
+          if (!res.get.isEmpty) Some(res.get) else None
+        } else Some(parsedUrl.last)
+      } else None
     } else if (isRelative(loweredUrl)) {
-      if (parsedUrl.last.matches("(.+)\\.(.{2,4})")) Some(parsedUrl.last) else None
+      if (parsedUrl.last.matches(RESOURCE_FRAGMENT_REGEX)) {
+        val indexQuery = parsedUrl.last.indexOf("?")
+        val res: Option[String] = if (indexQuery != -1) Some(parsedUrl.last.substring(0, indexQuery)) else None
+        if (!fullQuery && res.isDefined) {
+          if (!res.get.isEmpty) Some(res.get) else None
+        } else Some(parsedUrl.last)
+      } else None
     } else if (loweredUrl.startsWith("/")) {
-      if (parsedUrl.last.matches("(.+)\\.(.{2,4})")) Some(parsedUrl.last) else None
+      if (parsedUrl.last.matches(RESOURCE_FRAGMENT_REGEX)) {
+        val indexQuery = parsedUrl.last.indexOf("?")
+        val res: Option[String] = if (indexQuery != -1) Some(parsedUrl.last.substring(0, indexQuery)) else None
+        if (!fullQuery && res.isDefined) {
+          if (!res.get.isEmpty) Some(res.get) else None
+        } else Some(parsedUrl.last)
+      } else None
+    } else None
+  }
+
+  /**
+   * Returns requested query arguments from URL.
+   * @param url URL to analyze
+   * @return Map of (argument,value) if there are arguments; None otherwise
+   */
+  def getQueryArgs(url: String): Option[Map[String, String]] = {
+    val loweredUrl = url.trim.toLowerCase
+    val res = getRequestedResource(loweredUrl, fullQuery = true)
+    val indexQuery = if (res.isDefined && res.get.indexOf("?") != -1) Some(res.get.indexOf("?")) else None
+
+    if (indexQuery.isDefined) {
+      val query = res.get.substring(indexQuery.get)
+      if (query.isEmpty) None
+
+      val pattern = "[\\?\\&]([^\\?\\&]+)\\=([^\\?\\&]+)".r
+      var valuesMap: Map[String, String] = Map.empty
+      pattern.findAllIn(query).matchData.foreach(m => valuesMap += (m.group(1) -> m.group(2)))
+      if (!valuesMap.isEmpty) Some(valuesMap)
+      else None
     } else None
   }
 
@@ -96,8 +142,35 @@ object URLUtil {
     val urlTokens = parsedUrl.split("\\.")
 
     // Compose domain name or throw exception
-    if (urlTokens.length > 1) Success(urlTokens.apply(urlTokens.length - 2) + "." + urlTokens.last)
-    else Failure(new MalformedURLException(s"URL is malformed: $url"))
+    if (urlTokens.length > 1)
+      Success(urlTokens.apply(urlTokens.length - 2) + "." + urlTokens.last.replaceFirst("\\:[0-9]+", ""))
+    else
+      Failure(new MalformedURLException(s"URL is malformed: $url"))
+  }
+
+  /**
+   * Encode given URL (replaces invalid characters with corresponding HTML entities).
+   * @param url URL to encode
+   * @return Encoded URL
+   */
+  def encodeURL(url: String): String = {
+    val loweredUrl = url.trim.toLowerCase
+    val fullRes = getRequestedResource(loweredUrl, fullQuery = true)
+
+    if (!fullRes.isDefined) {
+      loweredUrl
+    } else {
+      val encodedRes = URLEncoder.encode(getRequestedResource(loweredUrl).getOrElse(""), "UTF-8")
+
+      val query = getQueryArgs(loweredUrl)
+      if (query.isDefined) {
+        val encodedQuery = query.get.mapValues(URLEncoder.encode(_, "UTF-8"))
+        var encQueryStr = ""
+        encodedQuery.foreach(m => encQueryStr += "&" + m._1 + "=" + m._2)
+        encQueryStr = encQueryStr.replaceFirst("&", "?")
+        loweredUrl.replace(fullRes.get, encodedRes) + encQueryStr
+      } else loweredUrl.replace(fullRes.get, encodedRes)
+    }
   }
 
   /**
@@ -110,7 +183,7 @@ object URLUtil {
 
     (lowerCaseUrl.endsWith("/")
       && (lowerCaseUrl.startsWith("https")
-        || lowerCaseUrl.startsWith("http")))
+      || lowerCaseUrl.startsWith("http")))
   }
 
   /**

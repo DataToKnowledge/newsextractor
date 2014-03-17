@@ -12,8 +12,8 @@ import scala.util.{ Success, Failure }
 import it.dtk.db.DBManager
 import akka.actor.ActorRef
 import akka.actor.actorRef2Scala
+import it.dtk.util.URLUtil
 import scala.concurrent.duration._
-import it.dtk.util.UrlResolver
 import akka.actor.PoisonPill
 import akka.actor.OneForOneStrategy
 
@@ -97,8 +97,9 @@ abstract class WebSiteController(val id: String, val dbActor: ActorRef, val rout
     case DataRecordExtractor.DataRecords(url, records) =>
       log.info("got {} data records from {}",records.size, sender.path.name)
       //normalize the urls in the records
-      val normalizedRecords = records.map { r =>
-        UrlResolver.resolve(baseUrl, r.newsUrl) match {
+
+      val normalizedRecords = records.map { r => 
+        URLUtil.normalize(baseUrl, r.newsUrl) match {
           case Success(normUrl) =>
             r.copy(newsUrl = normUrl)
           case Failure(_) =>
