@@ -48,7 +48,7 @@ class HttpGetterSpec extends MySpec("HttpGetterSpec") {
 
       val res = expectMsgClass(10.seconds, classOf[Result])
       res.html.getClass should be(classOf[String])
-      assert(!res.html.isEmpty)
+      assert(res.html.nonEmpty)
       res.headerDate.getClass should be(classOf[DateTime])
     }
 

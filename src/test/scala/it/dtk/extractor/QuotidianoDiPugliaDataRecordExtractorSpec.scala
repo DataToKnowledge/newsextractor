@@ -41,13 +41,13 @@ class QuotidianoDiPugliaDataRecordExtractorSpec extends MySpec("QuotidianoDiPugl
 
       assert(results.dataRecords.size == 50)
       results.dataRecords.foreach(dr =>
-        assert(!dr.title.isEmpty)
+        assert(dr.title.nonEmpty)
       )
       results.dataRecords.foreach(dr =>
-        assert(!dr.summary.isEmpty)
+        assert(dr.summary.nonEmpty)
       )
       results.dataRecords.foreach(dr =>
-        assert(!dr.newsUrl.isEmpty)
+        assert(dr.newsUrl.nonEmpty)
       )
     }
   }

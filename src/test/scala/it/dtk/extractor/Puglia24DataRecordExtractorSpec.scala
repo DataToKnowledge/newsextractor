@@ -41,13 +41,13 @@ class Puglia24DataRecordExtractorSpec extends MySpec("Puglia24DataRecordExtracto
 
       assert(results.dataRecords.size == 6)
       results.dataRecords.foreach(dr =>
-        assert(!dr.title.isEmpty)
+        assert(dr.title.nonEmpty)
       )
       results.dataRecords.foreach(dr =>
-        assert(!dr.summary.isEmpty)
+        assert(dr.summary.nonEmpty)
       )
       results.dataRecords.foreach(dr =>
-        assert(!dr.newsUrl.isEmpty)
+        assert(dr.newsUrl.nonEmpty)
       )
     }
   }
