@@ -28,7 +28,7 @@ object HttpGetter {
   case class Get(url: String)
 
   case class Fail(url: String, ex: Throwable)
-
+  
 }
 
 /**
@@ -51,7 +51,7 @@ class HttpGetter extends Actor with ActorLogging {
 
     case Get(url) =>
       val send = sender
-      log.info("Getting the HTML for the URL {}", url)
+      //log.info("Getting the HTML for the URL {}", url)
       context.system.scheduler.scheduleOnce(1.second) {
         val future = AsyncWebClient.get(url)
         future.onComplete {

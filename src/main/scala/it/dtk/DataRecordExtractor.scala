@@ -76,5 +76,6 @@ abstract class DataRecordExtractor(val routerHttpGetter: ActorRef) extends Actor
 
     case HttpGetter.Fail(url, ex) =>
       log.error("Failed to get the HTML for URL {} with exception {}", url, ex.getMessage)
+      throw ex
   }
 }

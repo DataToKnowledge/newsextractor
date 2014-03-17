@@ -31,10 +31,6 @@ object MainContentExtractor {
  */
 class MainContentExtractor(news: News, routerHttpGetter: ActorRef) extends Actor with ActorLogging {
 
-  override val supervisorStrategy = OneForOneStrategy(maxNrOfRetries = -1, loggingEnabled = true) {
-    case _: Exception =>
-      SupervisorStrategy.Restart
-  }
 
   import MainContentExtractor._
 

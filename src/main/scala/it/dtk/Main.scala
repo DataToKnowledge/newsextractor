@@ -9,6 +9,10 @@ import scala.collection.mutable.Map
 import scala.concurrent.duration._
 import scala.language.postfixOps
 import akka.routing.RoundRobinRouter
+import akka.actor.OneForOneStrategy
+import akka.actor.SupervisorStrategy._
+import reactivemongo.core.actors.Exceptions.PrimaryUnavailableException
+import akka.actor.Terminated
 
 /**
  * Author: Michele Damiano Torelli
@@ -26,10 +30,19 @@ class WebSiteReceptionist extends Actor with ActorLogging {
 
   import WebSiteReceptionist._
 
+  /**
+   * @return supervisor strategy for dbmanager and for http router
+   */
+  override def supervisorStrategy = OneForOneStrategy(maxNrOfRetries = 10, withinTimeRange = 10 minutes) {
+    case _: Exception => 
+      log.error("Yuppi!! error {}", self.path.name)
+      Escalate
+  }
+
   def host = "10.1.0.62"
   def db = "dbNews"
 
-  val dbActor: ActorRef = context.actorOf(Props(classOf[DBManager], host, db))
+  val dbActor: ActorRef = context.actorOf(DBManager.props(host, db))
 
   val httpGetterRouter = context.actorOf(Props[HttpGetter].withRouter(RoundRobinRouter(nrOfInstances = 5)))
 
@@ -91,7 +104,10 @@ class WebSiteReceptionist extends Actor with ActorLogging {
         optController.get.controllerName, dataRecordUrl, mainContentUrls.length)
 
       if (mainContentUrls.isEmpty)
-        log.error("{} failed extracting data records from the URL {}",optController.get.controllerName, dataRecordUrl)
+        log.error("{} failed extracting data records from the URL {}", optController.get.controllerName, dataRecordUrl)
+
+    case Terminated(ref) =>
+      log.error("terminated actor {}", ref.path)
   }
 
 }

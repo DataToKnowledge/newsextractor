@@ -1,11 +1,12 @@
 package it.dtk.db
 
-import akka.actor.{ActorLogging, Actor}
+import akka.actor.{ ActorLogging, Actor }
 import reactivemongo.api.MongoDriver
 import reactivemongo.api.collections.default.BSONCollection
-import scala.util.{Success, Failure}
+import scala.util.{ Success, Failure }
 import reactivemongo.bson.BSONDocument
 import scala.concurrent.ExecutionContext.Implicits.global
+import akka.actor.Props
 
 object DBManager {
 
@@ -25,6 +26,14 @@ object DBManager {
 
   case class UpdateWebController(controller: WebControllerData)
 
+  /**
+   * Create Props for the database actor
+   * @param host
+   * @param database
+   * @return
+   */
+  def props(host: String, database: String) = Props(classOf[DBManager], host, database)
+
 }
 
 class DBManager(host: String, database: String) extends Actor with ActorLogging {
@@ -41,7 +50,7 @@ class DBManager(host: String, database: String) extends Actor with ActorLogging 
   val geoNews = db[BSONCollection]("geoNews")
 
   val webControllers = db[BSONCollection]("webControllers")
-
+  
   def receive = {
     case InsertNews(datarecord) =>
       val selector = BSONDocument("urlNews" -> datarecord.urlNews)
@@ -49,13 +58,13 @@ class DBManager(host: String, database: String) extends Actor with ActorLogging 
       val dr = datarecord
       val send = sender
       future.onComplete {
-        case Failure(e) =>
-          log.error("Failed to insert news with URL {}", dr.urlNews.getOrElse("<UNDEFINED>"))
-          send ! FailHandlingNews(dr, e)
-
         case Success(lastError) =>
-          log.info("Successfully inserted news with URL {}", dr.urlNews.getOrElse("<UNDEFINED>"))
+          //log.info("Successfully inserted news with URL {}", dr.urlNews.getOrElse("<UNDEFINED>"))
           send ! DoneInsertNews
+
+        case Failure(e) =>
+          //log.error("Failed to insert news with URL {}", dr.urlNews.getOrElse("<UNDEFINED>"))
+          send ! FailHandlingNews(dr, e)
       }
 
     case ListWebControllers =>
@@ -64,7 +73,9 @@ class DBManager(host: String, database: String) extends Actor with ActorLogging 
       val send = sender
       controllers.map(
         result => send ! WebControllers(result)) recover {
-          case ex => send ! FailQueryWebControllers(ex)
+          case ex => 
+            send ! FailQueryWebControllers(ex)
+            throw ex
         }
 
     case UpdateWebController(c) =>
@@ -74,11 +85,11 @@ class DBManager(host: String, database: String) extends Actor with ActorLogging 
       val futureUpdate = webControllers.update(selector, update)
       futureUpdate.onComplete {
         case Failure(e) =>
-          log.error("Failed to update WebController {}", c.controllerName.getOrElse("<UNDEFINED>"))
+          //log.error("Failed to update WebController {}", c.controllerName.getOrElse("<UNDEFINED>"))
           send ! FailQueryWebControllers(e)
 
         case Success(lastError) =>
-          log.info("Successfully updated WebController {}", c.controllerName.getOrElse("<UNDEFINED>"))
+          //log.info("Successfully updated WebController {}", c.controllerName.getOrElse("<UNDEFINED>"))
           send ! DoneUpdateWebController
       }
   }
