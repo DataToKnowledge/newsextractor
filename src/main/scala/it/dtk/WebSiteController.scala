@@ -73,7 +73,7 @@ abstract class WebSiteController(val id: String, val dbActor: ActorRef, val rout
   val waiting: Receive = {
 
     case Start(stopUrls, currentIndex) =>
-      context.become(runNext(stopUrls, currentIndex, Vector[String](), sender()))
+      context.become(runNext(stopUrls, currentIndex, Vector[String](), sender))
 
     case Status =>
       Waiting
