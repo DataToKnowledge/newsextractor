@@ -41,7 +41,7 @@ class WebSiteReceptionist extends Actor with ActorLogging {
       dbActor ! DBManager.ListWebControllers
 
     case DBManager.WebControllers(controllers) =>
-      log.info("start news extraction for {} controllers", controllers.size)
+      log.info("Start news extraction for {} controllers", controllers.size)
 
       controllers.filter(_.enabled.getOrElse(false)).foreach { c =>
 
@@ -61,7 +61,7 @@ class WebSiteReceptionist extends Actor with ActorLogging {
 
     case WebSiteController.Done(idController, extractedUrls) =>
       val optController = controllersMap.get(idController)
-      log.info("extracted {} urls from the controller with id {}",
+      log.info("Extracted {} urls from the controller with id {}",
         extractedUrls.size, optController.get.controllerName)
 
       optController.map { c =>
@@ -87,11 +87,11 @@ class WebSiteReceptionist extends Actor with ActorLogging {
 
     case WebSiteController.JobUpdate(idController, dataRecordUrl, mainContentUrls) =>
       val optController = controllersMap.get(idController)
-      log.info("from the controller {} and the data record url {} are extract {} urls",
+      log.info("From the controller {} and the data record URL {} are extract {} urls",
         optController.get.controllerName, dataRecordUrl, mainContentUrls.length)
 
       if (mainContentUrls.length == 0)
-        log.error("{} failed extracting data records from the url {}",optController.get.controllerName, dataRecordUrl)
+        log.error("{} failed extracting data records from the URL {}",optController.get.controllerName, dataRecordUrl)
   }
 
 }

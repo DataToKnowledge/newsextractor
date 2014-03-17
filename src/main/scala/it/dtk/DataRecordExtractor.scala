@@ -23,17 +23,6 @@ abstract class DataRecordExtractor(val routerHttpGetter: ActorRef) extends Actor
 
   import DataRecordExtractor._
 
-  override val supervisorStrategy = OneForOneStrategy(maxNrOfRetries = 10, loggingEnabled = true) {
-
-    case ex: Exception =>
-      log.error("got exception in DataRecordExtractor {}", ex.getMessage)
-      SupervisorStrategy.Restart
-
-    case ex: Throwable =>
-      log.error("got exception in DataRecordExtractor {}", ex.getMessage)
-      SupervisorStrategy.Restart
-  }
-
   val cssRecordsSelector: String
 
   def extractRecords(doc: Document): Elements =
@@ -55,7 +44,7 @@ abstract class DataRecordExtractor(val routerHttpGetter: ActorRef) extends Actor
     //get the nodes
     val nodes = node.select("a[href]")
 
-    var map = Map[String, List[String]]()
+    var map: Map[String, List[String]] = Map()
 
     for (n <- nodes) {
       val text = n.text

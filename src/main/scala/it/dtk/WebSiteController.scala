@@ -7,15 +7,12 @@ import akka.actor.Props
 import akka.actor.ActorLogging
 import akka.actor.Terminated
 import akka.actor.ReceiveTimeout
-import it.dtk.db.{ DBManager, News }
+import it.dtk.db.News
 import scala.util.{ Success, Failure }
-import org.joda.time.DateTime
 import it.dtk.db.DBManager
 import akka.actor.ActorRef
 import akka.actor.actorRef2Scala
-import it.dtk.util.URLUtil
 import scala.concurrent.duration._
-import it.dtk.util.UrlCAnonicalizer
 import it.dtk.util.UrlResolver
 
 object WebSiteController {
@@ -48,12 +45,12 @@ abstract class WebSiteController(val id: String, val dbActor: ActorRef, val rout
 
   override val supervisorStrategy = OneForOneStrategy(maxNrOfRetries = -1, loggingEnabled = true) {
 
-    case e: Exception =>
-      log.error("got exception in DataRecordExtractor {}", e.getMessage())
+    case ex: Exception =>
+      log.error("Got exception in MainContentExtractor {}", ex.getMessage)
       SupervisorStrategy.Restart
 
-    case e: Throwable =>
-      log.error("got exception in DataRecordExtractor {}", e.getMessage())
+    case ex: Throwable =>
+      log.error("Got exception in MainContentExtractor {}", ex.getMessage)
       SupervisorStrategy.Restart
   }
 
@@ -76,7 +73,7 @@ abstract class WebSiteController(val id: String, val dbActor: ActorRef, val rout
   val waiting: Receive = {
 
     case Start(stopUrls, currentIndex) =>
-      context.become(runNext(stopUrls, currentIndex, Vector[String](), sender))
+      context.become(runNext(stopUrls, currentIndex, Vector[String](), sender()))
 
     case Status =>
       Waiting
@@ -85,12 +82,12 @@ abstract class WebSiteController(val id: String, val dbActor: ActorRef, val rout
   def runNext(stopUrls: Vector[String], currentIndex: Int, extractedUrls: Vector[String], jobSender: ActorRef): Receive = {
 
     if (currentIndex > maxIndex) {
-      log.info("all done waiting for new jobs")
+      log.info("All done! Waiting for new jobs...")
       jobSender ! Done(id, extractedUrls)
       waiting
     } else {
       val url = composeUrl(currentIndex)
-      log.info("start processing next job")
+      log.info("Start processing next jobs")
 
       drActor ! DataRecordExtractor.Extract(url)
 
@@ -120,7 +117,7 @@ abstract class WebSiteController(val id: String, val dbActor: ActorRef, val rout
       jobSender ! JobUpdate(id,url,records.map(_.newsUrl).toVector)
 
       filteredRecords.foreach(r => {
-        log.info("star extracting the main article content from URL {}", r.newsUrl)
+        log.info("Start extracting main content from URL {}", r.newsUrl)
 
         val recordNews = News(None, Some(baseUrl), Some(r.newsUrl), Some(r.title), Some(r.summary), Some(r.newsDate))
         context.watch(context.actorOf(mainContentExtractorProps(recordNews)))
@@ -143,7 +140,7 @@ abstract class WebSiteController(val id: String, val dbActor: ActorRef, val rout
       log.error("Error when fetching main content text form URL {} with ex", url, ex.getMessage)
 
     case DBManager.FailHandlingNews(news, ex) =>
-      log.error("Error inserting the new in the db {} with ex", news.urlNews, ex.getMessage)
+      log.error("Error inserting the new in the DB {} with ex", news.urlNews, ex.getMessage)
 
     case Terminated(ref) =>
       //log.info("Number of children {}", context.children.size)
@@ -151,7 +148,7 @@ abstract class WebSiteController(val id: String, val dbActor: ActorRef, val rout
         context.become(runNext(stopUrls, currentIndex + 1, extractedUrls, jobSender: ActorRef))
 
     case timeout: ReceiveTimeout =>
-      log.info("Failure in the extraction of the website controller with id {}", id)
+      log.error("Failure in the extraction of the website controller with id {}", id)
       //context.children foreach context.stop
       context.parent ! Fail(id, currentIndex, extractedUrls)
   }
