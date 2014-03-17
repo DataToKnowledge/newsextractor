@@ -57,11 +57,12 @@ class URLUtil$Test extends FlatSpec with Matchers {
       "http://www.example.com/index.html?name=test&rame=base#123",
       "http://www.example.com/~username/",
       "http://www.example.com:90/bar.html",
-      "http://corrieredelmezzogiorno.corriere.it/bari/notizie/cronaca/2012/19-maggio-2012/diretta|-profumo-colpiti-cuore-201253003150.shtml"
+      "http://corrieredelmezzogiorno.corriere.it/bari/notizie/cronaca/2012/19-maggio-2012/diretta|-profumo-colpiti-cuore-201253003150.shtml",
+      "http://www.example.com/index.html?&#123",
+      "http://www.example.com/index.html?&",
+      "http://www.example.com/index.html?"
       //"http://www.example.com/display?category=foo/bar+baz",
       //"http://www.example.com/display?category=foo%2Fbar%2Bbaz",
-      //"http://www.example.com/index.html?&",
-      //"http://www.example.com/index.html?",
       //"http://www.example.com:80/bar.html"
       //"http://www.example.com//A//B/index.html",
       //"http://www.example.com/index.html?&x=y",
@@ -84,11 +85,12 @@ class URLUtil$Test extends FlatSpec with Matchers {
       "http://www.example.com/index.html?name=test&rame=base",
       "http://www.example.com/~username/",
       "http://www.example.com:90/bar.html",
-      "http://corrieredelmezzogiorno.corriere.it/bari/notizie/cronaca/2012/19-maggio-2012/diretta%7C-profumo-colpiti-cuore-201253003150.shtml"
+      "http://corrieredelmezzogiorno.corriere.it/bari/notizie/cronaca/2012/19-maggio-2012/diretta%7C-profumo-colpiti-cuore-201253003150.shtml",
+      "http://www.example.com/index.html",
+      "http://www.example.com/index.html",
+      "http://www.example.com/index.html"
       //"http://www.example.com/display?category=foo%2Fbar%2Bbaz",
       //"http://www.example.com/display?category=foo%2fbar%2bbaz",  // Check case
-      //"http://www.example.com/index.html",
-      //"http://www.example.com/index.html",
       //"http://www.example.com/bar.html"
       //"http://www.example.com/A/B/index.html",
       //"http://www.example.com/index.html?x=y",
