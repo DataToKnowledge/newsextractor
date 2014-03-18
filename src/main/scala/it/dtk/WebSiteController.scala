@@ -132,14 +132,18 @@ abstract class WebSiteController(val id: String, val dbActor: ActorRef, val rout
       context.become(running(nextIndex, stopUrls, extractedUrls, jobSender, filteredRecords.size))
 
     case MainContentExtractor.Fail(url, ex) =>
-      log.error("fail extracting url {} with exception {}", url, ex.getStackTrace().map(_.toString()).mkString(" "))
-
+      //log.error("fail extracting url {} with exception {}", url, ex.getStackTrace().map(_.toString()).mkString(" "))
+      log.error("fail extracting url {} with exception {}", url, ex.toString())
       if (runningExtractions == 1) {
         context.become(runNext(currentIndex, stopUrls, extractedUrls, jobSender))
       } else {
         //reduce the number of extractions
         context.become(running(currentIndex, stopUrls, extractedUrls, jobSender, runningExtractions - 1))
       }
+      
+    case DataRecordExtractor.Fail(url,code) =>
+      log.error("Failure getting {} for {}",url,sender.path.name)
+      context.become(runNext(currentIndex+1,stopUrls,extractedUrls,jobSender))
 
     case MainContentExtractor.Result(news) =>
       log.info("extracted news with title {} from {}", news.urlNews, sender.path.name)

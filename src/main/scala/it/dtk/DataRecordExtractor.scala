@@ -16,6 +16,8 @@ object DataRecordExtractor {
   case class Extract(url: String)
   case class DataRecord(title: String, summary: String, newsUrl: String, newsDate: DateTime)
   case class DataRecords(url: String, dataRecords: Seq[DataRecord])
+  case class Fail(url: String, code: Option[Int])
+  private[DataRecordExtractor] case class Retry(url: String)
 
 }
 
@@ -35,30 +37,11 @@ abstract class DataRecordExtractor(val routerHttpGetter: ActorRef) extends Actor
   def newsUrl(node: Element): String
 
   def newsDate(node: Element, date: DateTime): DateTime
-
-  /**
-   * @param node
-   * @return a map with key url and list of text anchor as value
-   */
-  def linkExtractor(node: Element): Map[String, List[String]] = {
-    //get the nodes
-    val nodes = node.select("a[href]")
-
-    var map: Map[String, List[String]] = Map()
-
-    for (n <- nodes) {
-      val text = n.text
-      val href: String = n.attr("href")
-
-      val list = map.get(href) match {
-        case Some(l) => text :: l
-        case None => List(text)
-      }
-      map + (href -> list)
-    }
-    map.toMap
-  }
-
+  
+  private var retryMap: Map[String,Int] = Map[String,Int]()
+  private val maxRetries = 5
+  
+  
   def receive = {
 
     case Extract(url) =>
@@ -75,8 +58,29 @@ abstract class DataRecordExtractor(val routerHttpGetter: ActorRef) extends Actor
       context.parent ! DataRecords(url, records.filter(d => d.title.nonEmpty))
 
     case HttpGetter.Fail(url, ex) =>
-      log.error("Failed to get the HTML for URL {} with exception {}", url, ex.getStackTrace().map(_.toString()).mkString(" "))
-      ex.printStackTrace()
-      //TODO should we reschedule the http get?
+
+      ex match {
+
+        case BadStatus(url, code) =>
+          log.error("Failed to get HTML from {} with status code {} from {}", url,code, sender.path.name)
+          context.parent ! Fail(url,Option(code))
+          
+        case GetException(url,ex) =>
+          log.error("Retrying Failed to get HTML from {} with exception {}",url, ex.getStackTraceString)
+          //retry after timeout
+          self ! Retry(url)
+      }
+      
+    case Retry(url) =>
+      retryMap.get(url).map { times =>
+      	if (times < maxRetries){
+      	  retryMap += url -> (times + 1)
+      	  self ! Extract(url)
+      	}else{
+      	  retryMap -=url
+      	  log.error("Failed to get HTML from {} after {} tries",url, maxRetries)
+      	  context.parent ! Fail(url,None)
+      	}
+      }
   }
 }

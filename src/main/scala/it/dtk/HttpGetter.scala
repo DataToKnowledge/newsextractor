@@ -28,7 +28,7 @@ object HttpGetter {
   case class Get(url: String)
 
   case class Fail(url: String, ex: Throwable)
-  
+
 }
 
 /**
@@ -52,13 +52,13 @@ class HttpGetter extends Actor with ActorLogging {
     case Get(url) =>
       val send = sender
       //log.info("Getting the HTML for the URL {}", url)
-        val future = AsyncWebClient.get(url)
-        future.onComplete {
-          case Success(res) =>
-            send ! new Result(url, res.getResponseBody, sdf.parseDateTime(res.getHeader("Date")))
-          case Failure(ex) =>
-            send ! Fail(url, ex)
-        }
+      val future = AsyncWebClient.get(url)
+      future.onComplete {
+        case Success(res) =>
+          send ! new Result(url, res.getResponseBody, sdf.parseDateTime(res.getHeader("Date")))
+        case Failure(ex) =>
+          send ! Fail(url, ex)
+      }
   }
 
   override def postStop() = {
@@ -66,46 +66,82 @@ class HttpGetter extends Actor with ActorLogging {
   }
 }
 
-case class GetException(url: String, status: Int) extends Throwable
+case class BadStatus(url: String, status: Int) extends Throwable
+case class GetException(url: String, innerException: Throwable) extends Throwable
 
 object AsyncWebClient {
+  val builder = new AsyncHttpClientConfig.Builder()
+  builder.setFollowRedirects(true)
+  builder.setCompressionEnabled(false)
+  builder.setConnectionTimeoutInMs(240.seconds.toMillis.toInt)
+  builder.setRequestTimeoutInMs(240.seconds.toMillis.toInt)
+  //builder.setMaximumConnectionsPerHost(2)
+  builder.setAllowPoolingConnection(true)
 
-  private val client = init()
+  private val client = new AsyncHttpClient(builder.build())
 
-  def init(): AsyncHttpClient = {
-    val builder = new AsyncHttpClientConfig.Builder()
-    builder.setFollowRedirects(true)
-    builder.setCompressionEnabled(false)
-    builder.setConnectionTimeoutInMs(240.seconds.toMillis.toInt)
-    builder.setRequestTimeoutInMs(240.seconds.toMillis.toInt)
-    //builder.setMaximumConnectionsPerHost(2)
-    builder.setAllowPoolingConnection(true)
-    new AsyncHttpClient(builder.build())
-  }
-
-  def get(url: String): Future[Response] = {
+  def get(url: String)(implicit exec: Executor): Future[Response] = {
+    val u = url
+    val f = client.prepareGet(url).execute()
     val p = Promise[Response]()
-    
-    client.prepareGet(url).execute(new AsyncCompletionHandler[Response] {
-
-      override def onCompleted(response: Response): Response = {
-        if (response.getStatusCode < 400)
-          p.success(response)
-        else
-          p.failure(GetException(url, response.getStatusCode))
-        response
+    f.addListener(new Runnable {
+      def run = {
+        try {
+          val response = f.get()
+          if (response.getStatusCode() / 100 < 4)
+            p.success(response)
+          else p.failure(BadStatus(u, response.getStatusCode()))
+        } catch {
+          case t: Throwable =>
+            p.failure(GetException(u,t))
+        }
       }
 
-      override def onThrowable(t: Throwable) = {
-        p.failure(t)
-      }
-      
-    })
+    }, exec)
     p.future
   }
 
-  def shutdown() = client.close()
-
+  def shutdown(): Unit = client.close()
 }
+
+//object AsyncWebClient2 {
+//
+//  private val client = init()
+//
+//  def init(): AsyncHttpClient = {
+//    val builder = new AsyncHttpClientConfig.Builder()
+//    builder.setFollowRedirects(true)
+//    builder.setCompressionEnabled(false)
+//    builder.setConnectionTimeoutInMs(240.seconds.toMillis.toInt)
+//    builder.setRequestTimeoutInMs(240.seconds.toMillis.toInt)
+//    //builder.setMaximumConnectionsPerHost(2)
+//    builder.setAllowPoolingConnection(true)
+//    new AsyncHttpClient(builder.build())
+//  }
+//
+//  def get(url: String): Future[Response] = {
+//    val p = Promise[Response]()
+//
+//    client.prepareGet(url).execute(new AsyncCompletionHandler[Response] {
+//
+//      override def onCompleted(response: Response): Response = {
+//        if (response.getStatusCode < 400)
+//          p.success(response)
+//        else
+//          p.failure(GetException(url, response.getStatusCode))
+//        response
+//      }
+//
+//      override def onThrowable(t: Throwable) = {
+//        p.failure(t)
+//      }
+//
+//    })
+//    p.future
+//  }
+//
+//  def shutdown() = client.close()
+//
+//}
 
 
