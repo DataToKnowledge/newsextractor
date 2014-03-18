@@ -45,6 +45,7 @@ abstract class DataRecordExtractor(val routerHttpGetter: ActorRef) extends Actor
   def receive = {
 
     case Extract(url) =>
+      retryMap+= url -> 0
       routerHttpGetter ! HttpGetter.Get(url)
 
     case HttpGetter.Result(url, html, date) =>
