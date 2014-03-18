@@ -27,6 +27,14 @@ object URLUtil {
     if (parsedUrl.contains("#"))
       parsedUrl = parsedUrl.substring(0, parsedUrl.indexOf("#"))
 
+    // Remove useless query args concatenator
+    if (parsedUrl.endsWith("&"))
+      parsedUrl = parsedUrl.substring(0, parsedUrl.length - 1)
+
+    // Remove empty query
+    if (parsedUrl.endsWith("?"))
+      parsedUrl = parsedUrl.substring(0, parsedUrl.length - 1)
+
     // Add http if missing
     if (!parsedUrl.startsWith("http://") && !parsedUrl.startsWith("https://"))
       parsedUrl = "http://" + parsedUrl
