@@ -75,7 +75,6 @@ class DBManager(host: String, database: String) extends Actor with ActorLogging 
         result => send ! WebControllers(result)) recover {
           case ex => 
             send ! FailQueryWebControllers(ex)
-            throw ex
         }
 
     case UpdateWebController(c) =>

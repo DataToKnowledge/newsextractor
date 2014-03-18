@@ -52,7 +52,6 @@ class HttpGetter extends Actor with ActorLogging {
     case Get(url) =>
       val send = sender
       //log.info("Getting the HTML for the URL {}", url)
-      context.system.scheduler.scheduleOnce(1.second) {
         val future = AsyncWebClient.get(url)
         future.onComplete {
           case Success(res) =>
@@ -60,7 +59,6 @@ class HttpGetter extends Actor with ActorLogging {
           case Failure(ex) =>
             send ! Fail(url, ex)
         }
-      }
   }
 
   override def postStop() = {
@@ -77,9 +75,11 @@ object AsyncWebClient {
   def init(): AsyncHttpClient = {
     val builder = new AsyncHttpClientConfig.Builder()
     builder.setFollowRedirects(true)
-    builder.setCompressionEnabled(true)
-    builder.setMaximumConnectionsPerHost(2)
-    builder.setAllowPoolingConnection(false)
+    builder.setCompressionEnabled(false)
+    builder.setConnectionTimeoutInMs(240.seconds.toMillis.toInt)
+    builder.setRequestTimeoutInMs(240.seconds.toMillis.toInt)
+    //builder.setMaximumConnectionsPerHost(2)
+    builder.setAllowPoolingConnection(true)
     new AsyncHttpClient(builder.build())
   }
 
@@ -99,10 +99,13 @@ object AsyncWebClient {
       override def onThrowable(t: Throwable) = {
         p.failure(t)
       }
+      
     })
     p.future
   }
 
   def shutdown() = client.close()
+
 }
+
 

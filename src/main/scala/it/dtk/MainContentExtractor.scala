@@ -31,7 +31,6 @@ object MainContentExtractor {
  */
 class MainContentExtractor(news: News, routerHttpGetter: ActorRef) extends Actor with ActorLogging {
 
-
   import MainContentExtractor._
 
   val configuration = new Configuration()
@@ -65,15 +64,15 @@ class MainContentExtractor(news: News, routerHttpGetter: ActorRef) extends Actor
           context.parent ! Result(news.copy(text = Some(article.cleanedArticleText), tags = Some(article.tags.toSet),
             metaDescription = Some(article.metaDescription), metaKeyword = Some(article.metaKeywords),
             canonicalUrl = Some(article.canonicalLink), topImage = Some(article.topImage.getImageSrc)))
-          context.stop(self)
 
         case Failure(ex) =>
           context.parent ! Fail(url, ex)
       }
+      context.stop(self)
 
     case HttpGetter.Fail(url, ex) =>
-      log.error("Failed to get the HTML for URL {} with exception {}", url, ex.getMessage)
-
+      context.parent ! Fail(url, ex)
+      context.stop(self)
   }
 
 }

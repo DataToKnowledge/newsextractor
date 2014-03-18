@@ -16,6 +16,8 @@ import it.dtk.util.URLUtil
 import scala.concurrent.duration._
 import akka.actor.PoisonPill
 import akka.actor.OneForOneStrategy
+import akka.actor.SupervisorStrategy._
+import akka.actor.Terminated
 
 object WebSiteController {
 
@@ -46,7 +48,7 @@ object WebSiteController {
  */
 abstract class WebSiteController(val id: String, val dbActor: ActorRef, val routerHttpGetter: ActorRef) extends Actor with ActorLogging {
   // Max call duration
-  context.setReceiveTimeout(120.seconds)
+  //context.setReceiveTimeout(120.seconds)
   val baseUrl: String
   val maxIndex: Int
 
@@ -59,10 +61,12 @@ abstract class WebSiteController(val id: String, val dbActor: ActorRef, val rout
   def mainContentExtractorProps(news: News): Props = Props(classOf[MainContentExtractor], news, routerHttpGetter)
 
   import WebSiteController._
-  
-//  override val supervisorStrategy = OneForOneStrategy(maxNrOfRetries = 10, withinTimeRange = 100.seconds) {
-//    case _ => Restart
-//  }
+
+  override val supervisorStrategy = OneForOneStrategy(maxNrOfRetries = 10, withinTimeRange = 100.seconds) {
+    case ex: Exception =>
+      log.error("actor {} throw {} ", sender.path.name, ex.getMessage())
+      Restart
+  }
 
   def receive = waiting
 
@@ -95,10 +99,10 @@ abstract class WebSiteController(val id: String, val dbActor: ActorRef, val rout
       sender ! Running
 
     case DataRecordExtractor.DataRecords(url, records) =>
-      log.info("got {} data records from {}",records.size, sender.path.name)
+      log.info("from page {} got {} data records from {}", url, records.size, sender.path.name)
       //normalize the urls in the records
 
-      val normalizedRecords = records.map { r => 
+      val normalizedRecords = records.map { r =>
         URLUtil.normalize(baseUrl, r.newsUrl) match {
           case Success(normUrl) =>
             r.copy(newsUrl = normUrl)
@@ -112,39 +116,51 @@ abstract class WebSiteController(val id: String, val dbActor: ActorRef, val rout
       //start the main content extraction for each records
       filteredRecords.foreach { r =>
         val recordNews = News(None, Some(baseUrl), Some(r.newsUrl), Some(r.title), Some(r.summary), Some(r.newsDate))
-        context.watch(context.actorOf(mainContentExtractorProps(recordNews), self.path.name + "-MainContent-" + countContentExtractors))
+       // context.watch(
+            context.actorOf(mainContentExtractorProps(recordNews), self.path.name + "-MainContent-" + countContentExtractors)
+            //)
         countContentExtractors += 1
       }
 
       //go to the next status
       val nextIndex = if (filteredRecords.size < records.size)
-        maxIndex + 1
+        maxIndex + 1 //stop condition
       else
         currentIndex + 1
 
       // stay running waiting that all the main contents are extracted
       context.become(running(nextIndex, stopUrls, extractedUrls, jobSender, filteredRecords.size))
 
-    case MainContentExtractor.Result(news) =>
-      log.info("extracted news with title {} from {}",news.urlNews,sender.path.name)
-      dbActor ! DBManager.InsertNews(news)
-      
-      //evaluate if we should go to run next
-      
-      //reduce the number of extractions
-      context.become(running(currentIndex, stopUrls, extractedUrls :+ news.canonicalUrl.get, jobSender, runningExtractions-1))
-    
-    //this happens only for the MainContenExtractors
-    case Terminated(ref) =>
-      if (runningExtractions == 0){
+    case MainContentExtractor.Fail(url, ex) =>
+      log.error("fail extracting url {} with exception {}", url, ex.getStackTrace().map(_.toString()).mkString(" "))
+
+      if (runningExtractions == 1) {
         context.become(runNext(currentIndex, stopUrls, extractedUrls, jobSender))
+      } else {
+        //reduce the number of extractions
+        context.become(running(currentIndex, stopUrls, extractedUrls, jobSender, runningExtractions - 1))
       }
-   
+
+    case MainContentExtractor.Result(news) =>
+      log.info("extracted news with title {} from {}", news.urlNews, sender.path.name)
+      dbActor ! DBManager.InsertNews(news)
+
+      //evaluate if we should go to run next
+      if (runningExtractions == 1) {
+        context.become(runNext(currentIndex, stopUrls, extractedUrls, jobSender))
+      } else {
+        //reduce the number of extractions
+        context.become(running(currentIndex, stopUrls, extractedUrls :+ news.canonicalUrl.get, jobSender, runningExtractions - 1))
+      }
+
     case timeout: ReceiveTimeout =>
       log.error("Receiving timeout for News Extraction in {}", self.path.name)
       //allows the children to complete the current message evaluation
-      context.children.foreach( _ ! PoisonPill)
-      jobSender ! Fail(id,currentIndex,extractedUrls)
+      context.children.foreach(_ ! PoisonPill)
+      jobSender ! Fail(id, currentIndex, extractedUrls)
+      
+    case Terminated(ref) =>
+      
   }
 }
 

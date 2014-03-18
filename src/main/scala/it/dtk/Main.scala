@@ -11,7 +11,6 @@ import scala.language.postfixOps
 import akka.routing.RoundRobinRouter
 import akka.actor.OneForOneStrategy
 import akka.actor.SupervisorStrategy._
-import reactivemongo.core.actors.Exceptions.PrimaryUnavailableException
 import akka.actor.Terminated
 
 /**
@@ -34,9 +33,13 @@ class WebSiteReceptionist extends Actor with ActorLogging {
    * @return supervisor strategy for dbmanager and for http router
    */
   override def supervisorStrategy = OneForOneStrategy(maxNrOfRetries = 10, withinTimeRange = 10 minutes) {
-    case _: Exception =>
-      log.error("Yuppi!! error {}", self.path.name)
-      Escalate
+    case ex: java.io.IOException =>
+      log.error("Supervisor error from {} with {}", sender.path.name, ex.getMessage())
+      Restart
+
+    case ex: Exception =>
+      log.error("Supervisor error from {} with {}", sender.path.name, ex.getMessage())
+      Restart
   }
 
   def host = "10.1.0.62"
@@ -98,6 +101,7 @@ class WebSiteReceptionist extends Actor with ActorLogging {
 
     case DBManager.FailQueryWebControllers(ex) =>
       log.error("DBManager FailQueryWebControllers {}", ex.getMessage)
+      throw ex
 
     case WebSiteController.JobUpdate(idController, dataRecordUrl, mainContentUrls) =>
       val optController = controllersMap.get(idController)

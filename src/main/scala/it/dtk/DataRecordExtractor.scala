@@ -75,7 +75,8 @@ abstract class DataRecordExtractor(val routerHttpGetter: ActorRef) extends Actor
       context.parent ! DataRecords(url, records.filter(d => d.title.nonEmpty))
 
     case HttpGetter.Fail(url, ex) =>
-      log.error("Failed to get the HTML for URL {} with exception {}", url, ex.getMessage)
-      throw ex
+      log.error("Failed to get the HTML for URL {} with exception {}", url, ex.getStackTrace().map(_.toString()).mkString(" "))
+      ex.printStackTrace()
+      //TODO should we reschedule the http get?
   }
 }
