@@ -66,8 +66,8 @@ class HttpGetter extends Actor with ActorLogging {
   }
 }
 
-case class BadStatus(url: String, status: Int) extends Throwable
-case class GetException(url: String, innerException: Throwable) extends Throwable
+case class BadStatus(url: String, status: Int) extends Throwable(s"HTTP status code: ${status.toString}")
+case class GetException(url: String, innerException: Throwable) extends Throwable(innerException.getMessage)
 
 object AsyncWebClient {
   val builder = new AsyncHttpClientConfig.Builder()
