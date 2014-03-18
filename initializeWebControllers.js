@@ -17,7 +17,8 @@ var controllers = [
   'Puglia24News',
   'QuotidianoDiPuglia',
   'Repubblica',
-  'SenzaColonne'];
+  'SenzaColonne'
+];
 
 // delete current controllers
 db.webControllers.drop();
@@ -38,4 +39,4 @@ db.webControllers.update(
     { },
     { $set: { enabled: true } },
     { upsert: false, multi: true }
-)
+);
