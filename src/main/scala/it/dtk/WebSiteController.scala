@@ -18,6 +18,8 @@ import akka.actor.PoisonPill
 import akka.actor.OneForOneStrategy
 import akka.actor.SupervisorStrategy._
 import akka.actor.Terminated
+import java.util.concurrent.Executor
+import scala.concurrent.ExecutionContext
 
 object WebSiteController {
 
@@ -47,6 +49,8 @@ object WebSiteController {
  *
  */
 abstract class WebSiteController(val id: String, val dbActor: ActorRef, val routerHttpGetter: ActorRef) extends Actor with ActorLogging {
+  implicit val exec = context.dispatcher.asInstanceOf[Executor with ExecutionContext]
+
   // Max call duration
   //context.setReceiveTimeout(120.seconds)
   val baseUrl: String
@@ -112,13 +116,17 @@ abstract class WebSiteController(val id: String, val dbActor: ActorRef, val rout
       }
       //remove the url contained in the stopUrls vector
       val filteredRecords = normalizedRecords.takeWhile(r => !stopUrls.contains(r.newsUrl))
-
+      
+      var baseTime = 2
+      var i = 1
       //start the main content extraction for each records
       filteredRecords.foreach { r =>
         val recordNews = News(None, Some(baseUrl), Some(r.newsUrl), Some(r.title), Some(r.summary), Some(r.newsDate))
-       // context.watch(
-            context.actorOf(mainContentExtractorProps(recordNews), self.path.name + "-MainContent-" + countContentExtractors)
-            //)
+        val mainContentActor = context.actorOf(mainContentExtractorProps(recordNews), self.path.name + "-MainContent-" + countContentExtractors)
+        //send delayed messages
+        val nexTime = baseTime*i
+        context.system.scheduler.scheduleOnce(nexTime.seconds, mainContentActor, MainContentExtractor.Extract)
+        i+=1
         countContentExtractors += 1
       }
 
@@ -140,10 +148,10 @@ abstract class WebSiteController(val id: String, val dbActor: ActorRef, val rout
         //reduce the number of extractions
         context.become(running(currentIndex, stopUrls, extractedUrls, jobSender, runningExtractions - 1))
       }
-      
-    case DataRecordExtractor.Fail(url,code) =>
-      log.error("Failure getting {} for {}",url,sender.path.name)
-      context.become(runNext(currentIndex+1,stopUrls,extractedUrls,jobSender))
+
+    case DataRecordExtractor.Fail(url, code) =>
+      log.error("Failure getting {} for {}", url, sender.path.name)
+      context.become(runNext(currentIndex + 1, stopUrls, extractedUrls, jobSender))
 
     case MainContentExtractor.Result(news) =>
       log.info("extracted news with title {} from {}", news.urlNews, sender.path.name)
@@ -162,9 +170,9 @@ abstract class WebSiteController(val id: String, val dbActor: ActorRef, val rout
       //allows the children to complete the current message evaluation
       context.children.foreach(_ ! PoisonPill)
       jobSender ! Fail(id, currentIndex, extractedUrls)
-      
+
     case Terminated(ref) =>
-      
+
   }
 }
 

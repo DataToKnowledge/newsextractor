@@ -20,7 +20,7 @@ object MainContentExtractor {
 
   case class Result(news: News)
 
-  case class Extract(news: News)
+  case object Extract
 
   case class Fail(url: String, ex: Throwable)
 }
@@ -39,9 +39,10 @@ class MainContentExtractor(news: News, routerHttpGetter: ActorRef) extends Actor
   configuration.enableImageFetching = false
   val goose = new Goose(configuration)
 
-  routerHttpGetter ! HttpGetter.Get(news.urlNews.get)
-
   def receive = {
+    case Extract =>
+      routerHttpGetter ! HttpGetter.Get(news.urlNews.get)
+
     case HttpGetter.Result(url, html, date) =>
 
       val tryArticle = Try[Article] {
