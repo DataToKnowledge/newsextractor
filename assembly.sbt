@@ -5,7 +5,7 @@ assemblySettings
 // Skipping tests
 test in assembly := {}
 
-jarName in assembly := "newsExtractor.jar"
+jarName in assembly := "NewsExtractor.jar"
 
 mainClass in assembly := Some("it.dtk.Main")
 

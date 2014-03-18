@@ -124,7 +124,7 @@ object Main {
     //Use the system's dispatcher as ExecutionContext
     import system.dispatcher
 
-    val system = ActorSystem("newsExtractor")
+    val system = ActorSystem("NewsExtractor")
     val receptionist = system.actorOf(Props[WebSiteReceptionist], "WebSiteReceptionist")
     system.scheduler.schedule(1 second, 120 minutes, receptionist, WebSiteReceptionist.Start)
     //receptionist ! WebSiteReceptionist.Start
