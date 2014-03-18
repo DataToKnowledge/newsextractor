@@ -38,7 +38,7 @@ class HttpGetterBench extends MySpec("HttpGetterBench") {
             case res: Fail =>
               println("FAIL!")
               println(s"URL: ${res.url}")
-              println(s"Caused exception:\n${res.ex.getMessage}")
+              println(s"Exception message: ${res.ex.getMessage}")
               errorsNum += 1
           }
       }
