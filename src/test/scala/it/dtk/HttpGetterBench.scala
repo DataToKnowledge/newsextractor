@@ -46,7 +46,9 @@ class HttpGetterBench extends MySpec("HttpGetterBench") {
       val stopTime = DateTime.now
       val diff = new Period(startTime, stopTime)
       val ms = new PeriodFormatterBuilder().minimumPrintedDigits(1).appendMinutes().appendSuffix(" minutes and ").appendSeconds().appendSuffix(" seconds").toFormatter
+
       println(s"\nTest completed in ${ms print diff} with $errorsNum errors")
+      if (errorsNum > 0) fail()
     }
   }
 
