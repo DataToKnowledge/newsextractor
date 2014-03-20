@@ -3,7 +3,6 @@ package it.dtk
 import scala.concurrent.duration._
 import akka.actor.Props
 import it.dtk.util.MySpec
-import java.net.ConnectException
 import org.joda.time.DateTime
 
 /**
@@ -22,8 +21,9 @@ class HttpGetterSpec extends MySpec("HttpGetterSpec") {
       getter ! Get("http://www.google.it/")
 
       val res = expectMsgClass(10.seconds, classOf[Result])
-      res.html.getClass should be(classOf[String])
-      res.headerDate.getClass should be(classOf[DateTime])
+      res.html shouldBe a [String]
+      res.html should not be empty
+      res.headerDate shouldBe a [DateTime]
     }
 
     "returns an empty result when it fetches a 404" in {
@@ -31,7 +31,7 @@ class HttpGetterSpec extends MySpec("HttpGetterSpec") {
       getter ! Get("http://www.google.it/asd")
 
       val res = expectMsgClass(10.seconds, classOf[Fail])
-      res.ex.getClass should be(classOf[GetException])
+      res.ex shouldBe a [BadStatus]
     }
 
     "returns an empty result when it goes in timeout" in {
@@ -39,7 +39,7 @@ class HttpGetterSpec extends MySpec("HttpGetterSpec") {
       getter ! Get("http://www.go.it/")
 
       val res = expectMsgClass(classOf[Fail])
-      res.ex.getClass should be(classOf[ConnectException])
+      res.ex shouldBe a [GetException]
     }
 
     "returns the body from the destination page when it fetches a 301 on the first page" in {
@@ -47,9 +47,9 @@ class HttpGetterSpec extends MySpec("HttpGetterSpec") {
       getter ! Get("http://www.lecceprima.it/cronaca/pag/1/")
 
       val res = expectMsgClass(10.seconds, classOf[Result])
-      res.html.getClass should be(classOf[String])
-      assert(res.html.nonEmpty)
-      res.headerDate.getClass should be(classOf[DateTime])
+      res.html shouldBe a [String]
+      res.html should not be empty
+      res.headerDate shouldBe a [DateTime]
     }
 
   }
