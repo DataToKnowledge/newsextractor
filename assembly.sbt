@@ -2,9 +2,6 @@ import AssemblyKeys._
 
 assemblySettings
 
-// Skipping tests
-test in assembly := {}
-
 jarName in assembly := "NewsExtractor.jar"
 
 mainClass in assembly := Some("it.dtk.Main")
