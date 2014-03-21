@@ -116,7 +116,7 @@ abstract class WebSiteController(val id: String, val dbActor: ActorRef, val rout
       }
       //remove the url contained in the stopUrls vector
       val filteredRecords = normalizedRecords.takeWhile(r => !stopUrls.contains(r.newsUrl))
-      
+
       var baseTime = 2
       var i = 1
       //start the main content extraction for each records
@@ -124,20 +124,21 @@ abstract class WebSiteController(val id: String, val dbActor: ActorRef, val rout
         val recordNews = News(None, Some(baseUrl), Some(r.newsUrl), Some(r.title), Some(r.summary), Some(r.newsDate))
         val mainContentActor = context.actorOf(mainContentExtractorProps(recordNews), self.path.name + "-MainContent-" + countContentExtractors)
         //send delayed messages
-        val nexTime = baseTime*i
+        val nexTime = baseTime * i
         context.system.scheduler.scheduleOnce(nexTime.seconds, mainContentActor, MainContentExtractor.Extract)
-        i+=1
+        i += 1
         countContentExtractors += 1
       }
-
-      //go to the next status
-      val nextIndex = if (filteredRecords.size < records.size)
-        maxIndex + 1 //stop condition
+      
+      val nextStatus = if (filteredRecords.size == 0){
+        runNext(maxIndex + 1, stopUrls, extractedUrls, jobSender)
+      }else if (filteredRecords.size < records.size)
+        running(maxIndex + 1, stopUrls, extractedUrls, jobSender, filteredRecords.size)
       else
-        currentIndex + 1
-
+        running(currentIndex + 1, stopUrls, extractedUrls, jobSender, filteredRecords.size)
+        
       // stay running waiting that all the main contents are extracted
-      context.become(running(nextIndex, stopUrls, extractedUrls, jobSender, filteredRecords.size))
+      context.become(nextStatus)
 
     case MainContentExtractor.Fail(url, ex) =>
       //log.error("fail extracting url {} with exception {}", url, ex.getStackTrace().map(_.toString()).mkString(" "))
@@ -154,7 +155,7 @@ abstract class WebSiteController(val id: String, val dbActor: ActorRef, val rout
       context.become(runNext(currentIndex + 1, stopUrls, extractedUrls, jobSender))
 
     case MainContentExtractor.Result(news) =>
-      log.info("extracted news with title {} from {}", news.urlNews, sender.path.name)
+      log.info("saving news with title {} from {}", news.urlNews, sender.path.name)
       dbActor ! DBManager.InsertNews(news)
 
       //evaluate if we should go to run next
