@@ -121,7 +121,7 @@ abstract class WebSiteController(val id: String, val dbActor: ActorRef, val rout
       var i = 1
       //start the main content extraction for each records
       filteredRecords.foreach { r =>
-        val recordNews = News(None, Some(baseUrl), Some(r.newsUrl), Some(r.title), Some(r.summary), Some(r.newsDate))
+        val recordNews = News(None, Option(baseUrl), Option(r.newsUrl), Option(r.title), Option(r.summary), Option(r.newsDate))
         val mainContentActor = context.actorOf(mainContentExtractorProps(recordNews), self.path.name + "-MainContent-" + countContentExtractors)
         //send delayed messages
         val nexTime = baseTime * i

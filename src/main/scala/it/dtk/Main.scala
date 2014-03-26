@@ -84,7 +84,7 @@ class WebSiteReceptionist extends Actor with ActorLogging {
       optController.map { c =>
         val nextStopUrls = extractedUrls.take(3)
         if (nextStopUrls.nonEmpty) {
-          val toUpdateController = c.copy(stopUrls = Some(nextStopUrls.toList))
+          val toUpdateController = c.copy(stopUrls = Option(nextStopUrls.toList))
           dbActor ! DBManager.UpdateWebController(toUpdateController)
 
           //map the toUpdateController in a pair of id -> ControllerData

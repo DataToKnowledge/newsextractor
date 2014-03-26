@@ -87,26 +87,26 @@ object URLUtil {
     if (loweredUrl.startsWith("http") && parsedUrl.size >= 4) {
       if (parsedUrl.last.matches(RESOURCE_FRAGMENT_REGEX)) {
         val indexQuery = parsedUrl.last.indexOf("?")
-        val res: Option[String] = if (indexQuery != -1) Some(parsedUrl.last.substring(0, indexQuery)) else None
+        val res: Option[String] = if (indexQuery != -1) Option(parsedUrl.last.substring(0, indexQuery)) else None
         if (!fullQuery && res.isDefined) {
-          if (!res.get.isEmpty) Some(res.get) else None
-        } else Some(parsedUrl.last)
+          if (!res.get.isEmpty) Option(res.get) else None
+        } else Option(parsedUrl.last)
       } else None
     } else if (isRelative(loweredUrl)) {
       if (parsedUrl.last.matches(RESOURCE_FRAGMENT_REGEX)) {
         val indexQuery = parsedUrl.last.indexOf("?")
-        val res: Option[String] = if (indexQuery != -1) Some(parsedUrl.last.substring(0, indexQuery)) else None
+        val res: Option[String] = if (indexQuery != -1) Option(parsedUrl.last.substring(0, indexQuery)) else None
         if (!fullQuery && res.isDefined) {
-          if (!res.get.isEmpty) Some(res.get) else None
-        } else Some(parsedUrl.last)
+          if (!res.get.isEmpty) Option(res.get) else None
+        } else Option(parsedUrl.last)
       } else None
     } else if (loweredUrl.startsWith("/")) {
       if (parsedUrl.last.matches(RESOURCE_FRAGMENT_REGEX)) {
         val indexQuery = parsedUrl.last.indexOf("?")
-        val res: Option[String] = if (indexQuery != -1) Some(parsedUrl.last.substring(0, indexQuery)) else None
+        val res: Option[String] = if (indexQuery != -1) Option(parsedUrl.last.substring(0, indexQuery)) else None
         if (!fullQuery && res.isDefined) {
-          if (!res.get.isEmpty) Some(res.get) else None
-        } else Some(parsedUrl.last)
+          if (!res.get.isEmpty) Option(res.get) else None
+        } else Option(parsedUrl.last)
       } else None
     } else None
   }
@@ -119,7 +119,7 @@ object URLUtil {
   def getQueryArgs(url: String): Option[Map[String, String]] = {
     val loweredUrl = url.trim.toLowerCase
     val res = getRequestedResource(loweredUrl, fullQuery = true)
-    val indexQuery = if (res.isDefined && res.get.indexOf("?") != -1) Some(res.get.indexOf("?")) else None
+    val indexQuery = if (res.isDefined && res.get.indexOf("?") != -1) Option(res.get.indexOf("?")) else None
 
     if (indexQuery.isDefined) {
       val query = res.get.substring(indexQuery.get)
@@ -128,7 +128,7 @@ object URLUtil {
       val pattern = "[\\?\\&]([^\\?\\&]+)\\=([^\\?\\&]+)".r
       var valuesMap: Map[String, String] = Map.empty
       pattern.findAllIn(query).matchData.foreach(m => valuesMap += (m.group(1) -> m.group(2)))
-      if (!valuesMap.isEmpty) Some(valuesMap)
+      if (!valuesMap.isEmpty) Option(valuesMap)
       else None
     } else None
   }

@@ -14,7 +14,7 @@ object DataModel {
 }
 
 case class WebControllerData(id: Option[BSONObjectID] = None, controllerName: Option[String], 
-    stopUrls: Option[List[String]], enabled: Option[Boolean] = Some(false))
+    stopUrls: Option[List[String]], enabled: Option[Boolean] = Option(false))
 
 /**
  * @author fabiofumarola

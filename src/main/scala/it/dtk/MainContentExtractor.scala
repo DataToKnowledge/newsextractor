@@ -62,9 +62,9 @@ class MainContentExtractor(news: News, routerHttpGetter: ActorRef) extends Actor
             article.cleanedArticleText = extractor.getText(html)
           }
 
-          context.parent ! Result(news.copy(text = Some(article.cleanedArticleText), tags = Some(article.tags.toSet),
-            metaDescription = Some(article.metaDescription), metaKeyword = Some(article.metaKeywords),
-            canonicalUrl = Some(article.canonicalLink), topImage = Some(article.topImage.getImageSrc)))
+          context.parent ! Result(news.copy(text = Option(article.cleanedArticleText), tags = Option(article.tags.toSet),
+            metaDescription = Option(article.metaDescription), metaKeyword = Option(article.metaKeywords),
+            canonicalUrl = Option(article.canonicalLink), topImage = Option(article.topImage.getImageSrc)))
 
         case Failure(ex) =>
           context.parent ! Fail(url, ex)
