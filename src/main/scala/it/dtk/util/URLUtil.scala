@@ -89,7 +89,7 @@ object URLUtil {
         val indexQuery = parsedUrl.last.indexOf("?")
         val res: Option[String] = if (indexQuery != -1) Option(parsedUrl.last.substring(0, indexQuery)) else None
         if (!fullQuery && res.isDefined) {
-          if (!res.get.isEmpty) Option(res.get) else None
+          if (res.get.nonEmpty) Option(res.get) else None
         } else Option(parsedUrl.last)
       } else None
     } else if (isRelative(loweredUrl)) {
@@ -97,7 +97,7 @@ object URLUtil {
         val indexQuery = parsedUrl.last.indexOf("?")
         val res: Option[String] = if (indexQuery != -1) Option(parsedUrl.last.substring(0, indexQuery)) else None
         if (!fullQuery && res.isDefined) {
-          if (!res.get.isEmpty) Option(res.get) else None
+          if (res.get.nonEmpty) Option(res.get) else None
         } else Option(parsedUrl.last)
       } else None
     } else if (loweredUrl.startsWith("/")) {
@@ -105,7 +105,7 @@ object URLUtil {
         val indexQuery = parsedUrl.last.indexOf("?")
         val res: Option[String] = if (indexQuery != -1) Option(parsedUrl.last.substring(0, indexQuery)) else None
         if (!fullQuery && res.isDefined) {
-          if (!res.get.isEmpty) Option(res.get) else None
+          if (res.get.nonEmpty) Option(res.get) else None
         } else Option(parsedUrl.last)
       } else None
     } else None
@@ -128,7 +128,7 @@ object URLUtil {
       val pattern = "[\\?\\&]([^\\?\\&]+)\\=([^\\?\\&]+)".r
       var valuesMap: Map[String, String] = Map.empty
       pattern.findAllIn(query).matchData.foreach(m => valuesMap += (m.group(1) -> m.group(2)))
-      if (!valuesMap.isEmpty) Option(valuesMap)
+      if (valuesMap.nonEmpty) Option(valuesMap)
       else None
     } else None
   }
