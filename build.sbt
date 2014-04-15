@@ -36,3 +36,4 @@ libraryDependencies ++= Seq(
   "commons-io" % "commons-io" % "2.0.1"
 )
 
+atmosSettings
