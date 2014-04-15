@@ -11,7 +11,7 @@ import akka.actor.ActorRef
 class BrindisiReportWebSiteController(id: String, dbActor: ActorRef, routerHttpGetter: ActorRef)
   extends WebSiteController(id, dbActor, routerHttpGetter) {
 
-  override val maxIndex: Int = 728
+  override val maxIndex: Int = 435
   //override val maxIndex: Int = 5
 
   override val baseUrl: String = "http://www.brindisireport.it/"
@@ -20,6 +20,6 @@ class BrindisiReportWebSiteController(id: String, dbActor: ActorRef, routerHttpG
     Props(classOf[BrindisiReportDataRecordExtractor],routerHttpGetter)
 
   override def composeUrl(currentIndex: Int): String =
-    baseUrl + "cronaca/page/" + currentIndex
+    baseUrl + "cronaca/pag/" + currentIndex
 
 }
