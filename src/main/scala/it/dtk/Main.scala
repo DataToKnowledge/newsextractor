@@ -25,7 +25,7 @@ object WebSiteReceptionist {
   case object Stop
 }
 
-class WebSiteReceptionist extends Actor with ActorLogging {
+class WebSiteReceptionist(host: String) extends Actor with ActorLogging {
 
   import WebSiteReceptionist._
 
@@ -42,7 +42,6 @@ class WebSiteReceptionist extends Actor with ActorLogging {
       Restart
   }
 
-  def host = "10.1.0.62"
   def db = "dbNews"
 
   val dbActor: ActorRef = context.actorOf(DBManager.props(host, db))
@@ -54,6 +53,7 @@ class WebSiteReceptionist extends Actor with ActorLogging {
   def receive = {
 
     case Start =>
+      log.info("Using MongoDB instance on {}", host)
       dbActor ! DBManager.ListWebControllers
 
     case DBManager.WebControllers(controllers) =>
@@ -125,7 +125,10 @@ object Main {
     import system.dispatcher
 
     val system = ActorSystem("NewsExtractor")
-    val receptionist = system.actorOf(Props[WebSiteReceptionist], "WebSiteReceptionist")
+
+    val host = if (args.size > 0) args(0) else "127.0.0.1"
+
+    val receptionist = system.actorOf(Props(classOf[WebSiteReceptionist], host), "WebSiteReceptionist")
     system.scheduler.schedule(1 second, 120 minutes, receptionist, WebSiteReceptionist.Start)
     //receptionist ! WebSiteReceptionist.Start
   }
