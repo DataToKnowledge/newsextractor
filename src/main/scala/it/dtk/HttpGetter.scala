@@ -9,7 +9,6 @@ import scala.concurrent.Promise
 import com.ning.http.client.{ AsyncHttpClientConfig, Response, AsyncHttpClient }
 import scala.concurrent.Future
 import scala.concurrent.duration._
-import com.ning.http.client.AsyncCompletionHandler
 import scala.util.Success
 import org.joda.time.DateTime
 import scala.util.Failure
@@ -55,7 +54,8 @@ class HttpGetter extends Actor with ActorLogging {
       val future = AsyncWebClient.get(url)
       future.onComplete {
         case Success(res) =>
-          send ! new Result(url, res.getResponseBody, sdf.parseDateTime(res.getHeader("Date")))
+          val date = if (res.getHeader("Date") != null) sdf.parseDateTime(res.getHeader("Date")) else DateTime.now()
+          send ! new Result(url, res.getResponseBody, date)
         case Failure(ex) =>
           send ! Fail(url, ex)
       }
@@ -85,12 +85,12 @@ object AsyncWebClient {
     val f = client.prepareGet(url).execute()
     val p = Promise[Response]()
     f.addListener(new Runnable {
-      def run = {
+      def run() = {
         try {
           val response = f.get()
-          if (response.getStatusCode() / 100 < 4)
+          if (response.getStatusCode < 400)
             p.success(response)
-          else p.failure(BadStatus(u, response.getStatusCode()))
+          else p.failure(BadStatus(u, response.getStatusCode))
         } catch {
           case t: Throwable =>
             p.failure(GetException(u,t))
