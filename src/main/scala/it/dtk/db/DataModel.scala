@@ -24,7 +24,7 @@ case class News(id: Option[BSONObjectID] = None, urlWebSite: Option[String], url
                 title: Option[String], summary: Option[String], newsDate: Option[DateTime],
                 text: Option[String] = None, tags: Option[Set[String]] = None,
                 metaDescription: Option[String] = None, metaKeyword: Option[String] = None,
-                canonicalUrl: Option[String] = None, topImage: Option[String] = None, nlpAnalyzed: Option[Boolean]) {
+                canonicalUrl: Option[String] = None, topImage: Option[String] = None, nlpAnalyzed: Option[Boolean] = Option(false)) {
 
   val extractionDate: Date = (new DateTime).toDate
 }
@@ -64,7 +64,7 @@ object News {
       "metakeyword" -> news.metaKeyword,
       "canonicalUrl" -> news.canonicalUrl,
       "topImage" -> news.topImage,
-      "nlpAnalyzed" -> Option(false)
+      "nlpAnalyzed" -> news.nlpAnalyzed
     )
 
   }
