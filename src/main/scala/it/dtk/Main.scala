@@ -129,7 +129,7 @@ object Main {
     val host = if (args.size > 0) args(0) else "127.0.0.1"
 
     val receptionist = system.actorOf(Props(classOf[WebSiteReceptionist], host), "WebSiteReceptionist")
-    system.scheduler.schedule(1 second, 120 minutes, receptionist, WebSiteReceptionist.Start)
+    system.scheduler.schedule(1 second, 60 minutes, receptionist, WebSiteReceptionist.Start)
     //receptionist ! WebSiteReceptionist.Start
   }
 }
