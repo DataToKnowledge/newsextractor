@@ -11,7 +11,7 @@ import akka.actor.ActorRef
 class LeccePrimaWebSiteController(id: String, dbActor: ActorRef, routerHttpGetter: ActorRef)
   extends WebSiteController(id, dbActor, routerHttpGetter) {
 
-  override val maxIndex: Int = 851
+  override val maxIndex: Int = 941
   //override val maxIndex: Int = 5
 
   override val baseUrl: String = "http://www.lecceprima.it/"

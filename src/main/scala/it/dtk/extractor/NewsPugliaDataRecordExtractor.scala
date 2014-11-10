@@ -10,13 +10,13 @@ import akka.actor.ActorRef
  */
 class NewsPugliaDataRecordExtractor(routerHttpGetter: ActorRef) extends DataRecordExtractor(routerHttpGetter) {
 
-  override val cssRecordsSelector: String = "ul[class~=leadingblock|introblock] > li"
+  override val cssRecordsSelector: String = "div.contentpaneopen"
 
-  def title(node: Element) = node.select("div > h2 > a").text
+  def title(node: Element) = node.select("h2 > a").text
 
-  def summary(node: Element) = node.select("div > div[class=lineinfo line1]").text
+  def summary(node: Element) = node.select("div.faf-text > p").text
 
-  def newsUrl(node: Element) = node.select("div > h2 > a[href]").attr("href")
+  def newsUrl(node: Element) = node.select("h2 > a").attr("href")
 
   def newsDate(node: Element, date: DateTime) = date
 

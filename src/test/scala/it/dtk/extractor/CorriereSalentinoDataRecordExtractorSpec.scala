@@ -34,11 +34,11 @@ class CorriereSalentinoRecordExtractorSpec extends MySpec("CorriereSalentinoReco
 
   "The CorriereSalentino record extractor" should {
 
-    "extract 14 data records" in {
+    "extract 18 data records" in {
       parent ! Result(url, html, date)
       val results = expectMsgClass(15.seconds,classOf[DataRecords])
 
-      assert(results.dataRecords.size == 14)
+      assert(results.dataRecords.size == 18)
       results.dataRecords.foreach(dr =>
         assert(dr.title.nonEmpty)
       )

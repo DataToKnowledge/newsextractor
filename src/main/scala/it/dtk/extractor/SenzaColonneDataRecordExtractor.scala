@@ -11,11 +11,11 @@ class SenzaColonneDataRecordExtractor(routerHttpGetter: ActorRef) extends DataRe
 
   override val cssRecordsSelector: String = "div.itemContainer"
 
-  def title(node: Element) = node.getElementsByClass("catItemTitle").text()
+  def title(node: Element) = node.select("h3.catItemTitle").text()
 
   def summary(node: Element) = new String()
 
-  def newsUrl(node: Element) = node.getElementsByClass("catItemTitle").select("a").attr("href")
+  def newsUrl(node: Element) = node.select("h3.catItemTitle > a").attr("href")
 
   def newsDate(node: Element, date: DateTime) = {
     val sdf = DateTimeFormat.forPattern("EEEE, dd MMMM yyyy HH:mm").withLocale(Locale.ITALIAN)

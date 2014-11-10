@@ -12,7 +12,7 @@ import akka.actor.ActorRef
 class GoBariWebSiteController(id: String, dbActor: ActorRef, routerHttpGetter: ActorRef)
   extends WebSiteController(id, dbActor, routerHttpGetter) {
 
-  override val maxIndex: Int = 168
+  override val maxIndex: Int = 216
   //override val maxIndex: Int = 5
 
   override val baseUrl: String = "http://go-bari.it/"

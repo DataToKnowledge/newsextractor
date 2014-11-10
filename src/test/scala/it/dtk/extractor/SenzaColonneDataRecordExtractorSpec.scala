@@ -33,12 +33,12 @@ class SenzaColonneDataRecordExtractorSpec extends MySpec("SenzaColonneDataRecord
 
   "The SenzaColonne record extractor" should {
 
-    "extract 5 data records" in {
+    "extract 1 data record" in {
 
       parent ! Result(url, html, date)
       val results = expectMsgClass(15.seconds, classOf[DataRecords])
 
-      assert(results.dataRecords.size == 5)
+      assert(results.dataRecords.size == 1)
       results.dataRecords.foreach(dr =>
         assert(dr.title.nonEmpty)
       )

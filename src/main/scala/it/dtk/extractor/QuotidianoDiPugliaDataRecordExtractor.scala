@@ -10,14 +10,13 @@ import org.joda.time.DateTime
  */
 class QuotidianoDiPugliaDataRecordExtractor(routerHttpGetter: ActorRef) extends DataRecordExtractor(routerHttpGetter) {
 
-  override val cssRecordsSelector: String =
-    "html > body > table > tbody > tr > td > table[bgcolor=#ffffff] > tbody > tr > td[valign=top] > table"
+  override val cssRecordsSelector: String = "article.col-12"
 
-  def title(node: Element) = node.select("table > tbody > tr > td > a.nero18").text
+  def title(node: Element) = node.select("p.titolo > a").text
 
-  def summary(node: Element) = node.select("table > tbody > tr > td > div > span.testonero12").text
+  def summary(node: Element) = node.select("p.sottotitolo").text
 
-  def newsUrl(node: Element) = node.select("table > tbody > tr > td > a.nero18").attr("href")
+  def newsUrl(node: Element) = node.select("p.titolo > a").attr("href")
 
   def newsDate(node: Element, date: DateTime) = date
 

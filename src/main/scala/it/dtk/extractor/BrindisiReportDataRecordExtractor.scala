@@ -10,7 +10,7 @@ import org.joda.time.DateTime
  */
 class BrindisiReportDataRecordExtractor(routerHttpGetter: ActorRef) extends DataRecordExtractor(routerHttpGetter) {
 
-  override val cssRecordsSelector: String = "article[class= post p-small clearfix]"
+  override val cssRecordsSelector: String = "article.post"
 
   def title(node: Element) =
     node.select("header > figure > a > img[alt]").attr("alt")

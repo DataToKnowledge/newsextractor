@@ -10,13 +10,13 @@ import org.joda.time.DateTime
  */
 class BrindisiLiberaDataRecordExtractor(routerHttpGetter: ActorRef) extends DataRecordExtractor(routerHttpGetter) {
 
-  override val cssRecordsSelector: String = "td.contentheading"
+  override val cssRecordsSelector: String = "div.entry-content"
 
-  def title(node: Element) = node.select("a").text
+  def title(node: Element) = node.select("h3 > a").text
 
-  def summary(node: Element) = node.select("a").text
+  def summary(node: Element) = node.select("p").text
 
-  def newsUrl(node: Element) = node.select("a").attr("href")
+  def newsUrl(node: Element) = node.select("h3 > a").attr("href")
 
   def newsDate(node: Element, date: DateTime) = date
 

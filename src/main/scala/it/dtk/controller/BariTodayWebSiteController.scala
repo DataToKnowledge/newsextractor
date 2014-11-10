@@ -11,7 +11,7 @@ import akka.actor.ActorRef
 class BariTodayWebSiteController(id: String, dbActor: ActorRef, routerHttpGetter: ActorRef)
   extends WebSiteController(id, dbActor, routerHttpGetter) {
 
-  override val maxIndex: Int = 299
+  override val maxIndex: Int = 359
   //override val maxIndex: Int = 5
 
   override val baseUrl: String = "http://www.baritoday.it/"

@@ -10,7 +10,7 @@ import akka.actor.ActorRef
  */
 class Puglia24DataRecordExtractor(routerHttpGetter: ActorRef) extends DataRecordExtractor(routerHttpGetter) {
 
-  override val cssRecordsSelector: String = "div[class=newsTxt]"
+  override val cssRecordsSelector: String = "div.newsTxt"
 
   def title(node: Element) = node.select("h5 > a").text()
 

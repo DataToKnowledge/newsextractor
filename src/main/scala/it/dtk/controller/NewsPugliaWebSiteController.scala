@@ -11,7 +11,7 @@ import akka.actor.ActorRef
 class NewsPugliaWebSiteController(id: String, dbActor: ActorRef, routerHttpGetter: ActorRef)
   extends WebSiteController(id, dbActor, routerHttpGetter) {
 
-  override val maxIndex: Int = 287
+  override val maxIndex: Int = 11
   //override val maxIndex: Int = 5
 
   override val baseUrl: String = "http://www.newspuglia.it/"
@@ -20,6 +20,5 @@ class NewsPugliaWebSiteController(id: String, dbActor: ActorRef, routerHttpGette
     Props(classOf[NewsPugliaDataRecordExtractor],routerHttpGetter)
 
   override def composeUrl(currentIndex: Int): String =
-    baseUrl + "index.php?option=com_flexicontent&view=category&cid=186&Itemid=3&limitstart=" +
-      String.valueOf((currentIndex - 1) * 20)
+    baseUrl + "index.html?start=" + String.valueOf(((currentIndex - 1) * 10) + 1)
 }

@@ -7,7 +7,7 @@ import org.joda.time.DateTime
 
 class RepubblicaDataRecordExtractor(routerHttpGetter: ActorRef) extends DataRecordExtractor(routerHttpGetter) {
 
-  override val cssRecordsSelector: String = "article[class=article]"
+  override val cssRecordsSelector: String = "article.article"
 
   def title(node: Element) = node.select("h1").text
 

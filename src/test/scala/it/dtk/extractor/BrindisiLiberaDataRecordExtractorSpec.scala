@@ -33,13 +33,13 @@ class BrindisiLiberaDataRecordExtractorSpec extends MySpec("BrindisiLiberaDataRe
 
   "The BrindisiLibera record extractor" should {
 
-    "extract 9 data records" in {
+    "extract 10 data records" in {
 
       parent ! Result(url, html, date)
 
       val results = expectMsgClass(15.seconds, classOf[DataRecords])
 
-      assert(results.dataRecords.size == 9)
+      assert(results.dataRecords.size == 10)
       results.dataRecords.foreach(dr =>
         assert(dr.title.nonEmpty)
       )

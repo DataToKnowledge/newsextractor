@@ -49,6 +49,7 @@
 
 
 
+
 <!-- gestione cookie -->
 <script language="javascript">
 function setCookie(name, value, days)
@@ -90,17 +91,14 @@ function setCookie(name, value, days)
 
 
 
-
-
-		
-
-
+	
+	
 
 
 
 
-
-
+	
+	
 
 
 
@@ -124,6 +122,16 @@ function setCookie(name, value, days)
 
 
 
+
+
+
+
+
+
+
+
+<!--set var="WEB_ROOT_CORRIERE_CSS" 				value="http://css2.corriereobjects.it" -->
+<!--set var="WEB_ROOT_CORRIERE_JS" 				value="http://js2.corriereobjects.it" -->
 
 
 
@@ -347,6 +355,9 @@ function setCookie(name, value, days)
 	<!-- META -->
 	<!-- generato da /ssi/dyn/head/common_meta.shtml -->
 	<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7" />
+
+	<meta name="robots" content="noarchive, nocache"/>
+
 	<link rel="shortcut icon" href="http://css.corrieredelmezzogiorno.corriereobjects.it/libs/css/default_theme/assets/favicon.ico?v=<!-- [an error occurred while processing this directive]  -->" />
 	<!--[if IE 6]>
 		<script type="text/javascript">
@@ -368,6 +379,8 @@ function setCookie(name, value, days)
 
 	<!-- JS -->
 	<!-- generato da /ssi/dyn/head/common_js_top.shtml -->
+
+ 
 <script type="text/javascript">
 	var domain_community = 0;
 	var domain_community_2 = 0;
@@ -381,6 +394,8 @@ function setCookie(name, value, days)
 
 <script type="text/javascript" src="http://js.corrieredelmezzogiorno.corriereobjects.it/libs/js/jquery/jquery-1.6.4.min.js?v=20131106123728"></script>
  
+
+<script src="http://js.corrieredelmezzogiorno.corriereobjects.it/libs/js/lettura_cookie.js?v=20140410173339"></script>
 
 <!--Plugin per fotogallery nei local uguale a corriere-->
 
@@ -530,7 +545,7 @@ function getSite() {
  
 	Date.monthNames = ['mese','Gen', 'Feb', 'Mar', 'Apr', 'Mag', 'Giu', 'Lug', 'Ago', 'Set', 'Ott', 'Nov', 'Dic'];
 	Date.dayNames = ['Dom', 'Lun', 'Mar', 'Mer', 'Gio', 'Ven', 'Sab'];
-	var server_date = '02-26-14-08-3-46-16-2014-46';
+	var server_date = '11-10-14-45-1-50-19-2014-16';
 	var server_date_split = server_date.split('-');
 	
 	//MESE
@@ -624,9 +639,9 @@ function getSite() {
 	
 
 		 
-			<script type="text/javascript" src="http://video.corrieredelmezzogiorno.corriere.it/widget/js/FEED_CHANNEL.js"></script>
-			<script type="text/javascript" src="http://video.corrieredelmezzogiorno.corriere.it/widget/js/TEMPLATE_MAPPING.js"></script>
-			<script type="text/javascript" src="http://video.corrieredelmezzogiorno.corriere.it/widget/js/polymediaWidgetsCorriereDelMezzogiorno.js"></script>
+			<script type="text/javascript" src="http://static.video.corriereobjects.it/widget/js/FEED_CHANNEL.js"></script>
+			<script type="text/javascript" src="http://static.video.corriereobjects.it/widget/js/TEMPLATE_MAPPING.js"></script>
+			<script type="text/javascript" src="http://static.video.corriereobjects.it/widget/js/polymediaWidgetsCorriere.js"></script>
 		 
 
 
@@ -647,15 +662,15 @@ function getSite() {
 
    
 
+
    
-   		<!-- JS PER MINIPLAYER -->
-		
-		<script type="text/javascript" src="http://video.corrieredelmezzogiorno.corriere.it/widget/js/FEED_CHANNEL.js?v=201401161415"></script>
-		<script type="text/javascript" src="http://video.corrieredelmezzogiorno.corriere.it/widget/js/TEMPLATE_MAPPING.js?v=201402261634"></script>	
+
+		<script type="text/javascript" src="http://video.corrieredelmezzogiorno.corriere.it/widget/js/FEED_CHANNEL.js?v=201409161310"></script>
+		<script type="text/javascript" src="http://video.corrieredelmezzogiorno.corriere.it/widget/js/TEMPLATE_MAPPING.js?v=201411101946"></script>	
 		<script type="text/javascript" src="http://video.corrieredelmezzogiorno.corriere.it/widget/js/polymediaWidgetsCorriere.js?v=201311121441"></script>
-	    <script type="text/javascript" src="http://video.corrieredelmezzogiorno.corriere.it/widget/js/polymediaCorriere.js?v=201402051601"></script>
+	    <script type="text/javascript" src="http://video.corrieredelmezzogiorno.corriere.it/widget/js/polymediaCorriere.js?v=201403241305"></script>
 	        <script type="text/javascript" src="http://video.corrieredelmezzogiorno.corriere.it/widget/js/jquery.touchwipe.min.js?v=201311121441"></script>
-   
+
 
 
 <!-- Google Analytics Start -->
@@ -689,6 +704,9 @@ function getSite() {
 		 }) (document, "scr"+"ipt");
 	</script>
 
+<!--BOX YOODEAL-->
+<script src=" http://milano.corriere.it/yoo-box/js/yoodeal_widget.js"></script>
+
 <!-- fine generato da /ssi/dyn/head/common_js_top.shtml -->
 
 	<!-- CSS -->
@@ -697,20 +715,24 @@ function getSite() {
 
     <link href="http://css.corrieredelmezzogiorno.corriereobjects.it/libs/css/default_theme/reset.css?v=200809031634" media="all" rel="stylesheet" type="text/css" />
 
-    <link href="http://css.corrieredelmezzogiorno.corriereobjects.it/libs/css/default_theme/main.css?v=201402121831" media="all" rel="stylesheet" type="text/css" />
+    <link href="http://css.corrieredelmezzogiorno.corriereobjects.it/libs/css/default_theme/main.css?v=201409221142" media="all" rel="stylesheet" type="text/css" />
     
-    <link href="http://css.corrieredelmezzogiorno.corriereobjects.it/global/css/3colonna.css?v=201309301439" media="all" rel="stylesheet" type="text/css" />
+    <link href="http://css.corrieredelmezzogiorno.corriereobjects.it/global/css/3colonna.css?v=201411061531" media="all" rel="stylesheet" type="text/css" />
     
     <link href="http://css.corrieredelmezzogiorno.corriereobjects.it/libs/css/default_theme/print-main.css?v=201006170906" media="print" rel="stylesheet" type="text/css" />
+
+
+
+
     
 
     
-        <link href="http://css2.corriereobjects.it/includes2007/static/css/login_com.css?v=201311071534" media="all" rel="stylesheet" type="text/css" />
+        <link href="http://css.corriereobjects.it/includes2007/static/css/login_com.css?v=201405281130" media="all" rel="stylesheet" type="text/css" />
     
     
-    <link href="http://css2.corriereobjects.it/includes2007/static/css/community.css?v=201402180916" media="all" rel="stylesheet" type="text/css" />
-    <link href="http://css2.corriereobjects.it/includes2007/static/css/multibar.css?v=201310172345" media="all" rel="stylesheet" type="text/css" />
-    <link href="http://css2.corriereobjects.it/includes2007/static/css/jquery.fancybox.css?v=201310241138" media="all" rel="stylesheet" type="text/css" />    
+    <link href="http://css.corriereobjects.it/includes2007/static/css/community.css?v=201410081445" media="all" rel="stylesheet" type="text/css" />
+    <link href="http://css.corriereobjects.it/includes2007/static/css/multibar.css?v=201404161228" media="all" rel="stylesheet" type="text/css" />
+    <link href="http://css.corriereobjects.it/includes2007/static/css/jquery.fancybox.css?v=201310241138" media="all" rel="stylesheet" type="text/css" />    
   
 
 
@@ -723,6 +745,9 @@ function getSite() {
 
 
 
+
+<!--BOX YOODEAL-->
+<link rel="stylesheet" href="http://milano.corriere.it/yoo-box/style/style.css">
 
 <!-- mf: richiato anche in common_js_top.js / tolto -->
 <!--include virtual="/ssi/2008/adv/openx.html"-->
@@ -900,13 +925,13 @@ OAS_AD('Top');
             <li id="mn_spettacoli"><a href="http://corrieredelmezzogiorno.corriere.it/bari/notizie/spettacoli/">Spettacoli</a></li>
             <li id="mn_ore_piccole"><a href="http://corrieredelmezzogiorno.corriere.it/bari/notizie/ore_piccole/">Movida</a></li>
             
+            <li id="mn_salute" class="menu-new1_bg"><a href="http://corrieredelmezzogiorno.corriere.it/napoli/notizie/salute/">Salute</a></li>
 			<li id="mn_a_sociale" class="menu-new1_bg"><a href="http://corrieredelmezzogiorno.corriere.it/napoli/notizie/sociale/">Sociale</a></li>
-            
+   
             <li id="mn_universita"><a href="http://corrieredelmezzogiorno.corriere.it/bari/notizie/universita/">Scuola</a></li>
-            
+  
              <li id="mn_agenda"><a href="http://corrieredelmezzogiorno.corriere.it/bari/localwebapp/ricercaAgenda.do?settimana=true">Agenda</a></li>
              <li id="mn_blog"><a href="http://corrieredelmezzogiorno.corriere.it/bari/blog/">Blog</a></li>
-             <li id="mn_annunci"><a href="http://corrieredelmezzogiorno.corriere.it/bari/annunci/">Annunci</a></li>
              
             <li id="mn_meteo">
                 <span><a href="http://meteo.corriere.it/meteo/citta/previsioni/bari.shtml">METEO</span>, <span id="temperatura"></span><span class="icona-m"><img src="http://corrieredelmezzogiorno.corriere.it/libs/css/default_theme/assets/load-meteo.gif" class="icona_meteo"/></span></a>
@@ -962,201 +987,204 @@ OAS_AD('TopLeft');
 				<div id="col-sx" class="left archivio">
 					<a name="maincontent"></a>
                 
-                	
+                    
                 
     
     			<div class="pagerNew">
 						<a href="./index.shtml?id=2" class="frecciaDx" title="meno recenti"><img src="http://www.corriere.it/images/static/common/usa_menorecenti.gif"></a>
 								
 							<ul class="num-pagine">
+	<li><a href="./index.shtml?id=1" class="pagina1">1</a></li>
+	<li><a href="./index.shtml?id=2" class="pagina2">2</a></li>
+	<li><a href="./index.shtml?id=3" class="pagina3">3</a></li>
+	<li><a href="./index.shtml?id=4" class="pagina4">4</a></li>
+	<li><a href="./index.shtml?id=5" class="pagina5">5</a></li>
+	<li><a href="./index.shtml?id=6" class="pagina6">6</a></li>
 	</ul>
 	
 						</div>
 						<ul>
 							<!--per calcolo path-->
 										<li class="clearfix">
-<h3 class="date">25 maggio 2012</h3>
+<h3 class="date">08 novembre 2014</h3>
 <h2>
-<a href="/bari/notizie/cronaca/2012/25-maggio-2012/agguato-ceglie-grave-21enneil-ragazzo-al-clan-cosola-201330159209.shtml"><img class="left foto" src="http://images.corrieredelmezzogiorno.corriere.it/campania/media/foto/2012/05/25/ceglie--190x130.jpg" alt="
+<a href="/napoli/notizie/cronaca/2014/8-novembre-2014/torna-domenica-ecologicastop-auto-sino-13-230502722362.shtml"><img class="left foto" src="http://images.corrieredelmezzogiorno.corriere.it/campania/media/foto/2014/11/08/6347933-351-kUWF--190x130@Cormez.jpg" alt="
 								" title="" />
-								Agguato a Ceglie, grave un 21enne<br/>Il ragazzo è vicino al clan Di Cosola<br/></a>
+								Torna la domenica ecologica,<br/>stop alle auto sino alle 13</a>
 </h2>
 <p>
-<a href="/bari/notizie/cronaca/2012/25-maggio-2012/agguato-ceglie-grave-21enneil-ragazzo-al-clan-cosola-201330159209.shtml">Fatti esplodere sei colpi di pistola in piazza Santa Maria<br/>Il 21enne Boffo è ricoverato all'ospedale Di Venere</a>
+<a href="/napoli/notizie/cronaca/2014/8-novembre-2014/torna-domenica-ecologicastop-auto-sino-13-230502722362.shtml">Il divieto dalle 9.30 del mattino su tutto il territorio cittadino</a>
 </p>
 </li>
 <!--per calcolo path-->
 										<li class="clearfix">
 <h2>
-<a href="/bari/notizie/cronaca/2012/25-maggio-2012/san-raffaele-giglio-futuro-incerto-perl-ospedale-nato-pubblico-privati-201330454848.shtml">San Raffaele Giglio, futuro incerto per<br/>l'ospedale nato da pubblico e privati</a>
+<a href="/napoli/notizie/cronaca/2014/8-novembre-2014/gli-investigatori-iberici-la-camorravuol-condizionare-elezioni-spagna-230502589472.shtml">Gli investigatori iberici: «La camorra<br/>vuol condizionare le elezioni in Spagna»</a>
 </h2>
 <p>
-<a href="/bari/notizie/cronaca/2012/25-maggio-2012/san-raffaele-giglio-futuro-incerto-perl-ospedale-nato-pubblico-privati-201330454848.shtml">La nuova proprietà della fondazione creata da don Luigi Verzè ha disdetto la convenzione con la struttura siciliana</a>
+<a href="/napoli/notizie/cronaca/2014/8-novembre-2014/gli-investigatori-iberici-la-camorravuol-condizionare-elezioni-spagna-230502589472.shtml">La polizia di Madrid a Napoli: «Anche da noi i vostri clan si stanno infiltrando nelle amministrazioni locali e tentano di inserirsi nelle liste elettorali»</a>
 </p>
 </li>
 <!--per calcolo path-->
 										<li class="clearfix">
 <h2>
-<a href="/bari/notizie/cronaca/2012/25-maggio-2012/crisi-non-si-ferma-piuvia-sconti-turisti-201329554539.shtml">La crisi non si ferma più<br/>via agli sconti per i turisti</a>
+<a href="/caserta/notizie/cronaca/2014/8-novembre-2014/-morto-titino-l-oste-mercoglianoche-strego-toto--230502529353.shtml">E&#8217; morto Titino, l&#8217;oste di Mercogliano<br/>che stregò Totò </a>
 </h2>
 <p>
-<a href="/bari/notizie/cronaca/2012/25-maggio-2012/crisi-non-si-ferma-piuvia-sconti-turisti-201329554539.shtml">A Lecce i commercianti hanno anticipato i saldi<br/>Confcommercio e Confesercenti:«Iniziative da elogiare»<br/></a>
+<a href="/caserta/notizie/cronaca/2014/8-novembre-2014/-morto-titino-l-oste-mercoglianoche-strego-toto--230502529353.shtml">Il suo ristorante negli anni &#8216;80 meta di calciatori e politici </a>
 </p>
 </li>
 <!--per calcolo path-->
 										<li class="clearfix">
 <h2>
-<a href="/bari/notizie/cronaca/2012/25-maggio-2012/foggia-parte-street-control-cittalunedi-si-parte-vie-centro-201330089113.shtml">Foggia, parte lo street control in città<br/>Lunedì si parte dalle vie del centro</a>
+<a href="/bari/notizie/cronaca/2014/8-novembre-2014/demolita-torre-dell-acquala-nuova-ilva-fa-bonifica-230502431975.shtml">Demolita la torre dell&#8217;acqua<br/>La «nuova» Ilva fa bonifica</a>
 </h2>
 <p>
-<a href="/bari/notizie/cronaca/2012/25-maggio-2012/foggia-parte-street-control-cittalunedi-si-parte-vie-centro-201330089113.shtml">In funzione l'occhio elettronico dei vigili urbani<br/>Tecnologia contro la sosta selvaggia e la criminalità</a>
+<a href="/bari/notizie/cronaca/2014/8-novembre-2014/demolita-torre-dell-acquala-nuova-ilva-fa-bonifica-230502431975.shtml">Crollata la struttura di asservimento all&#8217;altoforno 4<br/>Ulitlizzato esplosivo per un impianto alto 25 metri</a>
 </p>
 </li>
 <!--per calcolo path-->
 										<li class="clearfix">
 <h2>
-<a href="/bari/notizie/cronaca/2012/25-maggio-2012/cambiali-protestate-camionista-si-barrica-banca-arrestato-201330074534.shtml">Cambiali protestate, camionista <br/>si barrica in banca: arrestato</a>
+<a href="/bari/notizie/cronaca/2014/8-novembre-2014/maltempo-voragine-torre-mare-230502425499.shtml">Maltempo, voragine a Torre a Mare</a>
 </h2>
 <p>
-<a href="/bari/notizie/cronaca/2012/25-maggio-2012/cambiali-protestate-camionista-si-barrica-banca-arrestato-201330074534.shtml">Giovanni Barbieri, 41 anni, di Mercogliano dopo aver<br/>cosparso i locali di diluente minacciava di dare fuoco all&#8217;istituto</a>
+<a href="/bari/notizie/cronaca/2014/8-novembre-2014/maltempo-voragine-torre-mare-230502425499.shtml">Il cratere si è aperto a causa della pioggia<br/>Rovinate le condutture della fogna</a>
 </p>
 </li>
 <!--per calcolo path-->
 										<li class="clearfix">
 <h2>
-<a href="/bari/notizie/cronaca/2012/25-maggio-2012/gizzi-tempo-scaduto-via-subito-baffi-201329993620.shtml">Gizzi: tempo scaduto, via subito i «baffi»</a>
+<a href="/catania/notizie/cronaca/2014/8-novembre-2014/formazione-giudizio-deputato-pdgenovese-rinaldi-altri-21--230502402397.shtml">Formazione, a giudizio il deputato Pd<br/>Genovese, Rinaldi e altri 21 </a>
 </h2>
 <p>
-<a href="/bari/notizie/cronaca/2012/25-maggio-2012/gizzi-tempo-scaduto-via-subito-baffi-201329993620.shtml">Scogliera del lungomare, polemica sui prolungamenti<br/>Il soprintendente al Comune: accordi non rispettati</a>
+<a href="/catania/notizie/cronaca/2014/8-novembre-2014/formazione-giudizio-deputato-pdgenovese-rinaldi-altri-21--230502402397.shtml">Accusati di truffa e falso in bilancio </a>
 </p>
 </li>
 <!--per calcolo path-->
 										<li class="clearfix">
 <h2>
-<a href="/bari/notizie/cronaca/2012/25-maggio-2012/ancora-allarme-tubercolosispuntano-altri-4-casi-sospetti-201329694819.shtml">È ancora allarme tubercolosi:<br/>spuntano altri 4 casi sospetti</a>
+<a href="/palermo/notizie/cronaca/2014/8-novembre-2014/idv-intimidazioni-all-imprenditrice-antiracket-valeria-grasso--230502090790.shtml">Idv: intimidazioni all&#8217; imprenditrice antiracket Valeria Grasso </a>
 </h2>
 <p>
-<a href="/bari/notizie/cronaca/2012/25-maggio-2012/ancora-allarme-tubercolosispuntano-altri-4-casi-sospetti-201329694819.shtml">I malati sono tre, oggi nuove analisi<br/>Sono alunni della scuola Giovanni XXIII</a>
+<a href="/palermo/notizie/cronaca/2014/8-novembre-2014/idv-intimidazioni-all-imprenditrice-antiracket-valeria-grasso--230502090790.shtml">«Qualcuno si è introdotto nel suo appartamento»</a>
 </p>
 </li>
 <!--per calcolo path-->
 										<li class="clearfix">
 <h2>
-<a href="/bari/notizie/cronaca/2012/25-maggio-2012/vesuvio-acampados-ancora-craterelunedi-corteo-protesta-osservatorio-201329603526.shtml">Vesuvio, gli acampados ancora nel cratere<br/>Lunedì corteo di protesta all'Osservatorio</a>
+<a href="/caserta/notizie/cronaca/2014/8-novembre-2014/aversa-riaperto-sedile-san-luigie-piu-antico-13-rimasti-italia-230502039847.shtml">Aversa, riaperto il Sedile di San Luigi<br/>È il più antico dei 13 rimasti in Italia</a>
 </h2>
 <p>
-<a href="/bari/notizie/cronaca/2012/25-maggio-2012/vesuvio-acampados-ancora-craterelunedi-corteo-protesta-osservatorio-201329603526.shtml">Ancora in tenda nella bocca del vulcano i sei dipendenti della ex cooperativa </a>
+<a href="/caserta/notizie/cronaca/2014/8-novembre-2014/aversa-riaperto-sedile-san-luigie-piu-antico-13-rimasti-italia-230502039847.shtml">L&#8217;iniziativa in concomitanza con l&#8217;avvio del Festival</a>
 </p>
 </li>
 <!--per calcolo path-->
 										<li class="clearfix">
 <h2>
-<a href="/bari/notizie/cronaca/2012/25-maggio-2012/auto-incendiate-pieno-centroa-monreale-emergenza-criminale-201329796952.shtml">Auto incendiate in pieno centro,<br/>a Monreale è emergenza criminale</a>
+<a href="/palermo/notizie/cronaca/2014/8-novembre-2014/crocetta-verifichiamo-maxi-vendita-beni-regione-all-epoca-cuffaro-230502059375.shtml">Crocetta: verifichiamo la  maxi-vendita dei beni della Regione all&#8217;epoca Cuffaro</a>
 </h2>
 <p>
-<a href="/bari/notizie/cronaca/2012/25-maggio-2012/auto-incendiate-pieno-centroa-monreale-emergenza-criminale-201329796952.shtml">Caputo, componente della Commissione regionale antimafia, denuncia un "clima di intimidazione e terrore"</a>
+<a href="/palermo/notizie/cronaca/2014/8-novembre-2014/crocetta-verifichiamo-maxi-vendita-beni-regione-all-epoca-cuffaro-230502059375.shtml">Il governatore: c&#8217;è stato un danno notevole alle casse</a>
 </p>
 </li>
 <!--per calcolo path-->
 										<li class="clearfix">
 <h2>
-<a href="/bari/notizie/cronaca/2012/25-maggio-2012/droga-42-ordinanze-cautelaritra-arrestati-quattro-donne-201329338088.shtml">Droga, 42 ordinanze cautelari:<br/>tra gli arrestati quattro donne</a>
+<a href="/catania/notizie/cronaca/2014/8-novembre-2014/isole-eolie-senza-collegamenti-4-giorni--230502018939.shtml">Isole Eolie senza collegamenti da 4 giorni </a>
 </h2>
 <p>
-<a href="/bari/notizie/cronaca/2012/25-maggio-2012/droga-42-ordinanze-cautelaritra-arrestati-quattro-donne-201329338088.shtml">L'accusa è di associazione per delinquere finalizzata<br/>al traffico di stupefacenti, e detenzione ai fini di spaccio</a>
-</p>
-</li>
-<!--per calcolo path-->
-										<li class="clearfix">
-<h3 class="date">24 maggio 2012</h3>
-<h2>
-<a href="/bari/notizie/cronaca/2012/24-maggio-2012/cassano-gamba-tesa-proformapioggia-appalti-amici-nichila-replica-tanti-nessun-contratto-201325208764.shtml"><img class="left foto" src="http://images.corrieredelmezzogiorno.corriere.it/campania/media/foto/2012/05/24/cassano--190x130.jpg" alt="
-								" title="" />
-								Cassano a gamba tesa su Proforma<br/>«Pioggia di appalti agli amici di Nichi»<br/>La replica: in tanti anni nessun contratto</a>
-</h2>
-<p>
-<a href="/bari/notizie/cronaca/2012/24-maggio-2012/cassano-gamba-tesa-proformapioggia-appalti-amici-nichila-replica-tanti-nessun-contratto-201325208764.shtml">Un'interrogazione del vice capogruppo Pdl in Consiglio<br/>«Faremo del bene, restituiremo zero euro incassati»</a>
+<a href="/catania/notizie/cronaca/2014/8-novembre-2014/isole-eolie-senza-collegamenti-4-giorni--230502018939.shtml">Mareggiate sui porti. Solo un traghetto da Milazzo a Lipari </a>
 </p>
 </li>
 <!--per calcolo path-->
 										<li class="clearfix">
 <h2>
-<a href="/bari/notizie/cronaca/2012/24-maggio-2012/muore-motociclista-leccese-31-anni-201323485119.shtml">Muore motociclista leccese di 31 anni</a>
+<a href="/lecce/notizie/cronaca/2014/8-novembre-2014/trivelle-leuca-rivoltama-scontro-politico-230501807811.shtml">Trivelle, a Leuca è rivolta<br/>Ma è scontro politico</a>
 </h2>
 <p>
-<a href="/bari/notizie/cronaca/2012/24-maggio-2012/muore-motociclista-leccese-31-anni-201323485119.shtml">È accaduto sulla statale 7ter per Campi Salentina<br/>La moto si è schiantata contro una macchina<br/></a>
+<a href="/lecce/notizie/cronaca/2014/8-novembre-2014/trivelle-leuca-rivoltama-scontro-politico-230501807811.shtml">Introna a Pittella: «Il caso all&#8217;Unione Europea»<br/>Sul petrolio lite elettorale Stefano-Emiliano</a>
 </p>
 </li>
 <!--per calcolo path-->
 										<li class="clearfix">
 <h2>
-<a href="/bari/notizie/cronaca/2012/24-maggio-2012/intimidazione-procuratore-trapaniidentificati-interrogati-autori-201324399484.shtml">Intimidazione al procuratore di Trapani<br/>Identificati e interrogati gli autori</a>
+<a href="/caserta/notizie/cronaca/2014/8-novembre-2014/sul-tetto-scuola-un-fucile-fintopanico-inseguimento-preso-rumeno-230501774280.shtml">Sul tetto della scuola con un fucile finto<br/>Panico e inseguimento, preso un rumeno</a>
 </h2>
 <p>
-<a href="/bari/notizie/cronaca/2012/24-maggio-2012/intimidazione-procuratore-trapaniidentificati-interrogati-autori-201324399484.shtml">Non sono indagati, avrebbero ridimensionato l'episodio<br/>e dato una spiegazione sul loro comportamento</a>
+<a href="/caserta/notizie/cronaca/2014/8-novembre-2014/sul-tetto-scuola-un-fucile-fintopanico-inseguimento-preso-rumeno-230501774280.shtml">Aveva litigato con i suoi, si è ferito per sfuggire alla cattura<br/>Il caso dell&#8217;edificio condiviso tra famiglie e plesso scolastico</a>
 </p>
 </li>
 <!--per calcolo path-->
 										<li class="clearfix">
 <h2>
-<a href="/bari/notizie/cronaca/2012/24-maggio-2012/lombardo-udienza-davantial-gup-rinviata-28-giugno-201324398864.shtml">Lombardo, udienza davanti<br/>al gup rinviata al 28 giugno</a>
+<a href="/bari/notizie/cronaca/2014/8-novembre-2014/area-cani-chiusura-anticipatamonta-protesta-contro-decaro-230501671184.shtml">Area per i cani, chiusura anticipata<br/>Monta la protesta contro Decaro</a>
 </h2>
 <p>
-<a href="/bari/notizie/cronaca/2012/24-maggio-2012/lombardo-udienza-davantial-gup-rinviata-28-giugno-201324398864.shtml">Il governatore e suo fratello Angelo imputati per concorso esterno in associazione mafiosa e voto di scambio</a>
+<a href="/bari/notizie/cronaca/2014/8-novembre-2014/area-cani-chiusura-anticipatamonta-protesta-contro-decaro-230501671184.shtml">Cartelli affissi nel giardino di piazza Gramsci</a>
 </p>
 </li>
 <!--per calcolo path-->
 										<li class="clearfix">
 <h2>
-<a href="/bari/notizie/cronaca/2012/24-maggio-2012/voto-scambio-lombardo-rito-abbreviato-scegliero-gli-avvocati-201323681250.shtml">Voto di scambio, Lombardo: rito <br/>abbreviato? Sceglierò con gli avvocati</a>
+<a href="/caserta/notizie/cronaca/2014/8-novembre-2014/ammazzano-figlia-chiede-risarcimentolo-stato-condanna-spese-processuali-230501169111.shtml">Le ammazzano la figlia, chiede risarcimento<br/>Lo Stato la condanna alle spese processuali</a>
 </h2>
 <p>
-<a href="/bari/notizie/cronaca/2012/24-maggio-2012/voto-scambio-lombardo-rito-abbreviato-scegliero-gli-avvocati-201323681250.shtml">Il governatore a processo. E&#8217; imputato con il fratello Angelo per concorso esterno in associazione mafiosa</a>
+<a href="/caserta/notizie/cronaca/2014/8-novembre-2014/ammazzano-figlia-chiede-risarcimentolo-stato-condanna-spese-processuali-230501169111.shtml">Per un omicidio avvenuto nel 2005 a Cancello ed Arnone<br/>una ingiunzione di 7.500 euro alla madre della vittima</a>
 </p>
 </li>
 <!--per calcolo path-->
 										<li class="clearfix">
 <h2>
-<a href="/bari/notizie/cronaca/2012/24-maggio-2012/bat-fanghi-inquinanti-finiti-marecaso-depuratori-indagato-monteforte-201323047732.shtml">Bat, fanghi inquinanti finiti in mare<br/>Caso depuratori: indagato Monteforte</a>
+<a href="/lecce/notizie/cronaca/2014/8-novembre-2014/confartigianato-accusatagli-il-patronato-230501647452.shtml">Confartigianato accusa:<br/>«Tagli per il Patronato»</a>
 </h2>
 <p>
-<a href="/bari/notizie/cronaca/2012/24-maggio-2012/bat-fanghi-inquinanti-finiti-marecaso-depuratori-indagato-monteforte-201323047732.shtml">Bloccati impianti di Trani, Barletta, Andria e Molfetta<br/>Concentrazioni elevate di azoto, fosforo e idrocarburi</a>
+<a href="/lecce/notizie/cronaca/2014/8-novembre-2014/confartigianato-accusatagli-il-patronato-230501647452.shtml">Dossier-denuncia sul ddl Stabilità<br/>«Per il Salento diventerà un boomerang»</a>
 </p>
 </li>
 <!--per calcolo path-->
 										<li class="clearfix">
 <h2>
-<a href="/bari/notizie/cronaca/2012/24-maggio-2012/incidente-amerigo-vespuccimuore-marinaio-brindisino-201322910374.shtml">Incidente sull'Amerigo Vespucci,<br/>muore marinaio brindisino<br/></a>
+<a href="/lecce/notizie/cronaca/2014/8-novembre-2014/strade-come-percorsi-guerra-ecco-lato-nascosto-barocco-230499620518.shtml">Strade come percorsi di guerra <br/>ecco il lato nascosto del barocco</a>
 </h2>
 <p>
-<a href="/bari/notizie/cronaca/2012/24-maggio-2012/incidente-amerigo-vespuccimuore-marinaio-brindisino-201322910374.shtml">Alessandro Nasta, 29 anni, precipitato da un pennone<br/>Le cause dell'accaduto sono ancora da chiarire<br/></a>
+<a href="/lecce/notizie/cronaca/2014/8-novembre-2014/strade-come-percorsi-guerra-ecco-lato-nascosto-barocco-230499620518.shtml">La periferia di Lecce sporca e abbandonata <br/>marciapiedi impraticabili e erbacce ovunque</a>
 </p>
 </li>
 <!--per calcolo path-->
 										<li class="clearfix">
 <h2>
-<a href="/bari/notizie/cronaca/2012/24-maggio-2012/ipotesi-amianto-gli-scavi-pompeiavviso-garanzia-sovrintendente-201322355094.shtml">Ipotesi amianto tra gli scavi di Pompei:<br/>avviso di garanzia alla sovrintendente</a>
+<a href="/napoli/notizie/cronaca/2014/8-novembre-2014/senzatetto-occupano-palazzo-dismessocon-effigi-papa-francesco--230501452239.shtml">Senzatetto occupano palazzo dismesso<br/>con le &#8220;effigi&#8221; di Papa Francesco </a>
 </h2>
 <p>
-<a href="/bari/notizie/cronaca/2012/24-maggio-2012/ipotesi-amianto-gli-scavi-pompeiavviso-garanzia-sovrintendente-201322355094.shtml">L'atto, come detto dalla Procura, notificato «da prassi»<br/>L'ente: «piena collaborazione con gli inquirenti» </a>
+<a href="/napoli/notizie/cronaca/2014/8-novembre-2014/senzatetto-occupano-palazzo-dismessocon-effigi-papa-francesco--230501452239.shtml">La struttura abbandonata è di un ordine religioso. I manifestanti: «Il Santo Padre ci sostiene, ora ci aspettiamo la solidarietà del Cardinale» </a>
 </p>
 </li>
 <!--per calcolo path-->
 										<li class="clearfix">
 <h2>
-<a href="/bari/notizie/cronaca/2012/24-maggio-2012/maro-deciso-trasferimento-ancora-incertezze-data-201321694425.shtml">Marò: deciso il trasferimento <br/>Ancora incertezze  sulla data</a>
+<a href="/bari/notizie/cronaca/2014/8-novembre-2014/cosi-mafia-blocca-pil-pugliesebankitalia-calo-16percento-30-anni-230501243059.shtml">Così la mafia blocca il pil pugliese<br/>Bankitalia: calo del 16% in 30 anni</a>
 </h2>
 <p>
-<a href="/bari/notizie/cronaca/2012/24-maggio-2012/maro-deciso-trasferimento-ancora-incertezze-data-201321694425.shtml">Venerdì nuova udienza presso l'Alta Corte<br/>«Ormai è solo una questione di buona volontà»<br/></a>
+<a href="/bari/notizie/cronaca/2014/8-novembre-2014/cosi-mafia-blocca-pil-pugliesebankitalia-calo-16percento-30-anni-230501243059.shtml">L&#8217;allarme di Visco. Pronta una legge col rating di legalità</a>
 </p>
 </li>
 <!--per calcolo path-->
 										<li class="clearfix">
 <h2>
-<a href="/bari/notizie/cronaca/2012/24-maggio-2012/vesuvio-protesta-ex-precari-parco-fermati-dieci-bus-turistici-201322221905.shtml">Vesuvio, protesta ex precari <br/>del parco: fermati dieci bus turistici<br/></a>
+<a href="/salerno/notizie/cronaca/2014/8-novembre-2014/crescent-luci-accuse-de-lucadai-parlamentari-grillini-celano-ncd-230500471790.shtml">Crescent e Luci, accuse a De Luca<br/>dai parlamentari grillini e Celano (Ncd)</a>
 </h2>
 <p>
-<a href="/bari/notizie/cronaca/2012/24-maggio-2012/vesuvio-protesta-ex-precari-parco-fermati-dieci-bus-turistici-201322221905.shtml">Stop anche alle auto: chi voleva raggiungere cratere <br/>ha dovuto fare marcia indietro e dirigersi altrove</a>
+<a href="/salerno/notizie/cronaca/2014/8-novembre-2014/crescent-luci-accuse-de-lucadai-parlamentari-grillini-celano-ncd-230500471790.shtml">I deputati M5s: «Quell&#8217;ecomostro va abbattuto»</a>
+</p>
+</li>
+<!--per calcolo path-->
+										<li class="clearfix">
+<h2>
+<a href="/salerno/notizie/cronaca/2014/8-novembre-2014/de-luca-processo-il-crescentil-mio-continuo-atto-eroismo-230499302393.shtml">De Luca a processo per il Crescent:<br/>«Il mio è un continuo atto di eroismo»</a>
+</h2>
+<p>
+<a href="/salerno/notizie/cronaca/2014/8-novembre-2014/de-luca-processo-il-crescentil-mio-continuo-atto-eroismo-230499302393.shtml">Il sindaco: «Rispetto la magistratura, ma rifarei tutto»</a>
 </p>
 </li>
 </ul>
@@ -1164,6 +1192,12 @@ OAS_AD('TopLeft');
 							<a href="./index.shtml?id=2" class="frecciaDx" title="meno recenti"><img src="http://www.corriere.it/images/static/common/usa_menorecenti.gif"></a>
 								
 							<ul class="num-pagine">
+	<li><a href="./index.shtml?id=1" class="pagina1">1</a></li>
+	<li><a href="./index.shtml?id=2" class="pagina2">2</a></li>
+	<li><a href="./index.shtml?id=3" class="pagina3">3</a></li>
+	<li><a href="./index.shtml?id=4" class="pagina4">4</a></li>
+	<li><a href="./index.shtml?id=5" class="pagina5">5</a></li>
+	<li><a href="./index.shtml?id=6" class="pagina6">6</a></li>
 	</ul>
 	
 						</div>
@@ -1230,7 +1264,7 @@ OAS_AD('Frame1');
     
     
     	<a rel="<strong>Farmacie aperte</strong> Gli orari delle farmacie aperte, di turno e notturne,  in tempo reale" href="http://gsf.rcs.it/content/page.html?id_gsf=807701&link=http://corrieredelmezzogiorno.corriere.it/bari/utilita/farmacie/072006.shtml" title="Farmacie aperte a Bari" class="farmacie_link"></a>
-        <a rel="<strong>Mappe</strong> Cerca servizi come sedi comunali, ospedali, scuole ed asili nelle nostre mappe interattive" href="http://corrieredelmezzogiorno.corriere.it/bari/mappe.shtml" title="Mappe di Bari" class="mappe_link"></a>
+<!--         <a rel="<strong>Mappe</strong> Cerca servizi come sedi comunali, ospedali, scuole ed asili nelle nostre mappe interattive" href="http://corrieredelmezzogiorno.corriere.it/bari/mappe.shtml" title="Mappe di Bari" class="mappe_link"></a> -->
         <a rel="<strong>Aperti domenica</strong> I centri commerciali,<br>i negozi e le concessionarie auto aperte la domenica" href="http://gsf.rcs.it/content/page.html?id_gsf=808537&link=http://corrieredelmezzogiorno.corriere.it/bari/utilita/aperture/072006.shtml" title="Aperti domenica a Bari" class="aperture_link"></a>
         
         
@@ -1357,8 +1391,7 @@ OAS_AD('Frame1');
 
     <!-- box mkt top -->
     <div class="box-mkt"><div class="riga_separatore"></div>
-<div class="clearfix box-mktg-dx"><div style="margin-top: 10px"><a href="http://gsf.rcs.it/content/page.html?id_gsf=776406&amp;link=http://corrieredelmezzogiorno.corriere.it/communityLocal/pages/login.jsp" target="_blank"><img width="300" height="90" src="http://creativita.gsf.rcs.it/creativita/1/5585/nlmezzogiorno300x90.png" alt="iscriviti alla newsletter corriere del mezzogiorno napoli" class="img" /></a></div> <script type="text/javascript"> var r = Math.random(); var t = new Date(); impression = new Image(1,1); impression.src ="http://gsf.rcs.it/content/776406.gif?t="+ t.getTime() + ";r=" + r;</script></div>
-<div class="clearfix box-mktg-dx"><div style="margin-top: 10px"><a target="_blank" href="http://gsf.rcs.it/content/page.html?id_gsf=829480&amp;link=http://corrieredelmezzogiorno.corriere.it/lecce/dalle-aziende/ionio-salento/"><img width="300" height="90" alt="" class="img" src="http://creativita.gsf.rcs.it/creativita/1/5915/salento-ionio300x90.jpg" /></a></div> <script type="text/javascript"> var r = Math.random(); var t = new Date(); impression = new Image(1,1); impression.src ="http://gsf.rcs.it/content/829480.gif?t="+ t.getTime() + ";r=" + r;</script></div>
+<div class="clearfix box-mktg-dx"><div style="margin-top: 10px"><a target="_blank" href="http://gsf.rcs.it/content/page.html?id_gsf=831632&amp;link=http://www.stradeanas.tv/?intcmp=ANAS_boxHP_24914_corriere_in"><img height="90" width="300" alt="" class="img" src="http://creativita.gsf.rcs.it/creativita/1/5944/anas300x90.png" /></a></div> <script type="text/javascript"> var r = Math.random(); var t = new Date(); impression = new Image(1,1); impression.src ="http://gsf.rcs.it/content/831632.gif?t="+ t.getTime() + ";r=" + r;</script></div>
 </div>
 
 
@@ -1445,58 +1478,22 @@ OAS_AD('Frame1');
 	document.getElementById("adv_annuncio_promo_1").src="/ssi/2008/boxes/shared/promozioni/rcs_src_tag_promo.html?advTile="+bust_pro
 </script>
 <!-- fine Chiamata ADV  -->
-	
-        <!-- yoodeal -->
-        <script type="text/javascript">
-$(document).ready(function() {
-	if($('#yoodeal').length) {
-		var yCity = 'bari';
-		var arrayFlastmod = new Array();
-		var yflastmod1 = '20140226160100';
-		var yflastmod2 = '20140226160100';
-		var yflastmod3 = '20140226160100';
-		var yflastmod4 = '20140226160100';
-		arrayFlastmod.push(yflastmod1,yflastmod2,yflastmod3,yflastmod4);
-		
-		$.getJSON('http://xml.corriereobjects.it/linked_webroots/milano.corriere.it/global/contents/yoodeal/'+yCity+'_yoodeal.json', function(data) {
-			$.each(data, function(i, j){
-				var yTitle = j.title;
-				if(yTitle.length > 54) {
-					yTitle = yTitle.substring(0,54)+'...';
-				}
-				var yPrice = j.price;
-				var yLink = j.link;
-				var yDiscount = j.discount;
-				var yhtml = "";
-				var ycount = i + 1;
-				yhtml += '<div class="ybox">';
-				yhtml += '<a href="'+yLink+'" rel="nofollow"><img alt="" class="img" src="/global/contents/yoodeal/'+yCity+'_yoodeal0'+ycount+'.jpg?v='+arrayFlastmod[i]+'"></a>';
-				yhtml += '<p><a href="'+yLink+'">'+yTitle+'</a></p>';
-				yhtml += '<ul><li><a href="'+yLink+'" rel="nofollow">Sconto<strong>'+yDiscount+'%</a></strong></li>';
-				yhtml += '<li class="price"><a href="'+yLink+'" rel="nofollow">Prezzo<strong>'+yPrice+'&euro;</a></strong></li>';
-				yhtml += '<li class="link"><a href="'+yLink+'" rel="nofollow">Dettagli</a></li></ul>';
-				yhtml += '</div>';
-				$('#yoodeal').append(yhtml);
-			});
-			$('#yoodeal .ybox:last').addClass("last");
-		
-		});
-	}
-});
+	  <div class="square-banner square-bottom"><!-- OAS AD '300x250'begin -->
 
-</script>
+<SCRIPT LANGUAGE='JavaScript'>
 
-<div id="yoodeal">
-	<div class="tit">
-    	<h5><span>OFFERTE</span> DEL GIORNO</h5>
-        <a href="http://offerte.corriere.it/bari" class="offerte">Tutte le offerte &gt;</a>
-        <a href="http://offerte.corriere.it/bari" class="yoodeal" target="_blank">yoodeal</a>
-    </div>
+<!--
+
+OAS_AD('Frame2');
+
+//-->
+
+</SCRIPT>
+
+<!-- OAS AD '300x250' end -->
 </div>
-<div class="corner-yoodeal-bottom"></div>
-
-
-
+        <!-- yoodeal -->
+        <!--include virtual="/ssi/2008/boxes/shared/yoodeal.html"-->
 
         <!-- NUOVE BACHECHE LOCAL -->
     
@@ -1552,14 +1549,14 @@ $(document).ready(function() {
 					<h5>FOTO<span>GALLERY</span></h5>
 					<div class="box-fotovideo">
 <div class="container-foto">
-<a href="/fotogallery/puglia/2013/12/beautiful_chiarellli/ridge-brooke-puglia-2223730786345.shtml"><img border="0" align="" alt="" title="" src="http://images.corrieredelmezzogiorno.corriereobjects.it/campania/fotogallery/puglia/2013/12/beautiful_chiarellli/img_beautiful_chiarellli/a_124-94_resize.jpg?v=20131202112457" width="124" height="94"/></a><span class="ico-foto"></span>
+<a href="/fotogallery/puglia/2014/06/federica_pellegrini/pellegrini-bari-col-fidanzato-magnini-223479299631.shtml"><img border="0" align="" alt="" title="" src="http://images.corrieredelmezzogiorno.corriereobjects.it/campania/fotogallery/puglia/2014/06/federica_pellegrini/img_federica_pellegrini/a_124-94_resize.jpg?v=20140628102654" width="124" height="94"/></a><span class="ico-foto"></span>
 </div>
 <p>
-<a href="/fotogallery/puglia/2013/12/beautiful_chiarellli/ridge-brooke-puglia-2223730786345.shtml">Ridge e Brooke in Puglia</a>
+<a href="/fotogallery/puglia/2014/06/federica_pellegrini/pellegrini-bari-col-fidanzato-magnini-223479299631.shtml">Pellegrini a Bari col fidanzato Magnini</a>
 </p>
-<span class="sezione">fotogallery</span><span class="data">2 dicembre 2013</span>
-<div class="social-bar" data-href="http://corrieredelmezzogiorno.corriere.it/fotogallery/puglia/2013/12/beautiful_chiarellli/ridge-brooke-puglia-2223730786345.shtml">
-<div class="title_art">Ridge e Brooke in Puglia</div>
+<span class="sezione">fotogallery</span><span class="data">28 giugno 2014</span>
+<div class="social-bar" data-href="http://corrieredelmezzogiorno.corriere.it/fotogallery/puglia/2014/06/federica_pellegrini/pellegrini-bari-col-fidanzato-magnini-223479299631.shtml">
+<div class="title_art">Pellegrini a Bari col fidanzato Magnini</div>
     
 
 
@@ -1579,19 +1576,19 @@ $(document).ready(function() {
 <!-- if expr="$QUERY_STRING = /testata=Corriere/ || $QUERY_STRING = /testata=Milano/" -->
 
     
-	<div style="display:none" id="testquerystringhomepagecommunity">uuid=c8277b1e-5b3b-11e3-ba87-8d0b44d87903&amp;uuidsplit=c8/27/7b/1e/5b/3b/11/e3/ba/87/8d/0b/44/d8/79/03&amp;commenti=Si&amp;compact=NoEmotional&amp;testata=Cormez&amp;link=http://corrieredelmezzogiorno.corriere.it/fotogallery/puglia/2013/12/beautiful_chiarellli/ridge-brooke-puglia-2223730786345.shtml</div>
+	<div style="display:none" id="testquerystringhomepagecommunity">uuid=a11db9f6-fe9d-11e3-8a7f-33d492e596f6&amp;uuidsplit=a1/1d/b9/f6/fe/9d/11/e3/8a/7f/33/d4/92/e5/96/f6&amp;commenti=Si&amp;compact=NoEmotional&amp;testata=Cormez&amp;link=http://corrieredelmezzogiorno.corriere.it/fotogallery/puglia/2014/06/federica_pellegrini/pellegrini-bari-col-fidanzato-magnini-223479299631.shtml</div>
     
     
     
         
-            <a href="http://corrieredelmezzogiorno.corriere.it/fotogallery/puglia/2013/12/beautiful_chiarellli/ridge-brooke-puglia-2223730786345.shtml#box-community-scrivi" class="tot-reply">
+            <a href="http://corrieredelmezzogiorno.corriere.it/fotogallery/puglia/2014/06/federica_pellegrini/pellegrini-bari-col-fidanzato-magnini-223479299631.shtml#box-community-scrivi" class="tot-reply">
                 0
             </a>
         
     
     
-    <div class="show-share" rel="c8277b1e-5b3b-11e3-ba87-8d0b44d87903">
-        <span class="total-count">0</span>
+    <div class="show-share" rel="a11db9f6-fe9d-11e3-8a7f-33d492e596f6">
+        <span class="total-count">1</span>
         
         <div class="share-bt">
             <!---PASSAPAROLA-->
@@ -1601,7 +1598,7 @@ $(document).ready(function() {
            <a class="bt-facebook-share" href="#" title="Condividi su facebook">0</a>
             
             <!---GOOGLE PLUS-->
-            <a class="bt-google-share" href="#" title="Condividi su googleplus">0</a>
+            <a class="bt-google-share" href="#" title="Condividi su googleplus">1</a>
         
             <!---TWITTER-->	
             <a href="#" title="Condividi su Twitter" class="bt-twitter-share">0</a>
@@ -1611,7 +1608,7 @@ $(document).ready(function() {
         
     
     <div class="readinglist">
-    	<a href="#" class="reading-list off" rel="c8277b1e-5b3b-11e3-ba87-8d0b44d87903" alt="da guardare dopo" title="da guardare dopo"></a>
+    	<a href="#" class="reading-list off" rel="a11db9f6-fe9d-11e3-8a7f-33d492e596f6" alt="da guardare dopo" title="da guardare dopo"></a>
     </div>
     
 	
@@ -1619,14 +1616,14 @@ $(document).ready(function() {
 </div>
 <div class="box-fotovideo">
 <div class="container-foto">
-<a href="/fotogallery/puglia/2013/12/ateneo_firme/raccolta-firme-2223734345137.shtml"><img border="0" align="" alt="" title="" src="http://images.corrieredelmezzogiorno.corriereobjects.it/campania/fotogallery/puglia/2013/12/ateneo_firme/img_ateneo_firme/5_124-94_resize.jpg?v=20131202180321" width="124" height="94"/></a><span class="ico-foto"></span>
+<a href="/fotogallery/puglia/2014/06/casadelledonne/casa-donne-mediterraneo-223426477100.shtml"><img border="0" align="" alt="" title="" src="http://images.corrieredelmezzogiorno.corriereobjects.it/campania/fotogallery/puglia/2014/06/casadelledonne/img_casadelledonne/1_124-94_resize.jpg?v=20140619120715" width="124" height="94"/></a><span class="ico-foto"></span>
 </div>
 <p>
-<a href="/fotogallery/puglia/2013/12/ateneo_firme/raccolta-firme-2223734345137.shtml">La raccolta delle firme</a>
+<a href="/fotogallery/puglia/2014/06/casadelledonne/casa-donne-mediterraneo-223426477100.shtml">La casa delle donne del Mediterraneo</a>
 </p>
-<span class="sezione">fotogallery</span><span class="data">2 dicembre 2013</span>
-<div class="social-bar" data-href="http://corrieredelmezzogiorno.corriere.it/fotogallery/puglia/2013/12/ateneo_firme/raccolta-firme-2223734345137.shtml">
-<div class="title_art">La raccolta delle firme</div>
+<span class="sezione">fotogallery</span><span class="data">19 giugno 2014</span>
+<div class="social-bar" data-href="http://corrieredelmezzogiorno.corriere.it/fotogallery/puglia/2014/06/casadelledonne/casa-donne-mediterraneo-223426477100.shtml">
+<div class="title_art">La casa delle donne del Mediterraneo</div>
     
 
 
@@ -1646,85 +1643,18 @@ $(document).ready(function() {
 <!-- if expr="$QUERY_STRING = /testata=Corriere/ || $QUERY_STRING = /testata=Milano/" -->
 
     
-	<div style="display:none" id="testquerystringhomepagecommunity">uuid=8701f00a-5b73-11e3-ba87-8d0b44d87903&amp;uuidsplit=87/01/f0/0a/5b/73/11/e3/ba/87/8d/0b/44/d8/79/03&amp;commenti=Si&amp;compact=NoEmotional&amp;testata=Cormez&amp;link=http://corrieredelmezzogiorno.corriere.it/fotogallery/puglia/2013/12/ateneo_firme/raccolta-firme-2223734345137.shtml</div>
+	<div style="display:none" id="testquerystringhomepagecommunity">uuid=c2ead048-f798-11e3-9ddd-149352441bff&amp;uuidsplit=c2/ea/d0/48/f7/98/11/e3/9d/dd/14/93/52/44/1b/ff&amp;commenti=Si&amp;compact=NoEmotional&amp;testata=Cormez&amp;link=http://corrieredelmezzogiorno.corriere.it/fotogallery/puglia/2014/06/casadelledonne/casa-donne-mediterraneo-223426477100.shtml</div>
     
     
     
         
-            <a href="http://corrieredelmezzogiorno.corriere.it/fotogallery/puglia/2013/12/ateneo_firme/raccolta-firme-2223734345137.shtml#box-community-scrivi" class="tot-reply">
+            <a href="http://corrieredelmezzogiorno.corriere.it/fotogallery/puglia/2014/06/casadelledonne/casa-donne-mediterraneo-223426477100.shtml#box-community-scrivi" class="tot-reply">
                 0
             </a>
         
     
     
-    <div class="show-share" rel="8701f00a-5b73-11e3-ba87-8d0b44d87903">
-        <span class="total-count">0</span>
-        
-        <div class="share-bt">
-            <!---PASSAPAROLA-->
-            <a title="Condividi con la community" href="#" class="bt-passaparola-share">0</a>
-        
-            <!---FACEBOOK-->
-           <a class="bt-facebook-share" href="#" title="Condividi su facebook">0</a>
-            
-            <!---GOOGLE PLUS-->
-            <a class="bt-google-share" href="#" title="Condividi su googleplus">0</a>
-        
-            <!---TWITTER-->	
-            <a href="#" title="Condividi su Twitter" class="bt-twitter-share">0</a>
-        
-        </div>
-    </div>
-        
-    
-    <div class="readinglist">
-    	<a href="#" class="reading-list off" rel="8701f00a-5b73-11e3-ba87-8d0b44d87903" alt="da guardare dopo" title="da guardare dopo"></a>
-    </div>
-    
-	
-<!-- endif --></div>
-</div>
-<div class="box-fotovideo">
-<div class="container-foto">
-<a href="/fotogallery/puglia/2013/12/bari_trofei/sede-bari-2223790668666.shtml"><img border="0" align="" alt="" title="" src="http://images.corrieredelmezzogiorno.corriereobjects.it/campania/fotogallery/puglia/2013/12/bari_trofei/img_bari_trofei/1_124-94_resize.jpg?v=20131213103509" width="124" height="94"/></a><span class="ico-foto"></span>
-</div>
-<p>
-<a href="/fotogallery/puglia/2013/12/bari_trofei/sede-bari-2223790668666.shtml">La sede del Bari</a>
-</p>
-<span class="sezione">fotogallery</span><span class="data">13 dicembre 2013</span>
-<div class="social-bar" data-href="http://corrieredelmezzogiorno.corriere.it/fotogallery/puglia/2013/12/bari_trofei/sede-bari-2223790668666.shtml">
-<div class="title_art">La sede del Bari</div>
-    
-
-
-
-    
-
-
-
-    
-
-
-
-    
-
-
-
-<!-- if expr="$QUERY_STRING = /testata=Corriere/ || $QUERY_STRING = /testata=Milano/" -->
-
-    
-	<div style="display:none" id="testquerystringhomepagecommunity">uuid=f7a31b7e-63d7-11e3-89e1-01b7b2385411&amp;uuidsplit=f7/a3/1b/7e/63/d7/11/e3/89/e1/01/b7/b2/38/54/11&amp;commenti=Si&amp;compact=NoEmotional&amp;testata=Cormez&amp;link=http://corrieredelmezzogiorno.corriere.it/fotogallery/puglia/2013/12/bari_trofei/sede-bari-2223790668666.shtml</div>
-    
-    
-    
-        
-            <a href="http://corrieredelmezzogiorno.corriere.it/fotogallery/puglia/2013/12/bari_trofei/sede-bari-2223790668666.shtml#box-community-scrivi" class="tot-reply">
-                0
-            </a>
-        
-    
-    
-    <div class="show-share" rel="f7a31b7e-63d7-11e3-89e1-01b7b2385411">
+    <div class="show-share" rel="c2ead048-f798-11e3-9ddd-149352441bff">
         <span class="total-count">1</span>
         
         <div class="share-bt">
@@ -1745,7 +1675,74 @@ $(document).ready(function() {
         
     
     <div class="readinglist">
-    	<a href="#" class="reading-list off" rel="f7a31b7e-63d7-11e3-89e1-01b7b2385411" alt="da guardare dopo" title="da guardare dopo"></a>
+    	<a href="#" class="reading-list off" rel="c2ead048-f798-11e3-9ddd-149352441bff" alt="da guardare dopo" title="da guardare dopo"></a>
+    </div>
+    
+	
+<!-- endif --></div>
+</div>
+<div class="box-fotovideo">
+<div class="container-foto">
+<a href="/fotogallery/puglia/2014/06/emiliano_sansevero/assessore-emiliano-prima-giornata-223460677648.shtml"><img border="0" align="" alt="" title="" src="http://images.corrieredelmezzogiorno.corriereobjects.it/campania/fotogallery/puglia/2014/06/emiliano_sansevero/img_emiliano_sansevero/1_124-94_resize.jpg?v=20140625113759" width="124" height="94"/></a><span class="ico-foto"></span>
+</div>
+<p>
+<a href="/fotogallery/puglia/2014/06/emiliano_sansevero/assessore-emiliano-prima-giornata-223460677648.shtml">L&#8217;assessore Emiliano: la prima giornata</a>
+</p>
+<span class="sezione">fotogallery</span><span class="data">25 giugno 2014</span>
+<div class="social-bar" data-href="http://corrieredelmezzogiorno.corriere.it/fotogallery/puglia/2014/06/emiliano_sansevero/assessore-emiliano-prima-giornata-223460677648.shtml">
+<div class="title_art">L&#8217;assessore Emiliano: la prima giornata</div>
+    
+
+
+
+    
+
+
+
+    
+
+
+
+    
+
+
+
+<!-- if expr="$QUERY_STRING = /testata=Corriere/ || $QUERY_STRING = /testata=Milano/" -->
+
+    
+	<div style="display:none" id="testquerystringhomepagecommunity">uuid=cf3043f8-fc4b-11e3-a053-b790af5b77df&amp;uuidsplit=cf/30/43/f8/fc/4b/11/e3/a0/53/b7/90/af/5b/77/df&amp;commenti=Si&amp;compact=NoEmotional&amp;testata=Cormez&amp;link=http://corrieredelmezzogiorno.corriere.it/fotogallery/puglia/2014/06/emiliano_sansevero/assessore-emiliano-prima-giornata-223460677648.shtml</div>
+    
+    
+    
+        
+            <a href="http://corrieredelmezzogiorno.corriere.it/fotogallery/puglia/2014/06/emiliano_sansevero/assessore-emiliano-prima-giornata-223460677648.shtml#box-community-scrivi" class="tot-reply">
+                1
+            </a>
+        
+    
+    
+    <div class="show-share" rel="cf3043f8-fc4b-11e3-a053-b790af5b77df">
+        <span class="total-count">0</span>
+        
+        <div class="share-bt">
+            <!---PASSAPAROLA-->
+            <a title="Condividi con la community" href="#" class="bt-passaparola-share">0</a>
+        
+            <!---FACEBOOK-->
+           <a class="bt-facebook-share" href="#" title="Condividi su facebook">0</a>
+            
+            <!---GOOGLE PLUS-->
+            <a class="bt-google-share" href="#" title="Condividi su googleplus">0</a>
+        
+            <!---TWITTER-->	
+            <a href="#" title="Condividi su Twitter" class="bt-twitter-share">0</a>
+        
+        </div>
+    </div>
+        
+    
+    <div class="readinglist">
+    	<a href="#" class="reading-list off" rel="cf3043f8-fc4b-11e3-a053-b790af5b77df" alt="da guardare dopo" title="da guardare dopo"></a>
     </div>
     
 	
@@ -1765,20 +1762,7 @@ $(document).ready(function() {
 	
         
 
-    <div class="square-banner square-bottom"><!-- OAS AD '300x250'begin -->
-
-<SCRIPT LANGUAGE='JavaScript'>
-
-<!--
-
-OAS_AD('Frame2');
-
-//-->
-
-</SCRIPT>
-
-<!-- OAS AD '300x250' end -->
-</div>
+  
 
     <!-- box mkt bottom -->
     <div class="box-mkt">
@@ -1838,56 +1822,108 @@ OAS_AD('Frame2');
 
     <!--include virtual="/ssi/2008/boxes/shared/box_facebook012.html"-->
 
-    					<div class="areaquote">		
-				<div id="tabellino-hp" class="quadroquote">
-                 <div class="title-box">
-                    <a href="http://www.corriere.it/scommesse-lotterie/scommesse-sportive"><span class="titoletto color-green"><strong>SCOMMESSE</strong> in <strong class="bold">primo</strong> piano</span></a>
-                 </div> 
-                 <img alt="giochi e scommesse" src="http://images.corriere.it/images/static/common/scommesse-lotterie/line_darkgray.gif" class="line-gray"/>           
-                    <h3>
-	                        <div class="title"><strong>CALCIO</strong>champions league<strong></strong> </div>
-                        <div class="title-quote"><img alt="SNAI" src="http://images.corriere.it/images/static/common/scommesse-lotterie/icon_csnai.gif"/></div>
-                    </h3>
-                    <div class="clearfix">
-                        <div class="boxquote-matchlist">
-                            <table cellspacing="0" cellpadding="0" class="tablequote-matchlist">
-                                <tbody>
-	                                    <tr>
-	                                        <th class="partita"></th>
-	                                        <th class="ris_1">1</th>
-	                                        <th class="ris_x">X</th>
-	                                        <th class="ris_2">2</th>
-	                                    </tr>
-	                                    <tr>
-	                                     
-	                                        <td class="partita">
-	                                        
-													<span>galatasaray </span>
-													 -  chelsea
-											</td>
-		                                        <td class="ris_1"><a target="new" href="http://clickquote.corriere.it/BoxRedirect.shtml?IDGQEVENTO=3387&TIPOCLICK=1&URL=http://www.snai.it/index_gds.php?cod_programma=14623&num_avvenimento=1&sport=CALCIO&des_manif=CHAMPIONS LEAGUE&comando=1">3,85</a></td>
-		                                        <td class="ris_x"><a target="new" href="http://clickquote.corriere.it/BoxRedirect.shtml?IDGQEVENTO=3387&TIPOCLICK=1&URL=http://www.snai.it/index_gds.php?cod_programma=14623&num_avvenimento=2&sport=CALCIO&des_manif=CHAMPIONS LEAGUE&comando=1">3,30</a></td>
-		                                        <td class="ris_2"><a target="new" href="http://clickquote.corriere.it/BoxRedirect.shtml?IDGQEVENTO=3387&TIPOCLICK=1&URL=http://www.snai.it/index_gds.php?cod_programma=14623&num_avvenimento=3&sport=CALCIO&des_manif=CHAMPIONS LEAGUE&comando=1">1,95</a></td>
-	                                    </tr>
-	                                    <tr>
-	                                     
-	                                        <td class="partita">
-	                                        
-													<span>schalke 04 </span>
-													 -  r. madrid
-											</td>
-		                                        <td class="ris_1"><a target="new" href="http://clickquote.corriere.it/BoxRedirect.shtml?IDGQEVENTO=3388&TIPOCLICK=1&URL=http://www.snai.it/index_gds.php?cod_programma=14623&num_avvenimento=1&sport=CALCIO&des_manif=CHAMPIONS LEAGUE&comando=1">7,00</a></td>
-		                                        <td class="ris_x"><a target="new" href="http://clickquote.corriere.it/BoxRedirect.shtml?IDGQEVENTO=3388&TIPOCLICK=1&URL=http://www.snai.it/index_gds.php?cod_programma=14623&num_avvenimento=2&sport=CALCIO&des_manif=CHAMPIONS LEAGUE&comando=1">4,50</a></td>
-		                                        <td class="ris_2"><a target="new" href="http://clickquote.corriere.it/BoxRedirect.shtml?IDGQEVENTO=3388&TIPOCLICK=1&URL=http://www.snai.it/index_gds.php?cod_programma=14623&num_avvenimento=3&sport=CALCIO&des_manif=CHAMPIONS LEAGUE&comando=1">1,43</a></td>
-	                                    </tr>
-	                            </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-        	</div>
-                
+    	<div class="bk_box_015">
+		<a class="bk_link" href="http://www.corriere.it/scommesse-lotterie/scommesse-sportive/" title="Scommesse Sportive">
+		<table>
+			<thead>
+				<tr>
+					<th class="scommesse" colspan="4">
+						<span class="hd_scommesse">SCOMMESSE IN PRIMO PIANO </span>
+						<img alt="Superenalotto" class="lazy img_scommesse" src="http://images2.corriereobjects.it/includes2013/LIBS/css/assets/scommesse-lotterie/logo_snai_xl.png" data-original="http://images2.corriereobjects.it/includes2013/LIBS/css/assets/scommesse-lotterie/logo_snai_xl.png?v=<!-- [an error occurred while processing this directive]  -->"/>
+					</th>
+				</tr>
+				<tr>
+					<th> CALCIO serie  B</th>
 
+					<th class="center">1</th>
+
+					<th class="center">X</th>
+
+					<th class="center">2</th>
+
+				</tr>
+
+			</thead>
+
+			<tbody>
+				<tr>
+							<td>bari -  ternana</td>
+						<td class="center">1,75</td>
+						<td class="center">3,35</td>
+						<td class="center">5,25</td>
+				</tr>
+				<tr>
+							<td>carpi -  cittadella</td>
+						<td class="center">1,80</td>
+						<td class="center">3,30</td>
+						<td class="center">4,75</td>
+				</tr>
+				<tr>
+							<td>bologna -  brescia</td>
+						<td class="center">1,85</td>
+						<td class="center">3,30</td>
+						<td class="center">4,50</td>
+				</tr>
+				<tr>
+							<td>trapani -  catania</td>
+						<td class="center">2,80</td>
+						<td class="center">3,00</td>
+						<td class="center">2,70</td>
+				</tr>
+				<tr>
+							<td>latina -  virtus lanciano</td>
+						<td class="center">2,40</td>
+						<td class="center">3,00</td>
+						<td class="center">3,20</td>
+				</tr>
+				<tr>
+							<td>ternana -  spezia</td>
+						<td class="center">2,75</td>
+						<td class="center">3,00</td>
+						<td class="center">2,75</td>
+				</tr>
+				<tr>
+							<td>crotone -  bari</td>
+						<td class="center">2,90</td>
+						<td class="center">3,00</td>
+						<td class="center">2,60</td>
+				</tr>
+				<tr>
+							<td>varese -  perugia</td>
+						<td class="center">2,70</td>
+						<td class="center">3,00</td>
+						<td class="center">2,80</td>
+				</tr>
+				<tr>
+							<td>virtus entella -  modena</td>
+						<td class="center">2,75</td>
+						<td class="center">3,00</td>
+						<td class="center">2,75</td>
+				</tr>
+				<tr>
+							<td>livorno -  pro vercelli</td>
+						<td class="center">1,90</td>
+						<td class="center">3,20</td>
+						<td class="center">4,50</td>
+				</tr>
+				<tr>
+							<td>pescara -  frosinone</td>
+						<td class="center">2,60</td>
+						<td class="center">3,00</td>
+						<td class="center">2,90</td>
+				</tr>
+				<tr>
+							<td>avellino -  vicenza</td>
+						<td class="center">1,80</td>
+						<td class="center">3,30</td>
+						<td class="center">4,75</td>
+				</tr>
+			</tbody>
+
+		</table>
+		</a>
+	</div>
+   
 </div>
 		<!-- fine contenitore main -->
 			<div id="footer">
@@ -1918,12 +1954,12 @@ OAS_AD('Frame2');
 
 		<div id="multibar">
 	<div id="multibar-default">
-    	<a href="#" class="multibar-show-hide hide"></a>
+    	<!--<a href="#" class="multibar-show-hide hide"></a>-->
     	
         <ul class="multibar-default">
             <li id="mb-logo"><a href="http://passaparola.corriere.it/">Passaparola</a></li>
             <li id="mb-emo">    
-                <div class="mb-emotion">
+              <!--  <div class="mb-emotion">
                     <a href="http://passaparola.corriere.it/">
                         <span class="circle"></span>
                         <span class="smile"></span>
@@ -1933,7 +1969,62 @@ OAS_AD('Frame2');
                         <span class="txt">si sente</span>
                         <span class="desc"></span>
                     </a>
-                </div> 
+                </div> -->
+				<div id="mb-emotion0" class="mb-emotion">
+					<a href="http://passaparola.corriere.it/">
+						<span class="title">COSA DICE IL PAESE</span>
+						<span class="txt">
+							<span class="perc"></span>
+							<span class="percText">% si sente</span>
+							<span class="smile"></span>
+							<span class="desc"></span>
+						</span>
+					</a>
+				</div>
+				<div id="mb-emotion1" class="mb-emotion">
+					<a href="http://passaparola.corriere.it/">
+						<span class="title">COSA DICE IL PAESE</span>
+						<span class="txt">
+							<span class="perc"></span>
+							<span class="percText">% si sente</span>
+							<span class="smile"></span>
+							<span class="desc"></span>
+						</span>
+					</a>
+				</div>
+				<div id="mb-emotion2" class="mb-emotion">
+					<a href="http://passaparola.corriere.it/">
+						<span class="title">COSA DICE IL PAESE</span>
+						<span class="txt">
+							<span class="perc"></span>
+							<span class="percText">% si sente</span>
+							<span class="smile"></span>
+							<span class="desc"></span>
+						</span>
+					</a>
+				</div>
+				<div id="mb-emotion3" class="mb-emotion">
+					<a href="http://passaparola.corriere.it/">
+						<span class="title">COSA DICE IL PAESE</span>
+						<span class="txt">
+							<span class="perc"></span>
+							<span class="percText">% si sente</span>
+							<span class="smile"></span>
+							<span class="desc"></span>
+						</span>
+					</a>
+				</div>
+				<div id="mb-emotion4" class="mb-emotion">
+					<a href="http://passaparola.corriere.it/">
+						<span class="title">COSA DICE IL PAESE</span>
+						<span class="txt">
+							<span class="perc"></span>
+							<span class="percText">% si sente</span>
+							<span class="smile"></span>
+							<span class="desc"></span>
+						</span>
+					</a>
+				</div>
 			</li>			
             <li id="mb-random">    
                 <div class="mb-emotion">
@@ -1948,21 +2039,24 @@ OAS_AD('Frame2');
                     </a>
                 </div>  
                 <div class="mb-sondaggio">
-                    <div class="title">IL SONDAGGIO</div>
-                    <a class="mb-vota" href="#">VOTA</a>
+				    <a id="target_sondaggio" href="javascript:void()">
+						<img src="http://images.corrieredelmezzogiorno.corriereobjects.it/includes2007/ssi/boxes/community/images/sonar_favicon.gif?v=20140130183941"/>
+						<div class="title">SONDAGGIO DEL GIORNO</div>
+					</a>
+                  <!--<a class="mb-vota" href="#">VOTA</a>
                     <p class="domanda"></p>
                     <p class="text"></p>
                 </div>  
                 <div class="mb-passaparola">
-                    <!-- <span class="tot-passaparola"><a href="#"></a></span> -->
+                    <!-- <span class="tot-passaparola"><a href="#"></a></span> 
                     <div class="title">IL PASSAPAROLA DEL MOMENTO</div>
                     <a href="#">
                         <span class="tit"></span>
                         <span class="text"></span>
-                    </a>
+                    </a>-->
                 </div>
 				<div class="mb-redazioneonline">
-                    <div class="title">REDAZIONE ON LINE</div>
+                    <!--<div class="title">REDAZIONE ON LINE</div>-->
                     <a href="#">
                         <span class="tit"></span>
                         <span class="text"></span>
@@ -1975,50 +2069,70 @@ OAS_AD('Frame2');
                 </ul>  
             </li> -->
             <li id="mb-login">
-                <a href="javascript:lcom_LoginCom();" class="mb-login">LOGIN</a>
-                <a href="javascript:accediLinkPop();" class="mb-registrati">REGISTRATI</a>    
+                <a href="javascript:accediLinkPop();" class="mb-login">ACCEDI</a>
+                <!--<a href="javascript:accediLinkPop();" class="mb-registrati">REGISTRATI</a>-->    
             </li>
         </ul>
     </div>
     
     <div id="multibar-log">
-		<a href="#" class="multibar-show-hide hide"></a>	
+		<!--<a href="#" class="multibar-show-hide hide"></a>-->	
 		<ul class="multibar-log">
 			<li id="mb-logo"><a href="http://passaparola.corriere.it/">Passaparola</a></li>
 			<li id="mb-random">
 				<div id="mb-emotion0" class="mb-emotion">
 					<a href="http://passaparola.corriere.it/">
-						<span class="smile"></span>
-						<div class="title">COSA DICE IL PAESE</div>
-						<span class="txt"><span class="perc"></span>% si sente  <span class="desc"></span></span>
+						<span class="title">COSA DICE IL PAESE</span>
+						<span class="txt">
+							<span class="perc"></span>
+							<span class="percText">% si sente</span>
+							<span class="smile"></span>
+							<span class="desc"></span>
+						</span>
 					</a>
 				</div>
 				<div id="mb-emotion1" class="mb-emotion">
 					<a href="http://passaparola.corriere.it/">
-						<span class="smile"></span>
-						<div class="title">COSA DICE IL PAESE</div>
-						<span class="txt"><span class="perc"></span>% si sente  <span class="desc"></span></span>
+						<span class="title">COSA DICE IL PAESE</span>
+						<span class="txt">
+							<span class="perc"></span>
+							<span class="percText">% si sente</span>
+							<span class="smile"></span>
+							<span class="desc"></span>
+						</span>
 					</a>
 				</div>
 				<div id="mb-emotion2" class="mb-emotion">
 					<a href="http://passaparola.corriere.it/">
-						<span class="smile"></span>
-						<div class="title">COSA DICE IL PAESE</div>
-						<span class="txt"><span class="perc"></span>% si sente  <span class="desc"></span></span>
+						<span class="title">COSA DICE IL PAESE</span>
+						<span class="txt">
+							<span class="perc"></span>
+							<span class="percText">% si sente</span>
+							<span class="smile"></span>
+							<span class="desc"></span>
+						</span>
 					</a>
 				</div>
 				<div id="mb-emotion3" class="mb-emotion">
 					<a href="http://passaparola.corriere.it/">
-						<span class="smile"></span>
-						<div class="title">COSA DICE IL PAESE</div>
-						<span class="txt"><span class="perc"></span>% si sente  <span class="desc"></span></span>
+						<span class="title">COSA DICE IL PAESE</span>
+						<span class="txt">
+							<span class="perc"></span>
+							<span class="percText">% si sente</span>
+							<span class="smile"></span>
+							<span class="desc"></span>
+						</span>
 					</a>
 				</div>
 				<div id="mb-emotion4" class="mb-emotion">
 					<a href="http://passaparola.corriere.it/">
-						<span class="smile"></span>
-						<div class="title">COSA DICE IL PAESE</div>
-						<span class="txt"><span class="perc"></span>% si sente  <span class="desc"></span></span>
+						<span class="title">COSA DICE IL PAESE</span>
+						<span class="txt">
+							<span class="perc"></span>
+							<span class="percText">% si sente</span>
+							<span class="smile"></span>
+							<span class="desc"></span>
+						</span>
 					</a>
 				</div>
 			</li>
@@ -2036,11 +2150,12 @@ OAS_AD('Frame2');
 				</div>
 			</li>
 			<li id="mb-reading">
-				<a class="mb-reading" href="#" title="Archivio contenuti da guardare"></a>
+				<a class="mb-reading" href="#" title="Archivio contenuti da guardare">0</a>
 			</li>
 			<li id="mb-modify">
 				<a href="#" class="mb-modify"></a>
 				<a href="javascript:lcom_ModificaProf();" class="mb-settings"></a>
+				
 			</li>        
 		</ul>
     </div>
@@ -2062,22 +2177,22 @@ OAS_AD('Frame2');
 <script type="text/javascript" src="http://js.corrieredelmezzogiorno.corriereobjects.it/libs/js/plugins/jquery.scrollTo-1.4.3.1-min.js?v=201309061048"></script>
 
 
-<script type="text/javascript" src="/global/includes2007/ssi/boxes/community/popup/hp/pop_hp.js?v=201311051441"></script>
+<script type="text/javascript" src="http://js.corrieredelmezzogiorno.corriereobjects.it/global/includes2007/ssi/boxes/community/popup/hp/pop_hp.js?v=201311051441"></script>
 	<script type="text/javascript" src="//platform.twitter.com/widgets.js"></script>
-	<script type="text/javascript" src="/global/includes2007/static/js_libs/jquery.hoverintent-0.5.minified.js?v=201209241036"></script>
+	<script type="text/javascript" src="http://js.corrieredelmezzogiorno.corriereobjects.it/global/includes2007/static/js_libs/jquery.hoverintent-0.5.minified.js?v=201209241036"></script>
 
   
-  	<script type="text/javascript" src="/global/includes2007/static/js_libs/login_com.js?v=201402171250"></script>	 
+  	<script type="text/javascript" src="http://js.corrieredelmezzogiorno.corriereobjects.it/global/includes2007/static/js_libs/login_com.js?v=201408131208"></script>	 
 	
 
-  <script type="text/javascript" src="/global/includes2007/static/js_libs/multibar.js?v=201402031057"></script>	 
-	<script type="text/javascript" src="/global/includes2007/static/js_libs/share.js?v=201402101114"></script>
-    <script type="text/javascript" src="/global/includes2007/static/js_libs/jquery.fancybox.js?v=201305311131"></script>
+  <script type="text/javascript" src="http://js.corrieredelmezzogiorno.corriereobjects.it/global/includes2007/static/js_libs/multibar.js?v=201405131843"></script>	 
+	<script type="text/javascript" src="http://js.corrieredelmezzogiorno.corriereobjects.it/global/includes2007/static/js_libs/share.js?v=201404011059"></script>
+    <script type="text/javascript" src="http://js.corrieredelmezzogiorno.corriereobjects.it/global/includes2007/static/js_libs/jquery.fancybox.js?v=201305311131"></script>
 
 
 <script type="text/javascript" src="http://js.corrieredelmezzogiorno.corriereobjects.it/libs/js/jquery.selectboxes.js?v=201006170907"></script>
 <script src="http://js.corrieredelmezzogiorno.corriereobjects.it/libs/js/plugins/jquery.tinysort.js?v=201201271303" type="text/javascript"></script>
-<script src="http://js.corrieredelmezzogiorno.corriereobjects.it/libs/js/common.js?v=201402201602" type="text/javascript"></script>
+<script src="http://js.corrieredelmezzogiorno.corriereobjects.it/libs/js/common.js?v=201404141249" type="text/javascript"></script>
 
 <script src="http://js.corrieredelmezzogiorno.corriereobjects.it/libs/js/plugins/jquery.dimensions.min.js?v=200809031634" type="text/javascript"></script>
   
@@ -2453,7 +2568,7 @@ if ($('.wide-pushbar').length) {controllaAdv('.wide-pushbar');}
 Copyright 1996-2009 Adobe, Inc. All Rights Reserved
 More info available at http://www.omniture.com -->
 <script src="http://js.corrieredelmezzogiorno.corriereobjects.it/libs/js/sitecatalyst/s_code.js?v=20130107141849" type="text/javascript"></script>
-<script src="http://js.corrieredelmezzogiorno.corriereobjects.it/libs/js/sitecatalyst/config.js?v=20120618150534" type="text/javascript"></script>
+<script src="http://js.corrieredelmezzogiorno.corriereobjects.it/libs/js/sitecatalyst/config.js?v=20140626180029" type="text/javascript"></script>
 
 <script language="JavaScript" type="text/javascript"><!--
 
