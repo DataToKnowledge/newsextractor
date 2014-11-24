@@ -5,7 +5,7 @@ import akka.actor.Props
 import it.dtk.WebSiteController
 import it.dtk.extractor.PoliziaDiStatoDataRecordExtractor
 
-object Pages {
+object PoliziaDiStatoPages {
     
   val pagesPairs: List[Pair[Int, List[Pair[Int, Int]]]] = List(
       (2002, List((11, 1))),
@@ -44,6 +44,6 @@ class PoliziaDiStatoWebSiteController(id: String, dbActor: ActorRef, routerHttpG
     Props(classOf[PoliziaDiStatoDataRecordExtractor],routerHttpGetter)
 
   override def composeUrl(currentIndex: Int): String =
-    baseUrl + Pages.pages(currentIndex)
+    baseUrl + PoliziaDiStatoPages.pages(currentIndex)
 
 }

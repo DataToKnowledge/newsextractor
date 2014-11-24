@@ -10,11 +10,11 @@ import akka.actor.ActorRef
  */
 class GoBariDataRecordExtractor(routerHttpGetter: ActorRef) extends DataRecordExtractor(routerHttpGetter) {
 
-  override val cssRecordsSelector: String = "div.centro_sx_home_news"
+  override val cssRecordsSelector: String = "div.centro_sx_home_news > div.block"
 
   def title(node: Element) = node.select("div.titolo > a").text
 
-  def summary(node: Element) = node.select("span.civetta > p").text
+  def summary(node: Element) = node.select("span.civetta").text
 
   def newsUrl(node: Element) = node.select("div.titolo > a").attr("href")
 
