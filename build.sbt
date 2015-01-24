@@ -1,8 +1,14 @@
-name := "NewsExtractor"
+import sbt._
+import Process._
+import Keys._
 
-version := "1.0"
 
-scalaVersion := "2.10.4"
+lazy val root = (project in file(".")).
+  settings(
+    name := "NewsExtractor",
+    version := "1.1",
+    scalaVersion := "2.11.4"
+  )
 
 scalacOptions ++= Seq(
   "-deprecation",
@@ -16,10 +22,10 @@ resolvers ++= Seq(
 )
 
 libraryDependencies ++= Seq(
-  "com.typesafe.akka" %% "akka-actor" % "2.2.4",
-  "com.typesafe.akka" %% "akka-testkit" % "2.2.4",
-  "com.typesafe.akka" %% "akka-cluster" % "2.2.4",
-  "com.typesafe.akka" %% "akka-slf4j" % "2.2.4",
+  "com.typesafe.akka" %% "akka-actor" % "2.3.8",
+  "com.typesafe.akka" %% "akka-testkit" % "2.3.8",
+  //"com.typesafe.akka" %% "akka-cluster" % "2.2.4",
+  "com.typesafe.akka" %% "akka-slf4j" % "2.3.8",
   "ch.qos.logback" % "logback-classic" % "1.1.2",
   "com.ning" % "async-http-client" % "1.8.3",
   "com.github.nscala-time" %% "nscala-time" % "0.8.0",
