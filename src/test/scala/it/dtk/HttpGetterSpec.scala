@@ -20,7 +20,7 @@ class HttpGetterSpec extends MySpec("HttpGetterSpec") {
 
       getter ! Get("http://www.google.it/")
 
-      val res = expectMsgClass(10.seconds, classOf[Result])
+      val res = expectMsgClass(10.seconds, classOf[Got])
       res.html shouldBe a [String]
       res.html should not be empty
       res.headerDate shouldBe a [DateTime]
@@ -30,7 +30,7 @@ class HttpGetterSpec extends MySpec("HttpGetterSpec") {
 
       getter ! Get("http://www.google.it/asd")
 
-      val res = expectMsgClass(10.seconds, classOf[Fail])
+      val res = expectMsgClass(10.seconds, classOf[Error])
       res.ex shouldBe a [BadStatus]
     }
 
@@ -38,7 +38,7 @@ class HttpGetterSpec extends MySpec("HttpGetterSpec") {
 
       getter ! Get("http://www.go.it/")
 
-      val res = expectMsgClass(classOf[Fail])
+      val res = expectMsgClass(classOf[Error])
       res.ex shouldBe a [GetException]
     }
 
@@ -46,7 +46,7 @@ class HttpGetterSpec extends MySpec("HttpGetterSpec") {
 
       getter ! Get("http://www.lecceprima.it/cronaca/pag/1/")
 
-      val res = expectMsgClass(10.seconds, classOf[Result])
+      val res = expectMsgClass(10.seconds, classOf[Got])
       res.html shouldBe a [String]
       res.html should not be empty
       res.headerDate shouldBe a [DateTime]

@@ -1,33 +1,36 @@
 package it.dtk
 
-import akka.actor.{ Props, Actor, ActorLogging }
-import akka.actor.ActorSystem
-import akka.actor.ActorRef
-import it.dtk.db.DBManager
-import it.dtk.db.WebControllerData
+import akka.actor.SupervisorStrategy._
+import akka.actor.{ Actor, ActorLogging, ActorRef, ActorSystem, OneForOneStrategy, Props, Terminated }
+import com.typesafe.config.ConfigFactory
+import it.dtk.db.DataModel._
+import it.dtk.db.MongoDbManager
+
 import scala.collection.mutable.Map
 import scala.concurrent.duration._
 import scala.language.postfixOps
-import akka.routing.RoundRobinRouter
-import akka.actor.OneForOneStrategy
-import akka.actor.SupervisorStrategy._
-import akka.actor.Terminated
 
 /**
- * Author: Michele Damiano Torelli
+ * Author: Michele Damiano Torelli and Fabio Fumarola
  * Project: NewsExtractor
  * Date: 05/02/14
  * Time: 18:42
  */
 
 object WebSiteReceptionist {
+
   case object Start
+
   case object Stop
+
+  def props = Props(classOf[WebSiteReceptionist])
+
 }
 
-class WebSiteReceptionist(host: String) extends Actor with ActorLogging {
+class WebSiteReceptionist extends Actor with ActorLogging {
 
-  import WebSiteReceptionist._
+  import it.dtk.WebSiteReceptionist._
+  import it.dtk.db.MongoDbManager._
 
   /**
    * @return supervisor strategy for dbmanager and for http router
@@ -42,26 +45,28 @@ class WebSiteReceptionist(host: String) extends Actor with ActorLogging {
       Restart
   }
 
-  def db = "dbNews"
-
-  val dbActor: ActorRef = context.actorOf(DBManager.props(host, db))
-
-  val httpGetterRouter = context.actorOf(Props[HttpGetter].withRouter(RoundRobinRouter(nrOfInstances = 5)))
-
-  val controllersMap: Map[String, WebControllerData] = Map()
+  val dbActor: ActorRef = context.actorOf(MongoDbManager.props)
+  val httpGetterRouter = context.actorOf(HttpGetter.routerProps())
+  var controllersMap = Map[String, CrawledWebSites]()
 
   def receive = {
 
     case Start =>
-      log.info("Using MongoDB instance on {}", host)
-      dbActor ! DBManager.ListWebControllers
+      log.info("Let's Start again :)")
+      dbActor ! ListWebControllers
 
-    case DBManager.WebControllers(controllers) =>
+    case DBFailure(ListWebControllers, ex) =>
+      log.error("cannot connect to mongod when listing for controllers", ex)
+      log.error("Stopping the world !!!")
+      context.stop(self)
+
+    case WebControllers(controllers) =>
       log.info("Start news extraction for {} controllers", controllers.size)
 
-      controllers.filter(_.enabled.getOrElse(false)).foreach { c =>
+      controllers.foreach { c =>
 
         for (id <- c.id; contrName <- c.controllerName) {
+          //FIXME make a method and make readable
           val contrClass = Class.forName(s"it.dtk.controller.$contrName")
           val controllerActor = context.child(contrName).
             getOrElse(context.actorOf(Props(contrClass, id.toString(), dbActor, httpGetterRouter), contrName))
@@ -69,11 +74,8 @@ class WebSiteReceptionist(host: String) extends Actor with ActorLogging {
           val stopUrls = c.stopUrls.getOrElse(List()).toVector
           controllerActor ! WebSiteController.Start(stopUrls)
         }
-
-        val controllersList = controllers.map(c => c.id.get.toString -> c)
-
         //add elements to the map
-        controllersMap ++= controllersList.toMap
+        controllersMap ++= controllers.map(c => c.id.get.toString -> c)
       }
 
     case WebSiteController.Done(idController, extractedUrls) =>
@@ -81,16 +83,15 @@ class WebSiteReceptionist(host: String) extends Actor with ActorLogging {
       log.info("Extracted {} urls from the controller with id {}",
         extractedUrls.size, optController.get.controllerName)
 
-      optController.map { c =>
+      optController.foreach { c =>
         val nextStopUrls = extractedUrls.take(3)
+
         if (nextStopUrls.nonEmpty) {
           val toUpdateController = c.copy(stopUrls = Option(nextStopUrls.toList))
-          dbActor ! DBManager.UpdateWebController(toUpdateController)
+          dbActor ! MongoDbManager.UpdateWebController(toUpdateController)
 
-          //map the toUpdateController in a pair of id -> ControllerData
-          val res = toUpdateController.id.map(id => id.toString -> toUpdateController)
-          //update the pair in the controllersMap
-          res.map(controllersMap += _) //vai mo vai!!!
+          controllersMap += toUpdateController.id.get.toString() -> toUpdateController
+
         }
 
       }
@@ -99,37 +100,21 @@ class WebSiteReceptionist(host: String) extends Actor with ActorLogging {
       val optController = controllersMap.get(idController)
       log.error("WebSiteController {} fails for index {}", optController.get.controllerName, currentIndex)
 
-    case DBManager.FailQueryWebControllers(ex) =>
-      log.error("DBManager FailQueryWebControllers {}", ex.getMessage)
-      throw ex
-
-    case WebSiteController.JobUpdate(idController, dataRecordUrl, mainContentUrls) =>
-      val optController = controllersMap.get(idController)
-      log.info("From the controller {} and the data record URL {} are extract {} urls",
-        optController.get.controllerName, dataRecordUrl, mainContentUrls.length)
-
-      if (mainContentUrls.isEmpty)
-        log.error("{} failed extracting data records from the URL {}", optController.get.controllerName, dataRecordUrl)
-
     case Terminated(ref) =>
       log.error("terminated actor {}", ref.path)
   }
-
 }
 
 object Main {
 
   def main(args: Array[String]) {
 
-    //Use the system's dispatcher as ExecutionContext
-    import system.dispatcher
+    val config = ConfigFactory.load("newsExtractor.conf")
+    val system = ActorSystem("NewsExtractor",config)
 
-    val system = ActorSystem("NewsExtractor")
+    implicit val executor = system.dispatcher
 
-    val host = if (args.size > 0) args(0) else "127.0.0.1"
-
-    val receptionist = system.actorOf(Props(classOf[WebSiteReceptionist], host), "WebSiteReceptionist")
+    val receptionist = system.actorOf(WebSiteReceptionist.props, "WebSiteReceptionist")
     system.scheduler.schedule(1 second, 60 minutes, receptionist, WebSiteReceptionist.Start)
-    //receptionist ! WebSiteReceptionist.Start
   }
 }

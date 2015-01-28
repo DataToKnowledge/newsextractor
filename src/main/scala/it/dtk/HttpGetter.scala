@@ -1,17 +1,17 @@
 package it.dtk
 
-import akka.actor.{ ActorLogging, Actor }
 import java.util.Locale
 import java.util.concurrent.Executor
-import org.joda.time.format.DateTimeFormat
-import scala.concurrent.ExecutionContext
-import scala.concurrent.Promise
-import com.ning.http.client.{ AsyncHttpClientConfig, Response, AsyncHttpClient }
-import scala.concurrent.Future
-import scala.concurrent.duration._
-import scala.util.Success
+
+import akka.actor.{ Actor, ActorLogging, Props }
+import akka.routing.RoundRobinPool
+import com.ning.http.client.{ AsyncHttpClient, AsyncHttpClientConfig, Response }
 import org.joda.time.DateTime
-import scala.util.Failure
+import org.joda.time.format.DateTimeFormat
+
+import scala.concurrent.{ ExecutionContext, Future, Promise }
+import scala.concurrent.duration._
+import scala.util.{ Failure, Success }
 
 object HttpGetter {
 
@@ -22,11 +22,22 @@ object HttpGetter {
    * @param html fetched HTML
    * @param headerDate time extracted from response headers
    */
-  case class Result(url: String, html: String, headerDate: DateTime)
+  case class Got(url: String, html: String, headerDate: DateTime)
 
   case class Get(url: String)
 
-  case class Fail(url: String, ex: Throwable)
+  case class Error(url: String, ex: Throwable)
+
+  /**
+   * @param nrOfInstances
+   * @return the props for a router with a defined number of instances
+   */
+  def routerProps(nrOfInstances: Int = 5) =
+    RoundRobinPool(nrOfInstances).props(props)
+
+  def props = Props(classOf[HttpGetter])
+
+  val sdf = DateTimeFormat.forPattern("EEE, dd MMM yyyy HH:mm:ss z").withLocale(Locale.ENGLISH)
 
 }
 
@@ -34,14 +45,13 @@ object HttpGetter {
  * Fetches the HTML of a given Web page.
  *
  * @author Andrea Scarpino <andrea@datatoknowledge.it>
+ * @author Fabio Fumarola
  */
 class HttpGetter extends Actor with ActorLogging {
 
-  import HttpGetter._
+  import it.dtk.HttpGetter._
 
   implicit val exec = context.dispatcher.asInstanceOf[Executor with ExecutionContext]
-
-  private val sdf = DateTimeFormat.forPattern("EEE, dd MMM yyyy HH:mm:ss z").withLocale(Locale.ENGLISH)
 
   /**
    * When receives any message it replies with the HTML of the given Web page
@@ -55,9 +65,9 @@ class HttpGetter extends Actor with ActorLogging {
       future.onComplete {
         case Success(res) =>
           val date = if (res.getHeader("Date") != null) sdf.parseDateTime(res.getHeader("Date")) else DateTime.now()
-          send ! new Result(url, res.getResponseBody, date)
+          send ! Got(url, res.getResponseBody, date)
         case Failure(ex) =>
-          send ! Fail(url, ex)
+          send ! Error(url, ex)
       }
   }
 
@@ -67,6 +77,7 @@ class HttpGetter extends Actor with ActorLogging {
 }
 
 case class BadStatus(url: String, status: Int) extends Throwable(s"HTTP status code: ${status.toString}")
+
 case class GetException(url: String, innerException: Throwable) extends Throwable(innerException.getMessage)
 
 object AsyncWebClient {
@@ -91,9 +102,10 @@ object AsyncWebClient {
           if (response.getStatusCode < 400)
             p.success(response)
           else p.failure(BadStatus(u, response.getStatusCode))
-        } catch {
+        }
+        catch {
           case t: Throwable =>
-            p.failure(GetException(u,t))
+            p.failure(GetException(u, t))
         }
       }
 

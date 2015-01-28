@@ -7,7 +7,7 @@ import it.dtk.extractor.PoliziaDiStatoDataRecordExtractor
 
 object PoliziaDiStatoPages {
     
-  val pagesPairs: List[Pair[Int, List[Pair[Int, Int]]]] = List(
+  val pagesPairs: List[Tuple2[Int, List[Tuple2[Int, Int]]]] = List(
       (2002, List((11, 1))),
       (2003, List((6, 1), (10, 1), (12, 1))),
       (2004, List((2, 1), (3, 1), (4, 1), (6, 1), (7, 1), (8, 1), (9, 1), (10, 1), (11, 1))),
@@ -23,7 +23,7 @@ object PoliziaDiStatoPages {
       (2014, List((1, 10), (2, 10), (3, 8), (4, 8), (5, 8), (6, 10), (7, 9), (8, 8), (9, 9), (10, 12), (11, 3)))
   )
   
-  def extend(pair: Pair[Int, List[Pair[Int, Int]]]): List[String] = pair._2.map(x => pair._1 + "/" + x._1 + "/" + x._2)
+  def extend(pair: Tuple2[Int, List[Tuple2[Int, Int]]]): List[String] = pair._2.map(x => pair._1 + "/" + x._1 + "/" + x._2)
   
   val pages: List[String] = pagesPairs.map(p => extend(p)).flatten
   

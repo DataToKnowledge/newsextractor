@@ -10,7 +10,7 @@ import akka.actor.ActorRef
 import akka.actor.Props
 import akka.actor.actorRef2Scala
 import it.dtk.DataRecordExtractor.DataRecords
-import it.dtk.HttpGetter.Result
+import it.dtk.HttpGetter._
 import it.dtk.util.MySpec
 
 object PoliziaDiStatoDataRecordExtractorSpec {
@@ -39,7 +39,7 @@ class PoliziaDiStatoDataRecordExtractorSpec extends MySpec("PoliziaDiStatoDataRe
   "The PoliziaDiStato record extractor" should {
 
     "extract 10 data records" in {
-      parent ! Result(url, html, date)
+      parent ! Got(url, html, date)
 
       val results = expectMsgClass(15.seconds, classOf[DataRecords])
 

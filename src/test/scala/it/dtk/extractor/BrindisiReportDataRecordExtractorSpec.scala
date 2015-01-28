@@ -1,12 +1,13 @@
 package it.dtk.extractor
 
+import akka.actor.{Actor, ActorRef, Props}
+import it.dtk.DataRecordExtractor.DataRecords
 import it.dtk.util.MySpec
 import org.joda.time.DateTime
-import akka.actor.{Actor, ActorRef, Props}
+import it.dtk.HttpGetter._
+
 import scala.concurrent.duration._
 import scala.io.Source
-import it.dtk.HttpGetter.Result
-import it.dtk.DataRecordExtractor.DataRecords
 
 object BrindisiReportDataRecordExtractorSpec {
 
@@ -36,8 +37,8 @@ class BrindisiReportDataRecordExtractorSpec extends MySpec("BrindisiReportDataRe
 
     "extract 25 data records" in {
 
-      parent ! Result(url, html, date)
-      val results = expectMsgClass(15.seconds,classOf[DataRecords])
+      parent ! Got(url, html, date)
+      val results = expectMsgClass(15.seconds, classOf[DataRecords])
 
       assert(results.dataRecords.size == 25)
       results.dataRecords.foreach(dr =>

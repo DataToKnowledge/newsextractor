@@ -5,7 +5,7 @@ import org.joda.time.DateTime
 import akka.actor.{Actor, ActorRef, Props}
 import scala.concurrent.duration._
 import scala.io.Source
-import it.dtk.HttpGetter.Result
+import it.dtk.HttpGetter._
 import it.dtk.DataRecordExtractor.DataRecords
 
 object BariTodayDataRecordExtractorSpec {
@@ -35,7 +35,7 @@ class BariTodayDataRecordExtractorSpec extends MySpec("BariTodayDataRecordExtrac
   "The BariToday record extractor" should {
 
     "extract 25 data records" in {
-      parent ! Result(url, html, date)
+      parent ! Got(url, html, date)
 
       val results = expectMsgClass(15.seconds, classOf[DataRecords])
 

@@ -2,7 +2,6 @@ import sbt._
 import Process._
 import Keys._
 
-
 lazy val root = (project in file(".")).
   settings(
     name := "NewsExtractor",
@@ -14,6 +13,8 @@ scalacOptions ++= Seq(
   "-deprecation",
   "-feature"
 )
+
+enablePlugins(JavaAppPackaging)
 
 resolvers ++= Seq(
   "Typesafe Repository" at "http://repo.typesafe.com/typesafe/releases/",
@@ -28,12 +29,15 @@ libraryDependencies ++= Seq(
   "com.typesafe.akka" %% "akka-slf4j" % "2.3.8",
   "ch.qos.logback" % "logback-classic" % "1.1.2",
   "com.ning" % "async-http-client" % "1.8.3",
-  "com.github.nscala-time" %% "nscala-time" % "0.8.0",
-  "org.scalatest" % "scalatest_2.10" % "2.1.2" % "test",
-  "org.scalacheck" %% "scalacheck" % "1.11.3" % "test",
+  "com.github.nscala-time" %% "nscala-time" % "1.6.0",
   "org.jsoup" % "jsoup" % "1.7.3",
-  "org.reactivemongo" %% "reactivemongo" % "0.10.0",
-  "com.syncthemall" % "boilerpipe" % "1.2.2"
+  "org.reactivemongo" %% "reactivemongo" % "0.10.5.0.akka23",
+  "com.syncthemall" % "boilerpipe" % "1.2.2",
+  "com.syncthemall" % "goose" % "2.1.25"
+)
+
+libraryDependencies ++= Seq(
+  "org.scalatest" % "scalatest_2.11" % "2.2.1" % "test"
 )
 
 /* Required by com.gravity.Goose */

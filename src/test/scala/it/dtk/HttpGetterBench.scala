@@ -30,12 +30,12 @@ class HttpGetterBench extends MySpec("HttpGetterBench") {
           val res = expectMsgAnyClassOf(10.seconds, classOf[Any])
 
           res match {
-            case res: Result =>
+            case res: Got =>
               res.html.getClass should be(classOf[String])
               res.headerDate.getClass should be(classOf[DateTime])
               println("SUCCESS!")
 
-            case res: Fail =>
+            case res: Error =>
               println("FAIL!")
               println(s"URL: ${res.url}")
               println(s"Exception message: ${res.ex.getMessage}")

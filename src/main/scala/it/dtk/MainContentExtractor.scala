@@ -1,83 +1,72 @@
 package it.dtk
 
-import akka.actor.Actor
-import com.gravity.goose.Goose
-import com.gravity.goose.Configuration
-import it.dtk.db.News
-import akka.actor.actorRef2Scala
-import scala.util.Success
-import akka.actor.OneForOneStrategy
-import akka.actor.SupervisorStrategy
+import java.util.concurrent.Executor
+
+import akka.actor._
 import de.l3s.boilerpipe.extractors.ArticleExtractor
-import com.gravity.goose.Article
-import scala.util.Try
-import com.gravity.goose.network.ImageFetchException
-import scala.util.Failure
-import akka.actor.ActorRef
-import akka.actor.ActorLogging
+import it.dtk.db.DataModel._
+import it.dtk.logic.GoseArticleExtractor
+import akka.pattern._
+
+import scala.concurrent.ExecutionContext
+import scala.concurrent.duration.FiniteDuration
+import scala.util.{ Failure, Success, Try }
 
 object MainContentExtractor {
 
-  case class Result(news: News)
+  case class Result(news: FetchedNews)
 
-  case object Extract
+  case class FailContent(url: String, ex: Throwable)
 
-  case class Fail(url: String, ex: Throwable)
+  def props(baseUrl: String, record: DataRecord, httpRouter: ActorRef, when: FiniteDuration) =
+    Props(classOf[MainContentExtractor],baseUrl, record, httpRouter,when)
 }
 
 /**
  * @author fabiana
  *
  */
-class MainContentExtractor(news: News, routerHttpGetter: ActorRef) extends Actor with ActorLogging {
+class MainContentExtractor(baseUrl: String, record: DataRecord, routerHttpGetter: ActorRef, when: FiniteDuration)
+    extends Actor with ActorLogging with GoseArticleExtractor {
+  implicit val exec = context.dispatcher.asInstanceOf[Executor with ExecutionContext]
 
-  import MainContentExtractor._
-
-  val configuration = new Configuration()
-  configuration.setImagemagickConvertPath("convert")
-  configuration.setImagemagickIdentifyPath("identify")
-  configuration.enableImageFetching = false
-  val goose = new Goose(configuration)
+  import it.dtk.MainContentExtractor._
+  import HttpGetter._
+  //schedule a message to fetch the html
+  context.system.scheduler.scheduleOnce(when, routerHttpGetter, Get(record.newsUrl))
 
   def receive = {
-    case Extract =>
-      routerHttpGetter ! HttpGetter.Get(news.urlNews.get)
+    case Got(url, html, date) =>
+      val article = extract(url, html)
 
-    case HttpGetter.Result(url, html, date) =>
+      article.map { a =>
 
-      val tryArticle = Try[Article] {
-        goose.extractContent(url, html)
+        val news = FetchedNews(
+          urlWebSite = baseUrl,
+          urlNews = url,
+          title = record.title,
+          summary = record.summary,
+          newsDate = Option(record.newsDate),
+          corpus = a.cleanedArticleText,
+          tags = a.tags.toSet,
+          metaDescription = a.metaDescription,
+          metaKeyword = a.metaKeywords,
+          canonicalUrl = a.canonicalLink,
+          topImage = Option(a.topImage.imageSrc))
+
+        Result(news)
       } recover {
-        case ex: ImageFetchException =>
-          val conf = new Configuration()
-          conf.setEnableImageFetching(false)
-          val gooseWithoutImage = new Goose(conf)
-          gooseWithoutImage.extractContent(url, html)
-      }
+        //wrong base usage but useful for wrapping the error
+        case ex: Throwable =>
+          context.parent ! FailContent(url,ex)
+      } pipeTo context.parent
 
-      tryArticle match {
-        case Success(article) =>
-          if (article.cleanedArticleText.isEmpty) {
-            val extractor = ArticleExtractor.getInstance()
-            article.cleanedArticleText = extractor.getText(html)
-          }
-
-          context.parent ! Result(news.copy(text = Option(article.cleanedArticleText), tags = Option(article.tags.toSet),
-            metaDescription = Option(article.metaDescription), metaKeyword = Option(article.metaKeywords),
-            canonicalUrl = Option(article.canonicalLink), topImage = Option(article.topImage.getImageSrc)))
-
-        case Failure(ex) =>
-          context.parent ! Fail(url, ex)
-      }
       context.stop(self)
 
-    case HttpGetter.Fail(url, ex) =>
-      context.parent ! Fail(url, ex)
+    case Error(url,ex) =>
+      context.parent ! FailContent(url,ex)
       context.stop(self)
   }
 
 }
-
-
-
 

@@ -5,7 +5,7 @@ import org.joda.time.DateTime
 import akka.actor.{Actor, ActorRef, Props}
 import scala.concurrent.duration._
 import scala.io.Source
-import it.dtk.HttpGetter.Result
+import it.dtk.HttpGetter._
 import it.dtk.DataRecordExtractor.DataRecords
 
 object CorriereDataRecordExtractorSpec {
@@ -35,7 +35,7 @@ class CorriereDataRecordExtractorSpec extends MySpec("CorriereDataRecordExtracto
   "The Corriere record extractor" should {
 
     "extract 20 data records" in {
-      parent ! Result(url, html, date)
+      parent ! Got(url, html, date)
       val results = expectMsgClass(15.seconds,classOf[DataRecords])
 
       assert(results.dataRecords.size == 20)

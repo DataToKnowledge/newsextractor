@@ -49,6 +49,9 @@ object URLUtil {
     else Failure(new MalformedURLException(s"URL is malformed: $url"))
   }
 
+  def normalizeOpt(baseUrl: String, relativePath: String) =
+      normalize(baseUrl,relativePath).toOption
+
   /**
    * Normalize a given base URL with given relative path
    * to http(s)://baseUrl/relativePath/ format.
@@ -56,7 +59,7 @@ object URLUtil {
    * @param relativePath Relative path to append to base URL
    * @return Normalized baseUrl + relativePath or MalformedURLException
    */
-  def normalize(baseUrl: String, relativePath: String): Try[String] = {
+  private def normalize(baseUrl: String, relativePath: String): Try[String] = {
     val lowerBaseUrl = baseUrl.trim.toLowerCase
     val lowerRelativePath = relativePath.trim.toLowerCase
 
