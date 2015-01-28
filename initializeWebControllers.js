@@ -10,7 +10,6 @@ var controllers = [
   'BrindisiReport',
   'CorriereSalentino',
   'Corriere',
-  'GiornaleDiPuglia',
   'GoBari',
   'LeccePrima',
   'NewsPuglia',
