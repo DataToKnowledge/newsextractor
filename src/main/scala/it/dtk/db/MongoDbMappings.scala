@@ -9,9 +9,9 @@ import DataModel._
  */
 trait MongoDbMappings {
 
-  implicit object NewsBSONWriter extends BSONDocumentWriter[FetchedNews] {
+  implicit object NewsBSONWriter extends BSONDocumentWriter[CrawledNews] {
 
-    override def write(news: FetchedNews): BSONDocument = {
+    override def write(news: CrawledNews): BSONDocument = {
 
       val date = news.newsDate.getOrElse(news.extractionDate)
 
@@ -31,9 +31,9 @@ trait MongoDbMappings {
     }
   }
 
-  implicit object NewsBSONReader extends BSONDocumentReader[FetchedNews] {
+  implicit object NewsBSONReader extends BSONDocumentReader[CrawledNews] {
     override def read(d: BSONDocument) =
-      FetchedNews(
+      CrawledNews(
         id = d.getAs[BSONObjectID]("_id").map(_.toString()),
         urlWebSite = d.getAs[String]("urlWebSite").get,
         urlNews = d.getAs[String]("urlNews").get,

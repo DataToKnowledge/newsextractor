@@ -10,7 +10,7 @@ import DataModel._
 
 object MongoDbManager {
 
-  case class Save(news: FetchedNews)
+  case class Save(news: CrawledNews)
 
   case object ListWebControllers
 

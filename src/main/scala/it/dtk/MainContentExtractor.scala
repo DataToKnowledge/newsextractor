@@ -14,7 +14,7 @@ import scala.util.{ Failure, Success, Try }
 
 object MainContentExtractor {
 
-  case class Result(news: FetchedNews)
+  case class Result(news: CrawledNews)
 
   case class FailContent(url: String, ex: Throwable)
 
@@ -41,7 +41,7 @@ class MainContentExtractor(baseUrl: String, record: DataRecord, routerHttpGetter
 
       article.map { a =>
 
-        val news = FetchedNews(
+        val news = CrawledNews(
           urlWebSite = baseUrl,
           urlNews = url,
           title = record.title,

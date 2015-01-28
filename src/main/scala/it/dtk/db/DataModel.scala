@@ -1,7 +1,7 @@
 package it.dtk.db
 
 import java.util.Date
-import it.dtk.db.DataModel.{ CrawledWebSites, FetchedNews }
+import it.dtk.db.DataModel.{ CrawledWebSites, CrawledNews }
 import org.joda.time.DateTime
 import reactivemongo.bson.BSONDocumentReader
 import reactivemongo.bson.BSONDocument
@@ -19,7 +19,7 @@ object DataModel {
     stopUrls: Option[List[String]],
     enabled: Option[Boolean] = Option(false))
 
-  case class FetchedNews(
+  case class CrawledNews(
       id: Option[String] = None,
       urlWebSite: String,
       urlNews: String,

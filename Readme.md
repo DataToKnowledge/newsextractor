@@ -80,13 +80,14 @@ Currently we are packaging the app as JavaApplication but we will explore also [
 
 2. use the [link plugin](https://github.com/rlaneve/dokku-link) to create a link to mongodb in the app to be deployed.
 
-    - go into the folder /home/dokku/newsextractor
-
-    - create a file named link and put db_istance_name:db_alias as
-
-        mongodb:mongodb
+    - run the command
+        dokku link:create newsextractor mongodb mongodb
 
     this is equivalent of placing **--link mongodb:mongodb** in a docker run.
+
+    - check if the app has the link
+
+        dokku link newsextractor
 
 
 ### deploy steps
