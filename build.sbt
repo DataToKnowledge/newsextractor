@@ -1,3 +1,4 @@
+import sbt.Resolver.file
 import sbt._
 import Process._
 import Keys._
@@ -15,6 +16,8 @@ scalacOptions ++= Seq(
 )
 
 enablePlugins(JavaAppPackaging)
+
+bashScriptConfigLocation := Some("${app_home}/../conf/jvmopts")
 
 resolvers ++= Seq(
   "Typesafe Repository" at "http://repo.typesafe.com/typesafe/releases/",
