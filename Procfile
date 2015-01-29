@@ -1,1 +1,1 @@
-worker: target/universal/stage/bin/newsextractor
+worker: target/universal/stage/bin/newsextractor -mem 512
