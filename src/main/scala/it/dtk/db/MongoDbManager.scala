@@ -7,6 +7,7 @@ import reactivemongo.bson.BSONDocument
 import akka.actor.Props
 import akka.pattern._
 import DataModel._
+import reactivemongo.core.nodeset.Authenticate
 
 object MongoDbManager {
 
@@ -35,6 +36,8 @@ class MongoDbManager() extends Actor with ActorLogging with MongoDbMappings {
   val port = mongoConf.getInt("port")
 
   val dbName = mongoConf.getString("dbName")
+  val username = mongoConf.getString("username")
+  val password = mongoConf.getString("password")
   val crawledNewsName = mongoConf.getString("crawledNews")
   val controllerColl = mongoConf.getString("controllers")
 
@@ -42,11 +45,13 @@ class MongoDbManager() extends Actor with ActorLogging with MongoDbMappings {
   implicit val exec = context.dispatcher
 
   val driver = new MongoDriver
-  val connection = driver.connection(List(host))
+  val credentials = List(Authenticate(dbName, username, password))
+
+  val connection = driver.connection(List(host), authentications = credentials)
   val db = connection(dbName)
 
   val crawledNews: BSONCollection = db(crawledNewsName)
-  val webControllers: BSONCollection = db(controllerColl)
+  val crawledWebSites: BSONCollection = db(controllerColl)
 
   def receive: Receive = {
 
@@ -58,7 +63,7 @@ class MongoDbManager() extends Actor with ActorLogging with MongoDbMappings {
     case ListWebControllers =>
       val send = sender
       val query = BSONDocument("enabled" -> true)
-      val result = webControllers.
+      val result = crawledWebSites.
         find(query).cursor[CrawledWebSites].collect[List]()
 
       result.map(WebControllers(_)).recover {
@@ -71,7 +76,7 @@ class MongoDbManager() extends Actor with ActorLogging with MongoDbMappings {
       val update = BSONDocument("$set" -> BSONDocument("stopUrls" -> c.stopUrls))
 
       val send = sender
-      webControllers.update(selector, update).
+      crawledWebSites.update(selector, update).
         recover {
           case ex: Throwable =>
             send ! DBFailure(u, ex)

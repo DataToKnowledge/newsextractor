@@ -66,16 +66,22 @@ class WebSiteReceptionist extends Actor with ActorLogging {
       controllers.foreach { c =>
 
         for (id <- c.id; contrName <- c.controllerName) {
-          //FIXME make a method and make readable
-          val contrClass = Class.forName(s"it.dtk.controller.$contrName")
-          val controllerActor = context.child(contrName).
-            getOrElse(context.actorOf(Props(contrClass, id.toString(), dbActor, httpGetterRouter), contrName))
 
-          val stopUrls = c.stopUrls.getOrElse(List()).toVector
-          controllerActor ! WebSiteController.Start(stopUrls)
+          try {
+            //FIXME make a method and make readable
+            val contrClass = Class.forName(s"it.dtk.controller.$contrName")
+            val controllerActor = context.child(contrName).
+              getOrElse(context.actorOf(Props(contrClass, id.toString(), dbActor, httpGetterRouter), contrName))
+
+            val stopUrls = c.stopUrls.getOrElse(List()).toVector
+            controllerActor ! WebSiteController.Start(stopUrls)
+
+            controllersMap += id.toString -> c
+          }catch {
+            case ex: Throwable =>
+              log.error("Controller {} is not available",contrName, ex)
+          }
         }
-        //add elements to the map
-        controllersMap ++= controllers.map(c => c.id.get.toString -> c)
       }
 
     case WebSiteController.Done(idController, extractedUrls) =>
