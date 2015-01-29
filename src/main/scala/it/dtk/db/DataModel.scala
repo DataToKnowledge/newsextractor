@@ -7,8 +7,8 @@ object DataModel {
   type Url = String
   type TagName = String
 
-  val zone = DateTimeZone.forID("Europe/Rome");
-  DateTimeZone.setDefault(zone)
+//  val zone = DateTimeZone.forID("Europe/Rome");
+//  DateTimeZone.setDefault(zone)
 
   case class CrawledWebSites(
                               id: Option[BSONObjectID] = None,
