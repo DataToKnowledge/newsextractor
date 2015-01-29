@@ -1,4 +1,3 @@
-import sbt.Resolver.file
 import sbt._
 import Process._
 import Keys._
