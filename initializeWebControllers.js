@@ -20,7 +20,7 @@ var controllers = [
 ];
 
 // delete current controllers
-db.webControllers.drop();
+db.crawledWebSites.drop();
 
 // add all controllers but disable them
 for (var w in controllers) {
@@ -30,11 +30,11 @@ for (var w in controllers) {
     enabled: false
   };
 
-  db.webControllers.insert(controller);
+  db.crawledWebSites.insert(controller);
 }
 
 // enable controllers
-db.webControllers.update(
+db.crawledWebSites.update(
     { },
     { $set: { enabled: true } },
     { upsert: false, multi: true }
