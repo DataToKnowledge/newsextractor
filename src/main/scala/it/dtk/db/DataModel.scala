@@ -29,6 +29,7 @@ object DataModel {
       metaKeyword: String,
       canonicalUrl: String,
       topImage: Option[String],
+      processing: Boolean = false,
       nlpAnalyzed: Boolean = false) {
     val extractionDate = DateTime.now
   }

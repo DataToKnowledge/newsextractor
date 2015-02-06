@@ -27,6 +27,7 @@ trait MongoDbMappings {
         "metakeyword" -> news.metaKeyword,
         "canonicalUrl" -> news.canonicalUrl,
         "topImage" -> news.topImage,
+        "processing" -> news.processing,
         "nlpAnalyzed" -> news.nlpAnalyzed)
     }
   }
@@ -46,6 +47,7 @@ trait MongoDbMappings {
         metaKeyword = d.getAs[String]("metaKeyword").get,
         canonicalUrl = d.getAs[String]("canonicalUrl").get,
         topImage = d.getAs[String]("topImage"),
+        processing = d.getAs[Boolean]("processing").get,
         nlpAnalyzed = d.getAs[Boolean]("nlpAnalyzed").get)
   }
 
