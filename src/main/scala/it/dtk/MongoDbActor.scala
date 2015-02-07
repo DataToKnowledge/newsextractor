@@ -1,15 +1,14 @@
-package it.dtk.db
+package it.dtk
 
-import akka.actor.{ ActorLogging, Actor }
+import akka.actor.{Actor, ActorLogging, Props}
+import akka.pattern._
+import it.dtk.DataModel._
 import reactivemongo.api._
 import reactivemongo.api.collections.default.BSONCollection
 import reactivemongo.bson.BSONDocument
-import akka.actor.Props
-import akka.pattern._
-import DataModel._
 import reactivemongo.core.nodeset.Authenticate
 
-object MongoDbManager {
+object MongoDbActor {
 
   case class Save(news: CrawledNews)
 
@@ -24,11 +23,11 @@ object MongoDbManager {
   /**
    * Create Props for the database actor
    */
-  def props() = Props(classOf[MongoDbManager])
+  def props() = Props(classOf[MongoDbActor])
 
 }
 
-class MongoDbManager() extends Actor with ActorLogging with MongoDbMappings {
+class MongoDbActor extends Actor with ActorLogging with MongoDbMappings {
 
   val config = context.system.settings.config
   val mongoConf = config.getConfig("newsExtractor.mongo")
@@ -41,7 +40,7 @@ class MongoDbManager() extends Actor with ActorLogging with MongoDbMappings {
   val crawledNewsName = mongoConf.getString("crawledNews")
   val controllerColl = mongoConf.getString("controllers")
 
-  import MongoDbManager._
+  import it.dtk.MongoDbActor._
   implicit val exec = context.dispatcher
 
   val driver = new MongoDriver

@@ -1,8 +1,11 @@
-package it.dtk.db
+package it.dtk
 
-import org.joda.time.{ DateTime, DateTimeZone }
+import org.joda.time.{DateTime, DateTimeZone}
 import reactivemongo.bson.BSONObjectID
 
+/**
+ * Created by fabiofumarola on 06/02/15.
+ */
 object DataModel {
   type Url = String
   type TagName = String

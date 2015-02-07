@@ -2,7 +2,7 @@
 //
 //import akka.actor.Props
 //import org.joda.time.DateTime
-//import it.dtk.db.MongoDbManager._
+//import it.dtk.MongoDbManager._
 //import scala.concurrent.duration._
 //import scala.language.postfixOps
 //import it.dtk.util.MySpec

@@ -4,7 +4,7 @@ import java.util.concurrent.Executor
 
 import akka.actor._
 import de.l3s.boilerpipe.extractors.ArticleExtractor
-import it.dtk.db.DataModel._
+import it.dtk.DataModel._
 import it.dtk.logic.GoseArticleExtractor
 import akka.pattern._
 

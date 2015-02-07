@@ -2,9 +2,7 @@ package it.dtk
 
 import akka.actor.SupervisorStrategy._
 import akka.actor.{Actor, ActorLogging, ActorRef, OneForOneStrategy, PoisonPill, Props, ReceiveTimeout, actorRef2Scala}
-import it.dtk.db.DataModel._
-import it.dtk.db.MongoDbManager
-import it.dtk.util.URLUtil
+import it.dtk.DataModel._
 
 import scala.concurrent.duration._
 
@@ -116,7 +114,8 @@ abstract class WebSiteController(val id: String, val dbActor: ActorRef, val rout
 
     case MainContentExtractor.Result(news) =>
       log.info("saving news with title {} from {}", news.urlNews, sender.path.name)
-      dbActor ! MongoDbManager.Save(news)
+      if (!news.corpus.isEmpty)
+        dbActor ! MongoDbActor.Save(news)
 
       //evaluate if we should go to run next
       if (runningExtractions == 1)

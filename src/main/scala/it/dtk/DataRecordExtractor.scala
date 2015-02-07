@@ -1,7 +1,7 @@
 package it.dtk
 
 import akka.actor.{Actor, ActorLogging, ActorRef}
-import it.dtk.db.DataModel._
+import it.dtk.DataModel._
 import org.joda.time.DateTime
 import org.jsoup.Jsoup
 import org.jsoup.nodes.{Document, Element}

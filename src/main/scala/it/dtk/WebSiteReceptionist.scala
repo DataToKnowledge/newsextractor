@@ -1,10 +1,9 @@
 package it.dtk
 
 import akka.actor.SupervisorStrategy._
-import akka.actor.{ Actor, ActorLogging, ActorRef, ActorSystem, OneForOneStrategy, Props, Terminated }
+import akka.actor.{Actor, ActorLogging, ActorRef, ActorSystem, OneForOneStrategy, Props, Terminated}
 import com.typesafe.config.ConfigFactory
-import it.dtk.db.DataModel._
-import it.dtk.db.MongoDbManager
+import it.dtk.DataModel._
 
 import scala.collection.mutable.Map
 import scala.concurrent.duration._
@@ -29,8 +28,8 @@ object WebSiteReceptionist {
 
 class WebSiteReceptionist extends Actor with ActorLogging {
 
+  import it.dtk.MongoDbActor._
   import it.dtk.WebSiteReceptionist._
-  import it.dtk.db.MongoDbManager._
 
   /**
    * @return supervisor strategy for dbmanager and for http router
@@ -45,7 +44,7 @@ class WebSiteReceptionist extends Actor with ActorLogging {
       Restart
   }
 
-  val dbActor: ActorRef = context.actorOf(MongoDbManager.props)
+  val dbActor: ActorRef = context.actorOf(MongoDbActor.props)
   val httpGetterRouter = context.actorOf(HttpGetter.routerProps())
   var controllersMap = Map[String, CrawledWebSites]()
 
@@ -77,9 +76,9 @@ class WebSiteReceptionist extends Actor with ActorLogging {
             controllerActor ! WebSiteController.Start(stopUrls)
 
             controllersMap += id.toString -> c
-          }catch {
+          } catch {
             case ex: Throwable =>
-              log.error("Controller {} is not available",contrName, ex)
+              log.error("Controller {} is not available", contrName, ex)
           }
         }
       }
@@ -94,7 +93,7 @@ class WebSiteReceptionist extends Actor with ActorLogging {
 
         if (nextStopUrls.nonEmpty) {
           val toUpdateController = c.copy(stopUrls = Option(nextStopUrls.toList))
-          dbActor ! MongoDbManager.UpdateWebController(toUpdateController)
+          dbActor ! MongoDbActor.UpdateWebController(toUpdateController)
 
           controllersMap += toUpdateController.id.get.toString() -> toUpdateController
 
@@ -108,19 +107,5 @@ class WebSiteReceptionist extends Actor with ActorLogging {
 
     case Terminated(ref) =>
       log.error("terminated actor {}", ref.path)
-  }
-}
-
-object Main {
-
-  def main(args: Array[String]) {
-
-    val config = ConfigFactory.load("newsExtractor.conf")
-    val system = ActorSystem("NewsExtractor",config)
-
-    implicit val executor = system.dispatcher
-
-    val receptionist = system.actorOf(WebSiteReceptionist.props, "WebSiteReceptionist")
-    system.scheduler.schedule(1 second, 60 minutes, receptionist, WebSiteReceptionist.Start)
   }
 }

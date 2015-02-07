@@ -1,4 +1,4 @@
-package it.dtk.db
+package it.dtk
 
 import org.joda.time.DateTime
 import reactivemongo.bson._

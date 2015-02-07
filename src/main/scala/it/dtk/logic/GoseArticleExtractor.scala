@@ -2,7 +2,7 @@ package it.dtk.logic
 
 import com.gravity.goose.network.ImageFetchException
 import com.gravity.goose.{ Article, Goose, Configuration }
-import it.dtk.db.DataModel.CrawledNews
+import it.dtk.DataModel.CrawledNews
 
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.Try
