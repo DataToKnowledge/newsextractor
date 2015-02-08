@@ -1,12 +1,13 @@
 package it.dtk
 
-import akka.actor.{Actor, ActorLogging, Props}
+import akka.actor.{ Actor, ActorLogging, Props }
 import akka.pattern._
 import it.dtk.DataModel._
 import reactivemongo.api._
 import reactivemongo.api.collections.default.BSONCollection
 import reactivemongo.bson.BSONDocument
 import reactivemongo.core.nodeset.Authenticate
+import scala.util._
 
 object MongoDbActor {
 
@@ -55,9 +56,25 @@ class MongoDbActor extends Actor with ActorLogging with MongoDbMappings {
   def receive: Receive = {
 
     case Save(record) =>
-      val selector = BSONDocument("urlNews" -> record.urlNews)
       val send = sender
-      crawledNews.update(selector, record, upsert = true) pipeTo send
+
+      val selector = BSONDocument("urlNews" -> record.urlNews)
+      //find by url
+      val ifExist = crawledNews.find(selector).cursor[BSONDocument].
+        collect[List]()
+
+      ifExist.onComplete {
+        case Success(list) =>
+          if (list.size == 0) {
+            crawledNews.insert(record) pipeTo send
+          }
+          else{
+            send ! DBFailure("record already inserted", new Error("record already inserted"))
+          }
+
+        case Failure(ex) =>
+          send ! DBFailure("error with the db", ex)
+      }
 
     case ListWebControllers =>
       val send = sender
