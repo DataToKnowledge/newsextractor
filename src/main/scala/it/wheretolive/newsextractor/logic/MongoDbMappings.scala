@@ -1,15 +1,15 @@
-package it.dtk
+package it.wheretolive.newsextractor.logic
 
-import it.dtk.DataModel._
+import it.wheretolive.newsextractor.DataModel.{CrawledNews, CrawledWebSites}
 import org.joda.time.DateTime
 import reactivemongo.bson._
 
 /**
  * Created by fabiofumarola on 27/01/15.
  */
-object MongoDbMappings {
+trait MongoDbMappings {
 
-  implicit object NewsBSONWriter extends BSONDocumentWriter[CrawledNews] {
+  implicit object CrawledNewsBSONWriter extends BSONDocumentWriter[CrawledNews] {
 
     override def write(news: CrawledNews): BSONDocument = {
 
@@ -32,7 +32,7 @@ object MongoDbMappings {
     }
   }
 
-  implicit object NewsBSONReader extends BSONDocumentReader[CrawledNews] {
+  implicit object CrawledNewsBSONReader extends BSONDocumentReader[CrawledNews] {
     override def read(d: BSONDocument) =
       CrawledNews(
         id = d.getAs[BSONObjectID]("_id").map(_.toString()),
@@ -54,19 +54,17 @@ object MongoDbMappings {
   implicit object WebControllerDataBSONReader extends BSONDocumentReader[CrawledWebSites] {
     override def read(doc: BSONDocument): CrawledWebSites = {
       CrawledWebSites(
-        doc.getAs[BSONObjectID]("_id"),
-        doc.getAs[String]("webSiteName"),
-        doc.getAs[String]("urlWebSite"),
-        doc.getAs[String]("controllerName"),
-        doc.getAs[Boolean]("enabled"))
+        id = doc.getAs[BSONObjectID]("_id"),
+        websiteName = doc.getAs[String]("websiteName"),
+        controllerName =  doc.getAs[String]("controllerName"),
+        enabled = doc.getAs[Boolean]("enabled"))
     }
   }
 
   implicit object WebControllerDataBSONWriter extends BSONDocumentWriter[CrawledWebSites] {
     override def write(webController: CrawledWebSites): BSONDocument = BSONDocument(
-      "webSiteName" -> webController.webSiteName,
-      "urlWebSite" -> webController.urlWebSite,
       "controllerName" -> webController.controllerName,
+      "websiteName" -> webController.websiteName,
       "enabled" -> webController.enabled)
   }
 

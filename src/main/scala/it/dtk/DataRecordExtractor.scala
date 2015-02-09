@@ -2,6 +2,7 @@ package it.dtk
 
 import akka.actor.{Actor, ActorLogging, ActorRef}
 import it.dtk.DataModel._
+import it.dtk.logic.{GetException, BadStatus}
 import org.joda.time.DateTime
 import org.jsoup.Jsoup
 import org.jsoup.nodes.{Document, Element}
@@ -24,6 +25,7 @@ object DataRecordExtractor {
 abstract class DataRecordExtractor(val routerHttpGetter: ActorRef) extends Actor with ActorLogging {
 
   import it.dtk.DataRecordExtractor._
+  import HttpActor._
 
   val cssRecordsSelector: String
 
@@ -46,9 +48,9 @@ abstract class DataRecordExtractor(val routerHttpGetter: ActorRef) extends Actor
 
     case Extract(url) =>
       retryMap += url -> 0
-      routerHttpGetter ! HttpGetter.Get(url)
+      routerHttpGetter ! HttpRequest(url)
 
-    case HttpGetter.Got(url, html, date) =>
+    case HttpResponse(url, html, date) =>
       log.debug("Got the HTML for URL {} having size of {} bytes", url, html.size)
 
       val doc = Jsoup.parse(html)
@@ -58,7 +60,7 @@ abstract class DataRecordExtractor(val routerHttpGetter: ActorRef) extends Actor
 
       context.parent ! DataRecords(url, records.filter(d => d.title.nonEmpty))
 
-    case HttpGetter.Error(url, ex) =>
+    case akka.actor.Status.Failure(ex) =>
       ex match {
         case BadStatus(url, code) =>
           log.error("Failed to get HTML from {} with status code {} from {}", url, code, sender.path.name)

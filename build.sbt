@@ -9,6 +9,8 @@ lazy val root = (project in file(".")).
     scalaVersion := "2.11.4"
   )
 
+//ivyScala := ivyScala.value map { _.copy(overrideScalaVersion = true) }
+
 scalacOptions ++= Seq(
   "-deprecation",
   "-feature"
@@ -25,10 +27,10 @@ resolvers ++= Seq(
 )
 
 libraryDependencies ++= Seq(
-  "com.typesafe.akka" %% "akka-actor" % "2.3.8",
-  "com.typesafe.akka" %% "akka-testkit" % "2.3.8",
-  //"com.typesafe.akka" %% "akka-cluster" % "2.2.4",
-  "com.typesafe.akka" %% "akka-slf4j" % "2.3.8",
+  "com.typesafe.akka"       %% "akka-actor" % "2.3.8",
+  "com.typesafe.akka"       %% "akka-testkit" % "2.3.8",
+  "com.typesafe.akka"       %% "akka-slf4j" % "2.3.8",
+  "com.typesafe.akka"       %%  "akka-contrib" % "2.3.8",
   "ch.qos.logback" % "logback-classic" % "1.1.2",
   "com.ning" % "async-http-client" % "1.8.3",
   "com.github.nscala-time" %% "nscala-time" % "1.6.0",

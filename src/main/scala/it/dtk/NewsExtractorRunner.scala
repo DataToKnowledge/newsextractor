@@ -3,6 +3,7 @@ package it.dtk
 import akka.actor.ActorSystem
 import com.typesafe.config.ConfigFactory
 import scala.concurrent.duration._
+import scala.language.postfixOps
 
 /**
  * Created by fabiofumarola on 07/02/15.

@@ -23,4 +23,6 @@
         <appender-ref ref="FILE"/>
     </root>
 
+    <logger name="com.ning.http.client" level="WARN"/>
+
 </configuration>
