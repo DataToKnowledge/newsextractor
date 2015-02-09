@@ -12,7 +12,7 @@ object NewsExtractorRunner {
 
   def main(args: Array[String]) {
 
-    val config = ConfigFactory.load("newsExtractor.conf")
+    val config = ConfigFactory.load("newsExtractor")
     val system = ActorSystem("NewsExtractor", config)
 
     implicit val executor = system.dispatcher
