@@ -98,7 +98,8 @@ abstract class WebSiteController(val name: String) extends Actor with ActorLoggi
       }
 
       //remove the url contained in the stopUrls vector
-      val filteredRecords = normalizedRecords.takeWhile(r => !stopUrl.contains(r.newsUrl))
+      val filteredRecords = normalizedRecords.takeWhile(r => !stopUrl.contains(r.newsUrl)).
+        filter(r => !r.summary.isEmpty)
 
       extractMainContent(filteredRecords)
 
