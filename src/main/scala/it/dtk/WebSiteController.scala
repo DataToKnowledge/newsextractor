@@ -102,7 +102,6 @@ abstract class WebSiteController(val name: String) extends Actor with ActorLoggi
         filter(r => !r.summary.isEmpty)
 
       extractMainContent(filteredRecords)
-
       val nextStatus =
         if (filteredRecords.size == 0)
           runNext(maxIndex + 1, stopUrl, extractedUrls, jobSender)
