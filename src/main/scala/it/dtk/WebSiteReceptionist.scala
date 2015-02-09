@@ -1,9 +1,10 @@
 package it.dtk
 
 import akka.actor.SupervisorStrategy._
-import akka.actor.{Actor, ActorLogging, ActorRef, ActorSystem, OneForOneStrategy, Props, Terminated}
+import akka.actor.{ Actor, ActorLogging, ActorRef, ActorSystem, OneForOneStrategy, Props, Terminated }
 import com.typesafe.config.ConfigFactory
 import it.dtk.DataModel._
+import it.dtk.controller.ControllersMapper
 
 import scala.collection.mutable.Map
 import scala.concurrent.duration._
@@ -45,8 +46,6 @@ class WebSiteReceptionist extends Actor with ActorLogging {
   }
 
   val dbActor: ActorRef = context.actorOf(MongoDbActor.props)
-  val httpGetterRouter = context.actorOf(HttpGetter.routerProps())
-  var controllersMap = Map[String, CrawledWebSites]()
 
   def receive = {
 
@@ -61,49 +60,25 @@ class WebSiteReceptionist extends Actor with ActorLogging {
 
     case WebControllers(controllers) =>
       log.info("Start news extraction for {} controllers", controllers.size)
-
       controllers.foreach { c =>
-
-        for (id <- c.id; contrName <- c.controllerName) {
-
-          try {
-            //FIXME make a method and make readable
-            val contrClass = Class.forName(s"it.dtk.controller.$contrName")
-            val controllerActor = context.child(contrName).
-              getOrElse(context.actorOf(Props(contrClass, id.toString(), dbActor, httpGetterRouter), contrName))
-
-            val stopUrls = c.stopUrls.getOrElse(List()).toVector
-            controllerActor ! WebSiteController.Start(stopUrls)
-
-            controllersMap += id.toString -> c
-          } catch {
-            case ex: Throwable =>
-              log.error("Controller {} is not available", contrName, ex)
-          }
-        }
+        val controllerName = c.controllerName.get
+        dbActor ! LastUrlNewsRequest(controllerName, c.urlWebSite.get)
       }
 
-    case WebSiteController.Done(idController, extractedUrls) =>
-      val optController = controllersMap.get(idController)
-      log.info("Extracted {} urls from the controller with id {}",
-        extractedUrls.size, optController.get.controllerName)
+    case LastUrlNewsResponse(controllerName, url) =>
 
-      optController.foreach { c =>
-        val nextStopUrls = extractedUrls.take(3)
+      val controllerActor = context.child(controllerName).
+        getOrElse(context.actorOf(ControllersMapper.props(controllerName).get, controllerName))
+      controllerActor ! WebSiteController.Start(url)
 
-        if (nextStopUrls.nonEmpty) {
-          val toUpdateController = c.copy(stopUrls = Option(nextStopUrls.toList))
-          dbActor ! MongoDbActor.UpdateWebController(toUpdateController)
+    case LastUrlNewsFailure(controllerName, ex) =>
+      log.error("failed extracting last url for {}", controllerName, ex)
 
-          controllersMap += toUpdateController.id.get.toString() -> toUpdateController
+    case WebSiteController.Done(name, extractedUrls) =>
+      log.info("Extracted {} urls from the controller with id {}", extractedUrls.size, name)
 
-        }
-
-      }
-
-    case WebSiteController.Fail(idController, currentIndex, extractedUrls) =>
-      val optController = controllersMap.get(idController)
-      log.error("WebSiteController {} fails for index {}", optController.get.controllerName, currentIndex)
+    case WebSiteController.Fail(name, currentIndex, extractedUrls) =>
+      log.error("WebSiteController {} fails for index {}", name, currentIndex)
 
     case Terminated(ref) =>
       log.error("terminated actor {}", ref.path)

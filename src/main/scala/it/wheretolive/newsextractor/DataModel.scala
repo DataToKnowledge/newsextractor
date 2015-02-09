@@ -1,4 +1,6 @@
-package it.dtk
+package it.wheretolive.newsextractor
+
+import javax.management.monitor.StringMonitor
 
 import org.joda.time.{ DateTime, DateTimeZone }
 import reactivemongo.bson.BSONObjectID
@@ -15,8 +17,7 @@ object DataModel {
 
   case class CrawledWebSites(
     id: Option[BSONObjectID] = None,
-    webSiteName: Option[String],
-    urlWebSite: Option[String],
+    websiteName: Option[String],
     controllerName: Option[String],
     enabled: Option[Boolean] = Option(false))
 
@@ -43,5 +44,13 @@ object DataModel {
     summary: String,
     newsUrl: String,
     newsDate: DateTime)
+
+  case class DataArticle(
+    canonicalUrl: Option[String],
+    metaDescription: Option[String],
+    metaKeywords: Option[String],
+    tags: Option[Set[String]],
+    corpus: Option[String],
+    topImage: Option[String])
 
 }

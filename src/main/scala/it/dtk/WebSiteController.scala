@@ -1,20 +1,22 @@
 package it.dtk
 
 import akka.actor.SupervisorStrategy._
-import akka.actor.{Actor, ActorLogging, ActorRef, OneForOneStrategy, PoisonPill, Props, ReceiveTimeout, actorRef2Scala}
+import akka.actor.{ Actor, ActorLogging, ActorRef, OneForOneStrategy, PoisonPill, Props, ReceiveTimeout, actorRef2Scala }
+import akka.contrib.throttle.Throttler.{ SetTarget, Rate }
+import akka.contrib.throttle.TimerBasedThrottler
 import it.dtk.DataModel._
 
 import scala.concurrent.duration._
 
 object WebSiteController {
 
-  case class Start(urls: Vector[String] = Vector(), currentIndex: Int = 1)
+  case class Start(lastUrl: Option[String], currentIndex: Int = 1)
 
   case class Job(url: String, index: Int, running: Boolean = false)
 
-  case class Done(id: String, extractedUrls: Vector[String])
+  case class Done(nameController: String, extractedUrls: Vector[String])
 
-  case class Fail(id: String, currentIndex: Int, extractedUrls: Vector[String])
+  case class Fail(nameController: String, currentIndex: Int, extractedUrls: Vector[String])
 
   case object Status
 
@@ -22,27 +24,30 @@ object WebSiteController {
 
   case object Running
 
-  def props(id: String, dbActor: ActorRef, routerHttpGetter: ActorRef) =
-    Props(classOf[WebSiteController], id, dbActor, routerHttpGetter)
-
 }
 
 /**
  * @author Fabio
  *
  */
-abstract class WebSiteController(val id: String, val dbActor: ActorRef, val routerHttpGetter: ActorRef) extends Actor with ActorLogging {
+abstract class WebSiteController(val name: String) extends Actor with ActorLogging {
 
   import it.dtk.WebSiteController._
 
   val baseUrl: String
   val maxIndex: Int
+  val call: Int
 
   def composeUrl(currentIndex: Int): String
+  def dataRecordExtractorProps(http: ActorRef): Props
 
-  def dataRecordExtractorProps(): Props
+  val httpRouter = context.actorOf(HttpActor.props, self.path.name + "-HttpRouter")
+  //val throttler = context.actorOf(Props(classOf[TimerBasedThrottler], new Rate(call, 1.second)))
+  //throttler ! SetTarget(Some(httpRouter))
 
-  private val drActor = context.actorOf(dataRecordExtractorProps(), self.path.name + "-DataRecord")
+  val drActor = context.actorOf(dataRecordExtractorProps(httpRouter), self.path.name + "-DataRecord")
+
+  val dbActor = context.actorOf(MongoDbActor.props())
 
   var countContentExtractors = 0
 
@@ -64,21 +69,21 @@ abstract class WebSiteController(val id: String, val dbActor: ActorRef, val rout
       Waiting
   }
 
-  def runNext(currentIndex: Int, stopUrls: Vector[String], extractedUrls: Vector[String], jobSender: ActorRef): Receive = {
+  def runNext(currentIndex: Int, stopUrl: Option[String], extractedUrls: Vector[String], jobSender: ActorRef): Receive = {
     if (currentIndex > maxIndex) {
       log.info("End Processing {}", self.path.name)
-      jobSender ! Done(id, extractedUrls)
+      jobSender ! Done(name, extractedUrls)
       waiting
     }
     else {
       log.info("Processing Page {} for the Actor {}", currentIndex, self.path.name)
       val nextUrl = composeUrl(currentIndex)
       drActor ! DataRecordExtractor.Extract(nextUrl)
-      running(currentIndex, stopUrls, extractedUrls, jobSender, 0)
+      running(currentIndex, stopUrl, extractedUrls, jobSender, 0)
     }
   }
 
-  def running(currentIndex: Int, stopUrls: Vector[String], extractedUrls: Vector[String], jobSender: ActorRef, runningExtractions: Int): Receive = {
+  def running(currentIndex: Int, stopUrl: Option[String], extractedUrls: Vector[String], jobSender: ActorRef, runningExtractions: Int): Receive = {
 
     case Status =>
       sender ! Running
@@ -93,24 +98,24 @@ abstract class WebSiteController(val id: String, val dbActor: ActorRef, val rout
       }
 
       //remove the url contained in the stopUrls vector
-      val filteredRecords = normalizedRecords.takeWhile(r => !stopUrls.contains(r.newsUrl))
+      val filteredRecords = normalizedRecords.takeWhile(r => !stopUrl.contains(r.newsUrl))
 
       extractMainContent(filteredRecords)
 
       val nextStatus =
         if (filteredRecords.size == 0)
-          runNext(maxIndex + 1, stopUrls, extractedUrls, jobSender)
+          runNext(maxIndex + 1, stopUrl, extractedUrls, jobSender)
         else if (filteredRecords.size < records.size)
-          running(maxIndex + 1, stopUrls, extractedUrls, jobSender, filteredRecords.size)
+          running(maxIndex + 1, stopUrl, extractedUrls, jobSender, filteredRecords.size)
         else
-          running(currentIndex + 1, stopUrls, extractedUrls, jobSender, filteredRecords.size)
+          running(currentIndex + 1, stopUrl, extractedUrls, jobSender, filteredRecords.size)
 
       // stay running waiting that all the main contents are extracted
       context.become(nextStatus)
 
     case DataRecordExtractor.Fail(url, code) =>
       log.error("Failure getting {} for {}", url, sender.path.name)
-      context.become(runNext(currentIndex + 1, stopUrls, extractedUrls, jobSender))
+      context.become(runNext(currentIndex + 1, stopUrl, extractedUrls, jobSender))
 
     case MainContentExtractor.Result(news) =>
       log.info("saving news with title {} from {}", news.urlNews, sender.path.name)
@@ -119,25 +124,25 @@ abstract class WebSiteController(val id: String, val dbActor: ActorRef, val rout
 
       //evaluate if we should go to run next
       if (runningExtractions == 1)
-        context.become(runNext(currentIndex, stopUrls, extractedUrls, jobSender))
+        context.become(runNext(currentIndex, stopUrl, extractedUrls, jobSender))
       else
-      //reduce the number of extractions
+        //reduce the number of extractions
         context.become(running(currentIndex,
-          stopUrls, extractedUrls :+ news.canonicalUrl, jobSender, runningExtractions - 1))
+          stopUrl, extractedUrls :+ news.canonicalUrl, jobSender, runningExtractions - 1))
 
     case MainContentExtractor.FailContent(url, ex) =>
       log.error("fail extracting url {} with exception {}", url, ex.toString())
       if (runningExtractions == 1)
-        context.become(runNext(currentIndex, stopUrls, extractedUrls, jobSender))
+        context.become(runNext(currentIndex, stopUrl, extractedUrls, jobSender))
       else
-      //reduce the number of extractions
-        context.become(running(currentIndex, stopUrls, extractedUrls, jobSender, runningExtractions - 1))
+        //reduce the number of extractions
+        context.become(running(currentIndex, stopUrl, extractedUrls, jobSender, runningExtractions - 1))
 
     case timeout: ReceiveTimeout =>
       log.error("Receiving timeout for News Extraction in {}", self.path.name)
       //allows the children to complete the current message evaluation
       context.children.foreach(_ ! PoisonPill)
-      jobSender ! Fail(id, currentIndex, extractedUrls)
+      jobSender ! Fail(name, currentIndex, extractedUrls)
 
     case akka.actor.Status.Failure(ex) =>
       log.error("Receiving error from future pipe {}", ex)
@@ -153,9 +158,9 @@ abstract class WebSiteController(val id: String, val dbActor: ActorRef, val rout
       //send delayed messages
       val nexTime = baseTime * i
 
-      val mainContentActor = context.actorOf(
-        MainContentExtractor.props(baseUrl, r, routerHttpGetter, nexTime.seconds),
-        self.path.name + "-MainContent-" + countContentExtractors)
+      val name = self.path.name + "-MainContent-" + countContentExtractors
+
+      val mainContentActor = context.actorOf(MainContentExtractor.props(baseUrl, r, httpRouter),name)
 
       i += 1
       countContentExtractors += 1
