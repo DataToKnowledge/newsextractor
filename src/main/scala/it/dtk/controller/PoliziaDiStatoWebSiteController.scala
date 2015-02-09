@@ -32,16 +32,18 @@ object PoliziaDiStatoPages {
 /**
  * @author Andrea Scarpino <andrea@datatoknowledge.it>
  */
-class PoliziaDiStatoWebSiteController(id: String, dbActor: ActorRef, routerHttpGetter: ActorRef)
-  extends WebSiteController(id, dbActor, routerHttpGetter) {
+class PoliziaDiStatoWebSiteController(name: String)
+  extends WebSiteController(name) {
 
   override val maxIndex: Int = 127
   //override val maxIndex: Int = 5
 
+  override val call = 2
+
   override val baseUrl: String = "http://www.poliziadistato.it/archivio/category/178/"
 
-  override def dataRecordExtractorProps(): Props =
-    Props(classOf[PoliziaDiStatoDataRecordExtractor],routerHttpGetter)
+  override def dataRecordExtractorProps(http: ActorRef): Props =
+    Props(classOf[PoliziaDiStatoDataRecordExtractor],http)
 
   override def composeUrl(currentIndex: Int): String =
     baseUrl + PoliziaDiStatoPages.pages(currentIndex)

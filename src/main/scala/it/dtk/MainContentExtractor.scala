@@ -5,7 +5,7 @@ import java.util.concurrent.Executor
 import akka.actor._
 import de.l3s.boilerpipe.extractors.ArticleExtractor
 import it.dtk.DataModel._
-import it.dtk.logic.GoseArticleExtractor
+import it.dtk.logic.{GetException, BadStatus, GoseArticleExtractor}
 import akka.pattern._
 
 import scala.concurrent.ExecutionContext
@@ -18,25 +18,25 @@ object MainContentExtractor {
 
   case class FailContent(url: String, ex: Throwable)
 
-  def props(baseUrl: String, record: DataRecord, httpRouter: ActorRef, when: FiniteDuration) =
-    Props(classOf[MainContentExtractor],baseUrl, record, httpRouter,when)
+  def props(baseUrl: String, record: DataRecord, httpRouter: ActorRef) =
+    Props(classOf[MainContentExtractor],baseUrl, record, httpRouter)
 }
 
 /**
  * @author fabiana
  *
  */
-class MainContentExtractor(baseUrl: String, record: DataRecord, routerHttpGetter: ActorRef, when: FiniteDuration)
+class MainContentExtractor(baseUrl: String, record: DataRecord, http: ActorRef)
     extends Actor with ActorLogging with GoseArticleExtractor {
   implicit val exec = context.dispatcher.asInstanceOf[Executor with ExecutionContext]
 
   import it.dtk.MainContentExtractor._
-  import HttpGetter._
-  //schedule a message to fetch the html
-  context.system.scheduler.scheduleOnce(when, routerHttpGetter, Get(record.newsUrl))
+  import HttpActor._
+
+  http ! HttpRequest(record.newsUrl)
 
   def receive = {
-    case Got(url, html, date) =>
+    case HttpResponse(url, html, date) =>
       val article = extract(url, html)
 
       article.map { a =>
@@ -63,9 +63,17 @@ class MainContentExtractor(baseUrl: String, record: DataRecord, routerHttpGetter
 
       context.stop(self)
 
-    case Error(url,ex) =>
-      context.parent ! FailContent(url,ex)
+    case akka.actor.Status.Failure(ex) =>
+      ex match {
+        case BadStatus(url, code) =>
+          log.error("Failed to get HTML from {} with status code {} from {}", url, code, sender.path.name)
+          context.parent ! FailContent(url, new Error("cannote get the main content"))
+
+        case GetException(url, ex) =>
+          context.parent ! FailContent(url,ex)
+      }
       context.stop(self)
+
   }
 
 }

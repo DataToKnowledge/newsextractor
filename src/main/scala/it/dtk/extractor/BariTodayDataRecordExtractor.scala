@@ -2,14 +2,19 @@ package it.dtk.extractor
 
 import it.dtk.DataRecordExtractor
 import org.jsoup.nodes.Element
-import akka.actor.ActorRef
+import akka.actor.{ Props, ActorRef }
 import org.joda.time.DateTime
 
+object BariTodayDataRecordExtractor {
+
+  def props(http: ActorRef) =
+    Props(classOf[BariTodayDataRecordExtractor], http)
+}
 /**
  * @author Andrea Scarpino <andrea@datatoknowledge.it>
  */
 class BariTodayDataRecordExtractor(routerHttpGetter: ActorRef) extends DataRecordExtractor(routerHttpGetter) {
-  
+
   override val cssRecordsSelector: String = "article.post"
 
   def title(node: Element) =
