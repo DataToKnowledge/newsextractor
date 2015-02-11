@@ -34,7 +34,7 @@ class HttpActor extends Actor with ActorLogging with HttpExecutor {
        get(url).map { res =>
          val date = if (res.getHeader("Date") != null) sdf.parseDateTime(res.getHeader("Date")) else DateTime.now()
          HttpResponse(
-           url = url,
+           url = res.getUri.toString,
            html = res.getResponseBody,
            date = date
          )
