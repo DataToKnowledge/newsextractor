@@ -6,7 +6,7 @@ lazy val root = (project in file(".")).
   settings(
     name := "NewsExtractor",
     version := "1.1",
-    scalaVersion := "2.11.4"
+    scalaVersion := "2.11.5"
   )
 
 //ivyScala := ivyScala.value map { _.copy(overrideScalaVersion = true) }
