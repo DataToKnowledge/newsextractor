@@ -11,6 +11,7 @@ lazy val root = (project in file(".")).
 
 //ivyScala := ivyScala.value map { _.copy(overrideScalaVersion = true) }
 
+
 scalacOptions ++= Seq(
   "-deprecation",
   "-feature"
