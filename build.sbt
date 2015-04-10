@@ -16,7 +16,6 @@ scalacOptions ++= Seq(
 )
 
 enablePlugins(JavaAppPackaging)
-
 bashScriptConfigLocation := Some("${app_home}/../conf/jvmopts")
 
 resolvers ++= Seq(
